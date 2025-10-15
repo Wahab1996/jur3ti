@@ -1,107 +1,279 @@
-
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>جرعتي - حاسبة جرعات الأطفال</title>
-    <style>
-        body { font-family: 'Arial', sans-serif; padding: 20px; background-color: #f7f7f7; }
-        h2 { color: #2c3e50; }
-        label, select, input, button { display: block; margin-top: 10px; font-size: 16px; }
-        #result { margin-top: 20px; background-color: #fff; padding: 15px; border-radius: 8px; box-shadow: 0 0 10px #ccc; }
-        .footer { margin-top: 30px; font-size: 14px; color: #555; }
-    </style>
-    <link rel="icon" type="image/png" href="favicon.png">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Antihyperglycemic Treatment of Diabetes Mellitus</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Arial, sans-serif;
+      background-color: #fafafa;
+      color: #222;
+      margin: 40px;
+      line-height: 1.6;
+    }
+    h1, h2, h3, h4 {
+      color: #0055a4;
+    }
+    h1 {
+      border-bottom: 3px solid #0055a4;
+      padding-bottom: 5px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 20px 0;
+    }
+    table, th, td {
+      border: 1px solid #ddd;
+    }
+    th, td {
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #f2f2f2;
+      color: #004477;
+    }
+    ul {
+      margin-left: 25px;
+    }
+    a {
+      color: #007acc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    .note {
+      background-color: #eef7ff;
+      border-left: 4px solid #007acc;
+      padding: 10px 15px;
+      margin: 20px 0;
+    }
+    .highlight {
+      background-color: #fff3cd;
+      border-left: 4px solid #ffca2c;
+      padding: 10px 15px;
+      margin: 20px 0;
+    }
+    .section-divider {
+      border-top: 3px dashed #ccc;
+      margin: 40px 0;
+    }
+  </style>
 </head>
 <body>
-    <h2>💊 تطبيق جرعتي – حاسبة جرعات الأطفال</h2>
 
-    <label for="ageYears">العمر (بالسنوات):</label>
-    <select id="ageYears">
-        <option value="0">0 سنة</option><option value="1">1 سنة</option><option value="2">2 سنة</option><option value="3">3 سنة</option><option value="4">4 سنة</option><option value="5">5 سنة</option><option value="6">6 سنة</option><option value="7">7 سنة</option><option value="8">8 سنة</option><option value="9">9 سنة</option><option value="10">10 سنة</option><option value="11">11 سنة</option><option value="12">12 سنة</option><option value="13">13 سنة</option><option value="14">14 سنة</option><option value="15">15 سنة</option><option value="16">16 سنة</option>
-    </select>
+  <h1>Antihyperglycemic Treatment of Diabetes Mellitus</h1>
 
-    <label for="ageMonths">العمر (بالأشهر):</label>
-    <select id="ageMonths">
-        <option value="0">0 شهر</option><option value="1">1 شهر</option><option value="2">2 شهر</option><option value="3">3 شهر</option><option value="4">4 شهر</option><option value="5">5 شهر</option><option value="6">6 شهر</option><option value="7">7 شهر</option><option value="8">8 شهر</option><option value="9">9 شهر</option><option value="10">10 شهر</option><option value="11">11 شهر</option>
-    </select>
+  <h2>Type 1 Diabetes Mellitus (T1DM)</h2>
+  <h3>Insulin Replacement Therapy</h3>
+  <ul>
+    <li><strong>Preferred methods:</strong> Multiple Daily Injections (MDI) or Insulin Pump.</li>
+    <li><strong>Starting dose:</strong> 0.4–1.0 units/kg/day (usually 0.5), divided 50% basal + 50% prandial.</li>
+    <li><strong>Adjust:</strong> Titrate based on glucose monitoring; reduce during “honeymoon phase.”</li>
+    <li><strong>Educate:</strong> Teach carb counting and insulin-to-carb ratios.</li>
+  </ul>
 
-    <label for="weight">الوزن (كجم):</label>
-    <input type="number" id="weight" placeholder="أدخل وزن الطفل بالكيلو" step="0.1" min="1">
+  <h3>Other Options</h3>
+  <ul>
+    <li><strong>Pramlintide:</strong> Amylin analog (rarely used).</li>
+    <li><strong>Pancreas or Islet Transplantation:</strong> For recurrent DKA or severe hypoglycemia despite optimal therapy.</li>
+  </ul>
 
-    <label for="medication">اختر الدواء:</label>
-    <select id="medication">
-        <option value="paracetamol">باراسيتامول (Panadol / Fevadol)</option>
-        <option value="ibuprofen">ايبوبروفين (Brufen / Advil)</option>
-        <option value="amoxicillin">أموكسيسيلين (Amoxil / Hibiotic)</option>
-        <option value="augmentin">أوغمنتين (Amoxicillin + Clavulanate)</option>
-        <option value="azithromycin">أزيثرومايسين (Zithromax)</option>
-        <option value="clarithromycin">كلاريثرومايسين (Klacid)</option>
-        <option value="ceftriaxone">سيفترياكسون (Rocephin)</option>
-        <option value="salbutamol_neb">فينتولين نيبول</option>
-        <option value="salbutamol_syrup">فينتولين شراب</option>
-    </select>
+  <div class="section-divider"></div>
 
-    <button onclick="calculateDose()">احسب الجرعة</button>
+  <h2>Type 2 Diabetes Mellitus (T2DM)</h2>
 
-    <div id="result"></div>
+  <h3>General Approach</h3>
+  <ol>
+    <li>Start therapy at diagnosis with lifestyle + pharmacologic treatment.</li>
+    <li><strong>Metformin</strong> is first-line unless contraindicated.</li>
+    <li>Reassess every 3–6 months; intensify if targets unmet.</li>
+    <li>Consider insulin for HbA1c >10%, glucose ≥300 mg/dL, or catabolic symptoms.</li>
+  </ol>
 
-    <div class="footer">
-        تم بواسطة: د. عبدالوهاب عبد المنان الشيخ – طبيب أطفال وطوارئ<br>
-        مطور تطبيق <strong>جرعتي</strong>
-    </div>
+  <h3>Noninsulin Diabetes Medications</h3>
+  <table>
+    <tr>
+      <th>Drug Class</th>
+      <th>Examples</th>
+      <th>Key Points / Dosing</th>
+    </tr>
+    <tr>
+      <td><strong>Biguanide</strong></td>
+      <td>Metformin</td>
+      <td>Start 500 mg once or twice daily with food → titrate to 2000 mg/day. Avoid if eGFR &lt; 30.</td>
+    </tr>
+    <tr>
+      <td><strong>DPP-4 inhibitors</strong></td>
+      <td>Sitagliptin, Saxagliptin, Linagliptin</td>
+      <td>Avoid saxagliptin in heart failure; do not combine with GLP-1RAs.</td>
+    </tr>
+    <tr>
+      <td><strong>SGLT-2 inhibitors</strong></td>
+      <td>Empagliflozin, Dapagliflozin, Canagliflozin</td>
+      <td>Cardiorenal benefits; continue if eGFR ≥20. Risk: genital infections, euglycemic DKA.</td>
+    </tr>
+    <tr>
+      <td><strong>GLP-1 receptor agonists</strong></td>
+      <td>Semaglutide, Liraglutide, Dulaglutide</td>
+      <td>Preferred in ASCVD, CKD, obesity; promotes weight loss. Start low, titrate slowly.</td>
+    </tr>
+    <tr>
+      <td><strong>Sulfonylureas</strong></td>
+      <td>Glimepiride, Glipizide</td>
+      <td>Start 1–2 mg/day, max 8 mg/day. Risk of hypoglycemia; avoid in elderly.</td>
+    </tr>
+    <tr>
+      <td><strong>Thiazolidinedione (TZD)</strong></td>
+      <td>Pioglitazone</td>
+      <td>15–45 mg/day; contraindicated in CHF; beneficial in fatty liver disease.</td>
+    </tr>
+  </table>
 
-    <script>
-        function calculateDose() {
-            var weight = parseFloat(document.getElementById("weight").value);
-            var med = document.getElementById("medication").value;
+  <div class="note">
+    <strong>Expected HbA1c reduction:</strong> ~1% for monotherapy; each added agent lowers HbA1c by 0.7–1.0%.
+  </div>
 
-            if (isNaN(weight) || weight <= 0) {
-                document.getElementById("result").innerHTML = "❌ أدخل وزنًا صحيحًا";
-                return;
-            }
+  <div class="section-divider"></div>
 
-            let doseText = "";
-            if (med === "paracetamol") {
-                let min = weight * 10;
-                let max = weight * 15;
-                let maxDaily = weight * 75;
-                doseText = `الجرعة: من ${min.toFixed(1)} إلى ${max.toFixed(1)} ملغ كل 4–6 ساعات.<br>الحد الأقصى اليومي: ${maxDaily.toFixed(1)} ملغ.`;
-            } else if (med === "ibuprofen") {
-                let min = weight * 5;
-                let max = weight * 10;
-                let maxDaily = weight * 40;
-                doseText = `الجرعة: من ${min.toFixed(1)} إلى ${max.toFixed(1)} ملغ كل 6–8 ساعات.<br>الحد الأقصى اليومي: ${maxDaily.toFixed(1)} ملغ.`;
-            } else if (med === "amoxicillin") {
-                let min = weight * 25;
-                let max = weight * 50;
-                doseText = `الجرعة اليومية: من ${min.toFixed(1)} إلى ${max.toFixed(1)} ملغ يوميًا مقسمة على 2–3 جرعات.`;
-            } else if (med === "augmentin") {
-                let min = weight * 20;
-                let max = weight * 40;
-                doseText = `الجرعة اليومية (amoxicillin): من ${min.toFixed(1)} إلى ${max.toFixed(1)} ملغ يوميًا مقسمة على جرعتين.`;
-            } else if (med === "azithromycin") {
-                let firstDay = weight * 10;
-                let otherDays = weight * 5;
-                doseText = `اليوم الأول: ${firstDay.toFixed(1)} ملغ<br>الأيام التالية: ${otherDays.toFixed(1)} ملغ يوميًا لمدة 3–5 أيام.`;
-            } else if (med === "clarithromycin") {
-                let dose = weight * 7.5;
-                doseText = `الجرعة: ${dose.toFixed(1)} ملغ كل 12 ساعة (مرتين في اليوم). الحد الأقصى: 500 ملغ لكل جرعة.`;
-            } else if (med === "ceftriaxone") {
-                let min = weight * 50;
-                let max = weight * 100;
-                doseText = `الجرعة اليومية: ${min.toFixed(1)} إلى ${max.toFixed(1)} ملغ IV أو IM. الحد الأقصى: 4 جم يوميًا.`;
-            } else if (med === "salbutamol_neb") {
-                let dose = weight * 0.15;
-                doseText = `الجرعة: ${dose.toFixed(2)} ملغ (نيبولايزر). الحد الأقصى: 5 ملغ لكل جرعة.`;
-            } else if (med === "salbutamol_syrup") {
-                let min = weight * 0.1;
-                let max = weight * 0.2;
-                doseText = `الجرعة: من ${min.toFixed(2)} إلى ${max.toFixed(2)} ملغ كل 8 ساعات. الحد الأقصى اليومي: 2 ملغ/كغ.`;
-            }
+  <h2>Insulin Regimens (Detailed)</h2>
 
-            document.getElementById("result").innerHTML = "<strong>📋 النتيجة:</strong><br>" + doseText;
-        }
-    </script>
+  <h3>1. Basal–Bolus Regimen</h3>
+  <ul>
+    <li><strong>Composition:</strong> 50% basal + 50% bolus insulin (divided among meals).</li>
+    <li><strong>Basal:</strong> Glargine, Detemir, Degludec.</li>
+    <li><strong>Bolus:</strong> Lispro, Aspart, Glulisine.</li>
+    <li><strong>Dosing:</strong> Start TDD 0.4–0.5 units/kg/day.</li>
+    <li><strong>Example:</strong> 70 kg → 35 units/day (17 basal + 6 units before each meal).</li>
+  </ul>
+
+  <h3>2. Basal-Only Regimen</h3>
+  <ul>
+    <li><strong>Indication:</strong> Fasting hyperglycemia, elderly, or new-onset T2DM.</li>
+    <li><strong>Dose:</strong> 0.1–0.2 units/kg/day (e.g., Glargine at bedtime).</li>
+    <li><strong>Titration:</strong> Increase by 2 units every 3 days until fasting glucose 80–130 mg/dL.</li>
+  </ul>
+
+  <h3>3. Premixed Regimen</h3>
+  <ul>
+    <li><strong>Insulins:</strong> 70/30 NPH/Regular, 75/25 Lispro Mix, or 70/30 Aspart Mix.</li>
+    <li><strong>Dosing:</strong> Twice daily — before breakfast (2/3) and dinner (1/3).</li>
+    <li><strong>Starting:</strong> 0.3–0.5 units/kg/day.</li>
+    <li><strong>Pros:</strong> Simpler dosing; <strong>Cons:</strong> Less flexible with meals.</li>
+  </ul>
+
+  <h3>4. Correctional (Sliding Scale) Regimen</h3>
+  <ul>
+    <li><strong>Used:</strong> Hospitalized or acutely ill patients.</li>
+    <li><strong>Example (Lispro):</strong>
+      <ul>
+        <li>150–200 mg/dL → +2 units</li>
+        <li>201–250 mg/dL → +4 units</li>
+        <li>251–300 mg/dL → +6 units</li>
+        <li>&gt;300 mg/dL → +8 units and recheck in 2 hrs</li>
+      </ul>
+    </li>
+  </ul>
+
+  <div class="highlight">
+    <strong>Note:</strong> Sliding-scale insulin should not be used alone. Always combine with basal insulin for stable glycemic control.
+  </div>
+
+  <div class="section-divider"></div>
+
+  <h2>Choice of Antihyperglycemic Therapy in Comorbidities</h2>
+
+  <table>
+    <tr>
+      <th>Comorbidity</th>
+      <th>Preferred Agents</th>
+      <th>Avoid / Caution</th>
+      <th>Rationale</th>
+    </tr>
+    <tr>
+      <td><strong>ASCVD (Atherosclerotic Cardiovascular Disease)</strong></td>
+      <td>GLP-1 receptor agonists (Liraglutide, Semaglutide, Dulaglutide)<br>SGLT-2 inhibitors (Empagliflozin, Canagliflozin)</td>
+      <td>Sulfonylureas, TZDs (may increase CV risk)</td>
+      <td>Reduce major adverse cardiac events (MI, stroke, CV death)</td>
+    </tr>
+    <tr>
+      <td><strong>Heart Failure (especially HFrEF)</strong></td>
+      <td>SGLT-2 inhibitors (Empagliflozin, Dapagliflozin)</td>
+      <td>Thiazolidinediones (Pioglitazone)</td>
+      <td>Decrease HF hospitalization and mortality</td>
+    </tr>
+    <tr>
+      <td><strong>Chronic Kidney Disease (CKD)</strong></td>
+      <td>SGLT-2 inhibitors (Empagliflozin, Dapagliflozin)<br>GLP-1RA if eGFR &lt; 30</td>
+      <td>Metformin if eGFR &lt; 30; Sulfonylureas in advanced CKD</td>
+      <td>Slow kidney disease progression and reduce albuminuria</td>
+    </tr>
+    <tr>
+      <td><strong>Obesity / Weight loss needed</strong></td>
+      <td>GLP-1RAs (Semaglutide, Liraglutide), SGLT-2 inhibitors</td>
+      <td>Sulfonylureas, TZDs, Insulin</td>
+      <td>Promote satiety and increase caloric loss in urine</td>
+    </tr>
+    <tr>
+      <td><strong>Cost constraints</strong></td>
+      <td>Metformin, Sulfonylureas, TZDs</td>
+      <td>Newer agents (GLP-1RA, SGLT2i)</td>
+      <td>Affordable and accessible</td>
+    </tr>
+  </table>
+
+  <div class="note">
+    <strong>Clinical tip:</strong> When multiple comorbidities exist, prioritize agents with overlapping benefits (e.g., SGLT2i for both CKD and HF).
+  </div>
+
+  <div class="section-divider"></div>
+
+  <h2>Monitoring and Follow-Up</h2>
+
+  <h3>Glycemic Monitoring</h3>
+  <ul>
+    <li><strong>HbA1c:</strong> Every 3 months if uncontrolled, every 6 months if stable.</li>
+    <li><strong>Fasting glucose target:</strong> 80–130 mg/dL.</li>
+    <li><strong>Postprandial (2-hr) glucose:</strong> &lt; 180 mg/dL.</li>
+    <li><strong>Continuous glucose monitoring (CGM):</strong> Recommended for intensive insulin users.</li>
+  </ul>
+
+  <h3>Blood Pressure and Lipids</h3>
+  <ul>
+    <li><strong>BP goal:</strong> &lt; 130/80 mmHg (ACE inhibitor or ARB preferred).</li>
+    <li><strong>Lipid goal:</strong> LDL &lt; 70 mg/dL (statin therapy for all adults ≥40 years).</li>
+  </ul>
+
+  <h3>Screening for Complications</h3>
+  <ul>
+    <li><strong>Eyes:</strong> Annual dilated exam for retinopathy.</li>
+    <li><strong>Kidneys:</strong> Urine albumin-to-creatinine ratio yearly.</li>
+    <li><strong>Feet:</strong> Comprehensive foot exam yearly (more often if neuropathy).</li>
+    <li><strong>Neuropathy:</strong> Assess vibration and monofilament sensation yearly.</li>
+  </ul>
+
+  <h3>Patient Education</h3>
+  <ul>
+    <li>Diet: Balanced carbohydrate intake, limited refined sugars.</li>
+    <li>Exercise: ≥150 min/week moderate-intensity.</li>
+    <li>Smoking cessation and weight management.</li>
+    <li>Vaccinations: Annual influenza + COVID-19; pneumococcal and hepatitis B as indicated.</li>
+  </ul>
+
+  <div class="note">
+    <strong>Follow-up frequency:</strong> Typically every 3 months until stable, then every 6 months.
+  </div>
+
+  <div class="section-divider"></div>
+
+  <h3>References</h3>
+  <ol>
+    <li><a href="https://www.amboss.com/us/knowledge/diabetes-mellitus?utm_medium=chatgpt-plugin&utm_source=chatgpt" target="_blank">Diabetes Mellitus – Glycemic Treatment (AMBOSS)</a></li>
+    <li><a href="https://www.amboss.com/us/knowledge/diabetes-mellitus-in-pregnancy?utm_medium=chatgpt-plugin&utm_source=chatgpt" target="_blank">Diabetes Mellitus in Pregnancy (AMBOSS)</a></li>
+  </ol>
+
 </body>
 </html>
