@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gastric Ulcer | Family Medicine Reference</title>
+  <title>Gastric and Duodenal Ulcers | Family Medicine Reference</title>
   <style>
     body {
       font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -25,7 +25,7 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin: 10px 0;
+      margin: 15px 0;
     }
     th, td {
       border: 1px solid #dee2e6;
@@ -46,122 +46,144 @@
     a:hover {
       text-decoration: underline;
     }
+    .compare {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .column {
+      flex: 1;
+      min-width: 350px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      padding: 20px;
+    }
   </style>
 </head>
 <body>
 
-  <h1>Gastric Ulcer</h1>
+  <h1>Gastric and Duodenal Ulcers</h1>
+  <p>
+    Both gastric and duodenal ulcers are part of <strong>peptic ulcer disease (PUD)</strong> — mucosal defects 
+    that penetrate through the muscularis mucosa due to the imbalance between gastric acid and mucosal defense.
+  </p>
+
+  <div class="compare">
+    <div class="column">
+      <h2>Gastric Ulcer</h2>
+
+      <h3>Definition</h3>
+      <p>A peptic ulcer located in the gastric mucosa, typically along the lesser curvature between the corpus and antrum.</p>
+
+      <h3>Etiology</h3>
+      <ul>
+        <li><strong>H. pylori infection</strong></li>
+        <li>Chronic NSAID use</li>
+        <li>Smoking and alcohol use</li>
+        <li>Stress-related mucosal injury</li>
+      </ul>
+
+      <h3>Clinical Features</h3>
+      <ul>
+        <li>Epigastric pain <strong>worsens after eating</strong>.</li>
+        <li>Pain described as burning or gnawing.</li>
+        <li>Often associated with early satiety and nausea.</li>
+        <li>Patients may lose weight due to food avoidance.</li>
+      </ul>
+
+      <h3>Diagnosis</h3>
+      <ul>
+        <li><strong>EGD:</strong> visualizes ulcer and allows biopsy to exclude malignancy.</li>
+        <li><strong>Benign:</strong> smooth, regular margins.</li>
+        <li><strong>Malignant:</strong> irregular, nodular edges — always biopsy.</li>
+      </ul>
+
+      <h3>Treatment</h3>
+      <ul>
+        <li><strong>H. pylori positive:</strong> Triple therapy (PPI + amoxicillin + clarithromycin).</li>
+        <li><strong>H. pylori negative:</strong> PPI for 8 weeks.</li>
+        <li><strong>NSAID-related:</strong> Discontinue NSAID; use PPI or misoprostol.</li>
+      </ul>
+
+      <h3>Complications</h3>
+      <ul>
+        <li>Bleeding (left gastric artery)</li>
+        <li>Perforation → peritonitis</li>
+        <li>Gastric outlet obstruction</li>
+        <li>Malignant transformation (5–10%)</li>
+      </ul>
+
+      <h3>Follow-Up</h3>
+      <ul>
+        <li>Repeat endoscopy to confirm healing and rule out cancer.</li>
+      </ul>
+    </div>
+
+    <div class="column">
+      <h2>Duodenal Ulcer</h2>
+
+      <h3>Definition</h3>
+      <p>A peptic ulcer of the duodenal mucosa, usually located in the duodenal bulb (first portion of the duodenum).</p>
+
+      <h3>Etiology</h3>
+      <ul>
+        <li><strong>H. pylori infection</strong> (most common cause).</li>
+        <li>Excess gastric acid secretion (Zollinger-Ellison syndrome rare).</li>
+        <li>NSAID use.</li>
+        <li>Smoking, stress, and chronic disease.</li>
+      </ul>
+
+      <h3>Clinical Features</h3>
+      <ul>
+        <li>Epigastric pain <strong>improves with eating</strong> and recurs 2–5 hours later.</li>
+        <li>Pain may awaken patient at night (nocturnal pain).</li>
+        <li>Weight gain possible due to relief with food.</li>
+      </ul>
+
+      <h3>Diagnosis</h3>
+      <ul>
+        <li><strong>EGD:</strong> confirms ulcer and rules out complications.</li>
+        <li>Biopsy only if lesion appears atypical or suspicious for malignancy (rare).</li>
+        <li>Noninvasive <strong>H. pylori testing</strong> recommended in all cases.</li>
+      </ul>
+
+      <h3>Treatment</h3>
+      <ul>
+        <li><strong>H. pylori positive:</strong> Eradication therapy (PPI + 2 antibiotics).</li>
+        <li><strong>Acid suppression:</strong> PPI for ≥4 weeks.</li>
+        <li>Stop NSAIDs and smoking.</li>
+      </ul>
+
+      <h3>Complications</h3>
+      <ul>
+        <li>Bleeding (posterior wall → gastroduodenal artery)</li>
+        <li>Perforation (anterior wall → peritonitis)</li>
+        <li>Penetration into pancreas or biliary tract</li>
+        <li>Gastric outlet obstruction (chronic scarring)</li>
+      </ul>
+
+      <h3>Follow-Up</h3>
+      <ul>
+        <li>Repeat EGD only if symptoms persist or complications suspected.</li>
+        <li>No routine biopsy required for typical duodenal ulcers.</li>
+      </ul>
+    </div>
+  </div>
 
   <section>
-    <h2>Definition</h2>
-    <p>
-      A <strong>gastric ulcer</strong> is a type of <strong>peptic ulcer</strong> that occurs in the gastric mucosa, 
-      typically along the lesser curvature between the corpus and antrum.  
-      It represents a mucosal defect ≥ 0.5 cm in diameter penetrating through the muscularis mucosae.
-    </p>
-  </section>
-
-  <section>
-    <h2>Etiology</h2>
-    <ul>
-      <li><strong>Helicobacter pylori infection</strong> (most common cause worldwide)</li>
-      <li><strong>NSAID use</strong> (impairs prostaglandin synthesis and mucosal protection)</li>
-      <li>Excess gastric acid secretion (less common than in duodenal ulcers)</li>
-      <li>Stress-related mucosal damage (e.g., severe illness, burns)</li>
-      <li>Smoking, alcohol, and corticosteroid use (contributory factors)</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Clinical Features</h2>
-    <ul>
-      <li><strong>Epigastric pain</strong> – classically worsens <em>shortly after meals</em>.</li>
-      <li>Pain described as burning or gnawing; may radiate to the back.</li>
-      <li>Associated symptoms: belching, bloating, nausea, or early satiety.</li>
-      <li>Patients may experience <strong>weight loss</strong> due to food avoidance.</li>
-    </ul>
-    <p><em>In contrast, duodenal ulcer pain often improves with food and leads to weight gain.</em></p>
-  </section>
-
-  <section>
-    <h2>Complications</h2>
-    <ul>
-      <li><strong>Bleeding</strong> – from erosion into the left gastric artery (hematemesis or melena).</li>
-      <li><strong>Perforation</strong> – presenting with sudden severe abdominal pain, rigidity, and pneumoperitoneum.</li>
-      <li><strong>Penetration</strong> – ulcer extends into adjacent organs (e.g., pancreas).</li>
-      <li><strong>Gastric outlet obstruction</strong> – due to edema or fibrosis from chronic ulcers.</li>
-      <li><strong>Malignant transformation</strong> – up to 5–10% risk; biopsy always indicated.</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Diagnosis</h2>
-    <h3>Initial Evaluation</h3>
-    <ul>
-      <li>Assess for risk factors: NSAID use, H. pylori, smoking, alcohol.</li>
-      <li>Basic labs: CBC (for anemia), metabolic panel, and fecal occult blood test if bleeding suspected.</li>
-    </ul>
-
-    <h3>Noninvasive Tests</h3>
-    <ul>
-      <li><strong>H. pylori testing:</strong> urea breath test or stool antigen test.</li>
-    </ul>
-
-    <h3>Esophagogastroduodenoscopy (EGD)</h3>
-    <ul>
-      <li><strong>Gold standard</strong> for diagnosis.</li>
-      <li>Allows direct visualization and biopsy to rule out malignancy.</li>
-      <li><strong>Benign ulcers:</strong> smooth base, regular margins.</li>
-      <li><strong>Malignant ulcers:</strong> irregular, heaped-up margins with nodularity.</li>
-    </ul>
-
-    <h3>Biopsy Indications</h3>
-    <ul>
-      <li>All gastric ulcers (to exclude carcinoma).</li>
-      <li>Multiple biopsies from ulcer edges and base, and additional samples for H. pylori detection.</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Treatment</h2>
-    <h3>General Measures</h3>
-    <ul>
-      <li>Discontinue NSAIDs and avoid alcohol and tobacco.</li>
-      <li>Encourage small, frequent meals and avoid eating before bedtime.</li>
-    </ul>
-
-    <h3>Pharmacologic Therapy</h3>
+    <h2>Comparison Summary</h2>
     <table>
-      <tr><th>Indication</th><th>Treatment</th></tr>
-      <tr><td>H. pylori positive</td><td>Eradication therapy: PPI + 2 antibiotics (e.g., amoxicillin + clarithromycin) for 14 days.</td></tr>
-      <tr><td>H. pylori negative</td><td>PPI monotherapy for 8 weeks.</td></tr>
-      <tr><td>NSAID-induced</td><td>Stop NSAID; PPI for 8–12 weeks or use misoprostol if NSAID must be continued.</td></tr>
+      <tr><th>Feature</th><th>Gastric Ulcer</th><th>Duodenal Ulcer</th></tr>
+      <tr><td>Pain timing</td><td>Worsens after meals</td><td>Improves with meals, returns later</td></tr>
+      <tr><td>Typical patient behavior</td><td>Food avoidance → weight loss</td><td>Frequent eating → weight gain</td></tr>
+      <tr><td>Location</td><td>Lesser curvature of stomach</td><td>Duodenal bulb</td></tr>
+      <tr><td>Malignancy risk</td><td>5–10% (biopsy required)</td><td>Very rare</td></tr>
+      <tr><td>Common artery involved (bleeding)</td><td>Left gastric artery</td><td>Gastroduodenal artery</td></tr>
+      <tr><td>Common perforation site</td><td>Prepyloric area</td><td>Anterior wall</td></tr>
+      <tr><td>H. pylori association</td><td>~70%</td><td>~90–95%</td></tr>
+      <tr><td>Typical acid levels</td><td>Normal or low</td><td>High</td></tr>
     </table>
-
-    <h3>Supportive Medications</h3>
-    <ul>
-      <li><strong>PPIs:</strong> Omeprazole 20–40 mg daily for ≥8 weeks.</li>
-      <li><strong>H<sub>2</sub> blockers:</strong> Famotidine 20 mg twice daily (alternative if PPI not tolerated).</li>
-      <li><strong>Sucralfate:</strong> 1 g four times daily – forms a protective mucosal barrier.</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Follow-Up</h2>
-    <ul>
-      <li>Repeat EGD with biopsy to confirm healing and rule out malignancy.</li>
-      <li>Ensure eradication of H. pylori if previously positive.</li>
-      <li>Monitor for recurrence if symptoms persist or risk factors remain.</li>
-    </ul>
-  </section>
-
-  <section>
-    <h2>Prevention</h2>
-    <ul>
-      <li>Avoid NSAIDs and smoking.</li>
-      <li>Use PPIs or misoprostol for patients requiring chronic NSAID therapy.</li>
-      <li>Limit alcohol and caffeine intake.</li>
-    </ul>
   </section>
 
   <p class="source">
