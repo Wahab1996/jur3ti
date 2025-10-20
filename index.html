@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Medical Topics Library</title>
-  <!-- Font Awesome Icons -->
   <link
     rel="stylesheet"
     href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
@@ -15,7 +14,7 @@
 
   <style>
     :root {
-      --bg-color: #f7f9fc;
+      --bg-color: #f8fbff;
       --text-color: #0d47a1;
       --card-bg: #ffffff;
       --card-hover-bg: #1565c0;
@@ -25,7 +24,7 @@
 
     [data-theme="dark"] {
       --bg-color: #121212;
-      --text-color: #90caf9;
+      --text-color: #bbdefb;
       --card-bg: #1e1e1e;
       --card-hover-bg: #0d47a1;
       --card-hover-text: #ffffff;
@@ -58,20 +57,16 @@
       position: absolute;
       top: 1rem;
       right: 1rem;
-      background: white;
+      background: transparent;
       border: none;
-      color: #1565c0;
-      font-size: 1.2rem;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
+      color: white;
+      font-size: 1.5rem;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: transform 0.3s ease;
     }
 
     #toggle-mode:hover {
-      background: #e3f2fd;
-      transform: rotate(15deg);
+      transform: rotate(20deg);
     }
 
     main {
@@ -127,12 +122,12 @@
     <h1>📘 Medical Topics Library</h1>
     <p>Select a topic below to view details</p>
     <button id="toggle-mode" title="Toggle Dark/Light Mode">
-      <i class="fas fa-moon"></i>
+      🌙
     </button>
   </header>
 
   <main>
-    <a class="card" href="CKD.html"><i class="fas fa-kidneys"></i> CKD</a>
+    <a class="card" href="CKD.html"><i class="fas fa-kidney"></i> CKD</a>
     <a class="card" href="DM.html"><i class="fas fa-syringe"></i> Diabetes Mellitus</a>
     <a class="card" href="HTN.html"><i class="fas fa-heartbeat"></i> Hypertension</a>
     <a class="card" href="Headache.html"><i class="fas fa-brain"></i> Headache</a>
@@ -141,7 +136,7 @@
     <a class="card" href="LABS.html"><i class="fas fa-vials"></i> LABS</a>
     <a class="card" href="PUD.html"><i class="fas fa-stomach"></i> PUD</a>
     <a class="card" href="Screening.html"><i class="fas fa-clipboard-check"></i> Screening</a>
-    <a class="card" href="Thalassemia.html"><i class="fas fa-blood-drop"></i> Thalassemia</a>
+    <a class="card" href="Thalassemia.html"><i class="fas fa-droplet"></i> Thalassemia</a>
     <a class="card" href="URTI.html"><i class="fas fa-lungs"></i> URTI</a>
   </main>
 
@@ -149,27 +144,6 @@
     &copy; 2025 Medical Notes by Wahab1996 | All Rights Reserved
   </footer>
 
-  <script>
-    // Load saved theme
-    const currentTheme = localStorage.getItem("theme");
-    if (currentTheme === "dark") {
-      document.documentElement.setAttribute("data-theme", "dark");
-      document.querySelector("#toggle-mode i").classList.replace("fa-moon", "fa-sun");
-    }
-
-    // Toggle dark/light mode
-    document.getElementById("toggle-mode").addEventListener("click", () => {
-      const isDark = document.documentElement.getAttribute("data-theme") === "dark";
-      if (isDark) {
-        document.documentElement.removeAttribute("data-theme");
-        document.querySelector("#toggle-mode i").classList.replace("fa-sun", "fa-moon");
-        localStorage.setItem("theme", "light");
-      } else {
-        document.documentElement.setAttribute("data-theme", "dark");
-        document.querySelector("#toggle-mode i").classList.replace("fa-moon", "fa-sun");
-        localStorage.setItem("theme", "dark");
-      }
-    });
-  </script>
+  <script src="theme.js"></script>
 </body>
 </html>
