@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Drug Interaction Checker (RxNorm)</title>
+<title>Drug Interaction Checker (RxNorm via Proxy)</title>
 <style>
   body { font-family: Arial, sans-serif; margin: 2em; }
   input, button { margin: 0.5em 0; padding: 0.5em; width: 100%; }
@@ -23,7 +23,7 @@
 
 <script>
 async function getRxCUI(drugName) {
-  const response = await fetch(`https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${encodeURIComponent(drugName)}`);
+  const response = await fetch(`https://corsproxy.io/?https://rxnav.nlm.nih.gov/REST/rxcui.json?name=${encodeURIComponent(drugName)}`);
   const data = await response.json();
   return data.idGroup?.rxnormId?.[0];
 }
@@ -43,7 +43,7 @@ async function checkInteraction() {
       return;
     }
 
-    const url = `https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=${rx1}+${rx2}`;
+    const url = `https://corsproxy.io/?https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis=${rx1}+${rx2}`;
     const response = await fetch(url);
     const data = await response.json();
 
@@ -58,7 +58,8 @@ async function checkInteraction() {
     interactions.forEach(group => {
       group.fullInteractionType.forEach(type => {
         type.interactionPair.forEach(pair => {
-          output += `<li><strong>${pair.interactionConcept.map(c => c.minConceptItem.name).join(' + ')}</strong>: ${pair.description}</li>`;
+          const drugs = pair.interactionConcept.map(c => c.minConceptItem.name).join(' + ');
+          output += `<li><strong>${drugs}</strong>: ${pair.description}</li>`;
         });
       });
     });
@@ -67,7 +68,7 @@ async function checkInteraction() {
 
   } catch (err) {
     console.error(err);
-    resultDiv.innerHTML = '⚠ Error connecting to RxNorm API.';
+    resultDiv.innerHTML = '⚠ Error connecting to RxNorm API (via proxy).';
   }
 }
 </script>
