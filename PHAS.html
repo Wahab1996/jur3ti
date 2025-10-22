@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Periodic Health Assessment & Screening – Saudi-aligned</title>
+<style>
+  :root{
+    --bg: #ffffff;
+    --card:#f8f9fb;
+    --ink:#0b1220;
+    --muted:#5b6577;
+    --brand:#0a7cff;
+    --ok:#0a9d5c;
+    --warn:#b85c00;
+    --bad:#b00020;
+    --border:#e6e8ee;
+    --chip:#eef2f7;
+  }
+  [data-theme="dark"]{
+    --bg:#0e1116; --card:#151923; --ink:#e7ecf3; --muted:#a6b0c2; --brand:#4ea2ff;
+    --ok:#2ecf87; --warn:#ffa048; --bad:#ff6b81; --border:#2a2f3a; --chip:#1b2130;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0; font:16px/1.5 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
+    color:var(--ink); background:var(--bg);
+  }
+  header{
+    position:sticky; top:0; z-index:5; backdrop-filter:saturate(1.2) blur(8px);
+    background:color-mix(in srgb, var(--bg) 85%, transparent);
+    border-bottom:1px solid var(--border);
+  }
+  .wrap{max-width:1100px; margin-inline:auto; padding:16px}
+  .title{display:flex; gap:12px; align-items:center; flex-wrap:wrap}
+  .title h1{font-size:22px; margin:0}
+  .title .chip{background:var(--chip); padding:6px 10px; border-radius:999px; font-size:12px; color:var(--muted)}
+  .toolbar{display:flex; gap:10px; flex-wrap:wrap; margin-top:10px}
+  .toolbar .group{display:flex; gap:8px; flex-wrap:wrap; align-items:center}
+  .toolbar label{font-size:13px; color:var(--muted)}
+  .toolbar select, .toolbar input[type="number"], .toolbar input[type="text"]{
+    padding:8px 10px; border:1px solid var(--border); border-radius:10px; background:var(--bg); color:var(--ink);
+  }
+  .toolbar .btn{padding:8px 12px; border-radius:10px; border:1px solid var(--border); background:var(--card); cursor:pointer}
+  .toolbar .btn:hover{border-color:var(--brand)}
+  .grid{
+    display:grid; grid-template-columns:repeat(12,1fr); gap:16px; margin-top:16px;
+  }
+  .card{
+    grid-column:span 6; background:var(--card); border:1px solid var(--border);
+    border-radius:14px; padding:16px; display:flex; flex-direction:column; gap:10px;
+  }
+  @media (max-width:860px){ .card{grid-column:span 12} }
+  .card h2{font-size:18px; margin:0}
+  .meta{display:flex; flex-wrap:wrap; gap:8px}
+  .badge{font-size:12px; padding:4px 8px; border-radius:999px; background:var(--chip); color:var(--muted); border:1px solid var(--border)}
+  .badge.ok{color:var(--ok)} .badge.warn{color:var(--warn)} .badge.bad{color:var(--bad)}
+  .what{font-weight:600}
+  .how{color:var(--muted)}
+  details{border-top:1px dashed var(--border); padding-top:10px}
+  details summary{cursor:pointer; color:var(--brand); font-weight:600}
+  .foot{margin-top:30px; color:var(--muted); font-size:13px}
+  .pill{display:inline-block; padding:2px 8px; border-radius:999px; border:1px solid var(--border); background:var(--chip); font-size:12px}
+  .tags{display:flex; flex-wrap:wrap; gap:6px}
+  .hide{display:none !important}
+  .row{display:flex; gap:8px; flex-wrap:wrap}
+  .kicker{font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted)}
+  .action{margin-top:auto; display:flex; gap:8px; flex-wrap:wrap}
+  .action .btn-primary{background:var(--brand); border-color:transparent; color:white}
+  .note{font-size:13px; color:var(--muted)}
+  .small{font-size:12px}
+  .hr{height:1px; background:var(--border); margin:8px 0}
+  .ref{font-size:12px; color:var(--muted)}
+  .search{min-width:200px}
+  .inline-input{display:inline-flex; align-items:center; gap:6px}
+  .calc{background:var(--bg); border:1px dashed var(--border); padding:8px; border-radius:10px; font-size:14px}
+  @media print{
+    header{position:static; backdrop-filter:none}
+    .toolbar{display:none}
+    .card{break-inside:avoid}
+    .action{display:none}
+    a[href]:after{content:""}
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <div class="title">
+      <h1>Periodic Health Assessment & Screening (Saudi-aligned)</h1>
+      <span class="chip">Family Medicine | Primary Care | Adults</span>
+      <span class="chip">Updated: Oct 2025</span>
+    </div>
+    <div class="toolbar">
+      <div class="group">
+        <label>Age</label>
+        <input id="age" type="number" min="18" max="120" step="1" value="40" />
+      </div>
+      <div class="group">
+        <label>Sex</label>
+        <select id="sex">
+          <option value="any">Any</option>
+          <option value="female">Female</option>
+          <option value="male">Male</option>
+        </select>
+      </div>
+      <div class="group">
+        <label>Risk</label>
+        <select id="risk">
+          <option value="average">Average</option>
+          <option value="high">Elevated/High</option>
+          <option value="smoker">Smoker</option>
+          <option value="pregnant">Pregnant/Planning pregnancy</option>
+        </select>
+      </div>
+      <div class="group">
+        <label>Search</label>
+        <input id="q" class="search" type="text" placeholder="e.g., diabetes, mammogram, CRC…" />
+      </div>
+      <button class="btn" id="reset">Reset Filters</button>
+      <button class="btn" id="theme">Dark/Light</button>
+      <button class="btn" onclick="window.print()">Print</button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+  <div id="grid" class="grid"></div>
+
+  <section class="foot">
+    <div class="hr"></div>
+    <div class="kicker">Clinical notes</div>
+    <p class="small">
+      This tool summarizes Saudi-aligned preventive care for asymptomatic adults in primary care. Individualize for comorbidities, life expectancy, patient preferences, and access. Follow local pathways for abnormal results and high-risk populations (e.g., known genetic syndromes, prior cancer, immunocompromise).
+    </p>
+    <div class="kicker">References (key local anchors)</div>
+    <ol class="small">
+      <li>Saudi Clinical Preventive Guideline (final 2023). Public Health Authority (Weqaya). (Core ages/intervals for BP, DM ≥35, CRC ≥45, mammography 40–69 q1–2y, osteoporosis, depression, AAA, counseling).  [oai_citation:0‡وزارة الصحة](https://www.pha.gov.sa/ar-sa/EvidenceAndProcedures/Documents/Saudi%20Clinical%20Preventive%20Guideline%20%282023%20final%20Version%29.pdf)</li>
+      <li>CHI (Council of Health Insurance). Adult Immunization (Ed.9, updated 2025/2024) – vaccines available/indicated in KSA (e.g., influenza, Td/Tdap, pneumococcal, HPV, shingles, RSV where applicable).  [oai_citation:1‡مجلس الضمان الصحي](https://www.chi.gov.sa/Style%20Library/IDF_Branding/Indication/165%20-%20Adult%20Immunization_Updated%20Indication_Ed.9.pdf?utm_source=chatgpt.com)</li>
+      <li>National/Local cancer screening resources (MOH/Weqaya). Colorectal screening age 45+ and program notes; breast screening program.  [oai_citation:2‡PMC](https://pmc.ncbi.nlm.nih.gov/articles/PMC6074460/?utm_source=chatgpt.com)</li>
+      <li>Where the Saudi guideline explicitly references USPSTF, current A/B items were used (e.g., LDCT 50–80 with 20 pack-years; biennial mammography 40–74).  [oai_citation:3‡خدمات الوقاية الأمريكية](https://www.uspreventiveservicestaskforce.org/uspstf/recommendation-topics/uspstf-a-and-b-recommendations?utm_source=chatgpt.com)</li>
+    </ol>
+  </section>
+</main>
+
+<script>
+/* -------------------------------
+   Data: Screening & Preventive Items
+   Source mapping: each item cites 'src' keys that correspond to ref list above
+---------------------------------- */
+const ITEMS = [
+  {
+    id:"bp",
+    what:"Blood Pressure",
+    who:"All adults ≥18; annually if ≥40 or ↑risk; otherwise q3–5y",
+    howOften:"Annual if ≥40 / overweight / high-normal; else every 3–5 years",
+    how:"Use validated device; confirm out-of-office before treatment",
+    sex:"any", minAge:18, tags:["cardio","hypertension","vitals"],
+    risk:["average","high"],
+    src:["weqaya2023"],
+    grade:"A"
+  },
+  {
+    id:"bmiwc",
+    what:"BMI & Waist Circumference",
+    who:"All adults ≥18",
+    howOften:"Every 2 years",
+    how:"Measure BMI; add WC for central obesity risk",
+    sex:"any", minAge:18, tags:["obesity","metabolic"],
+    risk:["average","high"],
+    src:["weqaya2023"]
+  },
+  {
+    id:"dm",
+    what:"Diabetes Mellitus (FPG / HbA1c / RBS)",
+    who:"All adults starting at 35; earlier if overweight with risk factors",
+    howOften:"Every 3 years (≥35) or sooner if risks",
+    how:"FPG, HbA1c, or RBS; follow local diagnostic thresholds",
+    sex:"any", minAge:35, tags:["diabetes","metabolic"],
+    risk:["average","high"],
+    src:["weqaya2023"]
+  },
+  {
+    id:"lipids",
+    what:"Dyslipidemia & ASCVD Risk",
+    who:"Adults 40–75 for primary prevention risk stratification",
+    howOften:"Per risk; consider statin if ≥1 risk factor and 10-yr risk ≥10% (selective at 7.5–10%)",
+    how:"Non-fasting lipid panel; calculate 10-yr risk; shared decision",
+    sex:"any", minAge:40, tags:["lipids","ASCVD","statin"],
+    risk:["average","high"],
+    src:["weqaya2023","uspstf"]
+  },
+  {
+    id:"crc",
+    what:"Colorectal Cancer",
+    who:"Average-risk adults ≥45",
+    howOften:"FIT/FOBT yearly; FSIG q5y; colonoscopy q10y",
+    how:"Positive non-colonoscopy → timely colonoscopy",
+    sex:"any", minAge:45, tags:["cancer","colorectal","FIT","colonoscopy"],
+    risk:["average","high"],
+    src:["weqaya2023","crcKSA"]
+  },
+  {
+    id:"breast",
+    what:"Breast Cancer (Mammography)",
+    who:"Women 40–69 (Saudi expert panel) ; consider to 74 per USPSTF",
+    howOften:"Every 1–2 years",
+    how:"Digital 2D/3D per availability; individualize ≥70",
+    sex:"female", minAge:40, maxAge:74, tags:["cancer","breast","mammogram"],
+    risk:["average","high"],
+    src:["weqaya2023","mohBreast","uspstf"]
+  },
+  {
+    id:"cervical",
+    what:"Cervical Cancer",
+    who:"Women 21–65 after sexual activity",
+    howOften:"Pap q3y (21–29). 30–65: Pap+HPV cotest q5y (or Pap q3y)",
+    how:"Follow local referral for abnormal cytology/HPV",
+    sex:"female", minAge:21, maxAge:65, tags:["cancer","cervical","pap","hpv"],
+    risk:["average","high"],
+    src:["weqaya2023"]
+  },
+  {
+    id:"lung",
+    what:"Lung Cancer (LDCT)",
+    who:"Adults 50–80 with ≥20 pack-years and smoke or quit <15y",
+    howOften:"Annual; stop if quit ≥15y or limited life expectancy",
+    how:"Shared decision; ensure smoking cessation support",
+    sex:"any", minAge:50, tags:["cancer","smoking","LDCT"],
+    risk:["smoker","high"],
+    src:["weqaya2023","uspstf"]
+  },
+  {
+    id:"aaa",
+    what:"Abdominal Aortic Aneurysm",
+    who:"Men 65–75 who have ever smoked",
+    howOften:"One-time abdominal ultrasound",
+    how:"Document smoking history; counsel cardiovascular risk",
+    sex:"male", minAge:65, maxAge:75, tags:["vascular","ultrasound","AAA"],
+    risk:["smoker","high"],
+    src:["weqaya2023","uspstf"]
+  },
+  {
+    id:"osteoporosis",
+    what:"Osteoporosis (DEXA)",
+    who:"Women ≥65; post-menopausal <65 if clinical risk ↑",
+    howOften:"Per baseline risk & results",
+    how:"Use FRAX/risk tool to decide <65; no routine screening for men",
+    sex:"female", minAge:65, tags:["bone","DEXA","fracture"],
+    risk:["average","high"],
+    src:["weqaya2023"]
+  },
+  {
+    id:"depression",
+    what:"Depression Screening (PHQ-2 → PHQ-9)",
+    who:"All adults, including perinatal; ensure pathway for diagnosis/treatment",
+    howOften:"Opportunistic / periodic",
+    how:"PHQ-2: low mood & anhedonia over 2 weeks; positive → PHQ-9",
+    sex:"any", minAge:18, tags:["mental health","PHQ","screening"],
+    risk:["average","high","pregnant"],
+    src:["weqaya2023"]
+  },
+  {
+    id:"alcohol",
+    what:"Unhealthy Alcohol Use (brief counseling)",
+    who:"Adults 18+ (per guideline text)",
+    howOften:"Opportunistic",
+    how:"Screen sensitively; brief intervention where relevant",
+    sex:"any", minAge:18, tags:["counseling","behavior"],
+    risk:["average","high"],
+    src:["weqaya2023"]
+  },
+  {
+    id:"folate",
+    what:"Folic Acid Supplementation",
+    who:"Women planning or capable of pregnancy",
+    howOften:"0.4–0.8 mg daily from ≥1 month pre-conception through 1st trimester; 4 mg if high NTD risk",
+    how:"High risk: prior NTD, epilepsy, diabetes, etc.",
+    sex:"female", minAge:15, tags:["preconception","NTD","pregnancy"],
+    risk:["pregnant","high"],
+    src:["weqaya2023"]
+  },
+  {
+    id:"immunization",
+    what:"Adult Immunization (KSA context)",
+    who:"Per age/risk (e.g., influenza annually; Td/Tdap; HPV; pneumococcal; zoster; RSV where eligible)",
+    howOften:"Follow CHI/MOH indications and product labels",
+    how:"Check history; use catch-up if needed; counsel on availability",
+    sex:"any", minAge:18, tags:["vaccine","immunization","influenza","HPV","pneumococcal","zoster"],
+    risk:["average","high","pregnant"],
+    src:["chiAdultImm","mohImm"]
+  },
+  {
+    id:"oral",
+    what:"Oral Health Counseling",
+    who:"Adults (tooth brushing/flossing; hygiene)",
+    howOften:"Opportunistic",
+    how:"Reinforce hygiene; refer dental issues",
+    sex:"any", minAge:18, tags:["dental","counseling"],
+    risk:["average","high"],
+    src:["weqaya2023"]
+  },
+  {
+    id:"falls",
+    what:"Falls Risk & Physical Activity",
+    who:"Older adults (screen risks; exercise, home safety, vision, meds, vitamin D as appropriate)",
+    howOften:"Opportunistic / periodic",
+    how:"Timed Up & Go; counsel & address risks",
+    sex:"any", minAge:60, tags:["geriatrics","falls","exercise"],
+    risk:["average","high"],
+    src:["weqaya2023"]
+  }
+];
+
+const SRC_MAP = {
+  weqaya2023: {abbr:"Saudi Clinical Preventive Guideline 2023", href:"#ref1"},
+  crcKSA: {abbr:"KSA Colorectal Screening Guidance", href:"#ref3"},
+  mohBreast: {abbr:"MOH/CHI Breast Screening", href:"#ref3"},
+  chiAdultImm: {abbr:"CHI Adult Immunization", href:"#ref2"},
+  mohImm: {abbr:"MOH Immunization", href:"#ref3"},
+  uspstf: {abbr:"USPSTF A/B (as referenced)", href:"#ref4"}
+};
+
+/* ------------ UI: render & filtering ----------------- */
+const grid = document.getElementById('grid');
+const ageEl = document.getElementById('age');
+const sexEl = document.getElementById('sex');
+const riskEl = document.getElementById('risk');
+const qEl = document.getElementById('q');
+
+function badgeFrom(item){
+  if(item.grade==="A") return '<span class="badge ok">Strong</span>';
+  if(item.grade==="B") return '<span class="badge ok">Recommend</span>';
+  if(item.grade==="C") return '<span class="badge warn">Selective</span>';
+  return '<span class="badge">Guidance</span>';
+}
+
+function srcBadges(item){
+  return item.src.map(k=>{
+    const s = SRC_MAP[k]||{abbr:k};
+    return `<span class="badge">${s.abbr}</span>`;
+  }).join(' ');
+}
+
+function withinAge(item, age){
+  const min = item.minAge ?? 0;
+  const max = item.maxAge ?? 200;
+  return age >= min && age <= max;
+}
+
+function matches(item){
+  const age = parseInt(ageEl.value||0,10);
+  const sex = sexEl.value;
+  const risk = riskEl.value;
+  const q = (qEl.value||"").toLowerCase().trim();
+
+  let ok = true;
+  ok = ok && withinAge(item, age);
+  if(sex!=="any") ok = ok && (item.sex==="any" || item.sex===sex);
+  if(risk) ok = ok && (item.risk||[]).includes(risk);
+
+  if(q){
+    const hay = [item.what,item.who,item.how,item.tags?.join(" ")].join(" ").toLowerCase();
+    ok = ok && hay.includes(q);
+  }
+  return ok;
+}
+
+function card(item){
+  return `
+  <article class="card" data-id="${item.id}">
+    <div class="kicker">Screening / Prevention</div>
+    <h2>${item.what}</h2>
+    <div class="meta">
+      ${badgeFrom(item)}
+      ${srcBadges(item)}
+      <span class="badge">${item.sex==='any'?'All adults':(item.sex==='female'?'Women':'Men')}</span>
+      ${item.minAge?`<span class="badge">Age ${item.minAge}${item.maxAge?('–'+item.maxAge):'+'}</span>`:''}
+    </div>
+    <div class="what">Who: ${item.who}</div>
+    <div class="how">Interval: ${item.howOften}</div>
+    <div class="how">How: ${item.how}</div>
+
+    ${tools(item)}
+
+    <details>
+      <summary>Notes & pathways</summary>
+      <div class="note">
+        <p>Tailor to comorbidities and local program availability. For abnormal results, follow MOH pathways/referral in your region.</p>
+      </div>
+    </details>
+
+    ${actions(item)}
+  </article>`;
+}
+
+function tools(item){
+  // Small built-in calculators/links
+  let x = `<div class="row">`;
+  if(item.id==="lung"){
+    x += `<div class="calc">Pack-years: <span class="inline-input">cigs/day <input type="number" id="cigs" min="0" value="20" style="width:80px"></span> × <span class="inline-input">years <input type="number" id="years" min="0" value="20" style="width:80px"></span> ÷ 20 = <b id="py">20</b></div>`;
+  }
+  if(item.id==="depression"){
+    x += `<div class="calc">PHQ-2: “Down, depressed, or hopeless?” & “Little interest or pleasure?” (≥3 → PHQ-9)</div>`;
+  }
+  if(item.id==="lipids"){
+    x += `<div class="calc">ASCVD risk: use your local calculator/app; document shared decision for statin.</div>`;
+  }
+  return x + `</div>`;
+}
+
+function actions(item){
+  return `
+  <div class="action">
+    <span class="pill">${(item.tags||[]).join(" • ")}</span>
+  </div>`;
+}
+
+function render(){
+  grid.innerHTML = ITEMS.filter(matches).map(card).join('');
+  attachPackYears();
+}
+
+function attachPackYears(){
+  const c = document.getElementById('cigs');
+  const y = document.getElementById('years');
+  const py = document.getElementById('py');
+  if(c && y && py){
+    const upd = ()=>{ py.textContent = ((Number(c.value)||0)/20 * (Number(y.value)||0)).toFixed(1); };
+    c.addEventListener('input',upd); y.addEventListener('input',upd); upd();
+  }
+}
+
+document.getElementById('reset').addEventListener('click', ()=>{
+  ageEl.value=40; sexEl.value='any'; riskEl.value='average'; qEl.value='';
+  render();
+});
+
+document.getElementById('theme').addEventListener('click', ()=>{
+  const cur = document.documentElement.getAttribute('data-theme');
+  document.documentElement.setAttribute('data-theme', cur==='dark' ? 'light':'dark');
+});
+
+[ageEl,sexEl,riskEl,qEl].forEach(el=>el.addEventListener('input', render));
+
+/* initial */
+if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches){
+  document.documentElement.setAttribute('data-theme','dark');
+}
+render();
+</script>
+</body>
+</html>
