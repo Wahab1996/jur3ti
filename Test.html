@@ -1,35 +1,286 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Medscape Drug Interaction Checker</title>
-<style>
-  body { font-family: Arial, sans-serif; margin: 2em; }
-  input, button { margin: 0.5em 0; padding: 0.5em; width: 100%; }
-  #result { margin-top: 1em; padding: 1em; border: 1px solid #ccc; }
-</style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hypercholesterolemia (Hyperlipidemia) | Family Medicine Reference</title>
+  <style>
+    body {
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f8f9fa;
+      color: #212529;
+      line-height: 1.6;
+      margin: 40px;
+    }
+    h1, h2, h3 {
+      color: #004085;
+    }
+    section {
+      background: #ffffff;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 15px 0;
+    }
+    th, td {
+      border: 1px solid #dee2e6;
+      padding: 10px;
+      text-align: left;
+    }
+    th {
+      background-color: #e9ecef;
+    }
+    .source {
+      font-size: 0.9em;
+      color: #555;
+    }
+    a {
+      color: #0069d9;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  </style>
 </head>
 <body>
 
-<h2>Medscape Drug Interaction Checker</h2>
-<p>Enter two drug names:</p>
+  <h1>Hypercholesterolemia (Hyperlipidemia)</h1>
 
-<input type="text" id="drug1" placeholder="First drug name">
-<input type="text" id="drug2" placeholder="Second drug name">
-<button onclick="openMedscape()">Check in Medscape</button>
+  <section>
+    <h2>Definition</h2>
+    <p>
+      <strong>Dyslipidemia</strong> refers to abnormal concentrations of lipids in the blood.  
+      <strong>Hyperlipidemia</strong> indicates elevated levels of cholesterol and/or triglycerides.
+    </p>
+    <ul>
+      <li><strong>Hypercholesterolemia:</strong> Elevated total or LDL cholesterol</li>
+      <li><strong>Hypertriglyceridemia:</strong> Elevated triglycerides</li>
+      <li><strong>Mixed hyperlipidemia:</strong> Both cholesterol and triglycerides elevated</li>
+    </ul>
+  </section>
 
-<div id="result"></div>
+  <section>
+    <h2>Etiology</h2>
+    <table>
+      <tr><th>Category</th><th>Examples</th></tr>
+      <tr>
+        <td><strong>Primary (genetic)</strong></td>
+        <td>Familial hypercholesterolemia, familial combined hyperlipidemia, polygenic hypercholesterolemia</td>
+      </tr>
+      <tr>
+        <td><strong>Secondary (acquired)</strong></td>
+        <td>
+          Uncontrolled diabetes mellitus, hypothyroidism, nephrotic syndrome, chronic kidney disease, Cushing syndrome, alcohol use, obesity, medications (e.g., corticosteroids, thiazides, antiretrovirals)
+        </td>
+      </tr>
+    </table>
+  </section>
 
-<script>
-function openMedscape() {
-  const d1 = document.getElementById('drug1').value.trim();
-  const d2 = document.getElementById('drug2').value.trim();
-  if (!d1 || !d2) return alert('Please enter both drug names.');
-  const url = `https://reference.medscape.com/drug-interactionchecker?drugList=${encodeURIComponent(d1)}+${encodeURIComponent(d2)}`;
-  window.open(url, '_blank');
-}
-</script>
+  <section>
+    <h2>Screening</h2>
+    <ul>
+      <li><strong>Adults:</strong> Begin at age 20; repeat every 4–6 years if normal (per ACC/AHA).</li>
+      <li><strong>High-risk groups:</strong> Family history of premature ASCVD, diabetes, hypertension, obesity — screen earlier and more frequently.</li>
+      <li><strong>Children:</strong> Universal screening once between ages 9–11 and 17–21 (for familial forms).</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Clinical Features</h2>
+    <ul>
+      <li>Usually asymptomatic</li>
+      <li><strong>Xanthomas:</strong> yellow papules over tendons or skin</li>
+      <li><strong>Xanthelasma:</strong> cholesterol deposits on eyelids</li>
+      <li><strong>Corneal arcus:</strong> white/gray ring around cornea (early sign in familial hypercholesterolemia)</li>
+      <li>Complications: atherosclerosis → coronary artery disease, stroke, peripheral vascular disease</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Diagnosis</h2>
+    <ul>
+      <li><strong>Lipid panel:</strong> fasting or non-fasting (total cholesterol, LDL, HDL, triglycerides)</li>
+      <li><strong>LDL calculation:</strong> LDL = Total cholesterol − HDL − (Triglycerides/5)</li>
+      <li>Consider secondary causes with: fasting glucose, TSH, liver and renal function tests</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Treatment</h2>
+
+    <h3>1. Lifestyle Modifications (for all patients)</h3>
+    <ul>
+      <li>Diet: reduce saturated fats, trans fats, and cholesterol intake</li>
+      <li>Increase fiber, fruits, vegetables, and omega-3 intake</li>
+      <li>Regular aerobic exercise (≥150 min/week)</li>
+      <li>Weight control and smoking cessation</li>
+      <li>Limit alcohol intake</li>
+    </ul>
+
+    <h3>2. Pharmacologic Therapy</h3>
+    <table>
+      <tr><th>Drug Class</th><th>Examples</th><th>Main Effects / Notes</th></tr>
+      <tr>
+        <td><strong>Statins (HMG-CoA reductase inhibitors)</strong></td>
+        <td>Atorvastatin, Rosuvastatin, Simvastatin</td>
+        <td>↓ LDL 30–60%; first-line for ASCVD prevention; monitor LFTs and myopathy</td>
+      </tr>
+      <tr>
+        <td><strong>Ezetimibe</strong></td>
+        <td>—</td>
+        <td>↓ LDL 15–25%; add if statin alone insufficient or statin intolerance</td>
+      </tr>
+      <tr>
+        <td><strong>PCSK9 inhibitors</strong></td>
+        <td>Evolocumab, Alirocumab</td>
+        <td>Potent LDL reduction (~60%); for familial or refractory hypercholesterolemia</td>
+      </tr>
+      <tr>
+        <td><strong>Bile acid sequestrants</strong></td>
+        <td>Cholestyramine, Colesevelam</td>
+        <td>↓ LDL; may ↑ triglycerides; safe in pregnancy</td>
+      </tr>
+      <tr>
+        <td><strong>Fibrates</strong></td>
+        <td>Fenofibrate, Gemfibrozil</td>
+        <td>↓ Triglycerides; avoid combining Gemfibrozil with statins</td>
+      </tr>
+      <tr>
+        <td><strong>Niacin</strong></td>
+        <td>—</td>
+        <td>↑ HDL, ↓ LDL and triglycerides; limited by flushing, hyperglycemia</td>
+      </tr>
+      <tr>
+        <td><strong>Omega-3 fatty acids</strong></td>
+        <td>Icosapent ethyl</td>
+        <td>↓ Triglycerides; used in severe hypertriglyceridemia</td>
+      </tr>
+    </table>
+
+    <h3>3. Treatment Targets</h3>
+    <ul>
+      <li><strong>Severe LDL elevation (≥190 mg/dL):</strong> High-intensity statin</li>
+      <li><strong>Familial hypercholesterolemia:</strong> LDL goal &lt; 100 mg/dL (or &lt; 70 mg/dL if ASCVD)</li>
+      <li><strong>High triglycerides (&gt;500 mg/dL):</strong> Fibrates or omega-3s to prevent pancreatitis</li>
+    </ul>
+
+    <h3>4. Follow-Up</h3>
+    <ul>
+      <li>Repeat lipid panel 6–12 weeks after initiation or dose change</li>
+      <li>Monitor liver enzymes and muscle symptoms</li>
+      <li>Reassess cardiovascular risk and adherence regularly</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Familial Hypercholesterolemia (FH)</h2>
+    <ul>
+      <li>Autosomal dominant disorder → defective LDL receptor</li>
+      <li>LDL typically &gt; 190 mg/dL in adults</li>
+      <li>Early-onset CAD, tendon xanthomas, corneal arcus</li>
+      <li>Treatment: maximal statin + ezetimibe ± PCSK9 inhibitor; consider LDL apheresis in homozygous FH</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Severe Hypertriglyceridemia</h2>
+    <ul>
+      <li>Triglycerides &gt; 500 mg/dL → risk of pancreatitis</li>
+      <li>Treat secondary causes (alcohol, diabetes, drugs)</li>
+      <li>Start fibrate ± omega-3 fatty acids</li>
+      <li>Add niacin or statin if LDL elevation coexists</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Xanthomas and Xanthelasma</h2>
+    <ul>
+      <li>Cutaneous manifestations of lipid accumulation</li>
+      <li>May regress with lipid control, but often recur</li>
+      <li>Removal (laser/surgical) for cosmetic purposes</li>
+    </ul>
+  </section>
+
+  <!-- ======================================= -->
+  <!-- NEW SECTION: CARDIOVASCULAR RISK TOOL -->
+  <!-- ======================================= -->
+  <section>
+    <h2>Cardiovascular Risk Calculator (ASCVD) & Statin Therapy Decision Guide</h2>
+
+    <h3>1. ASCVD 10-Year Risk Estimation</h3>
+    <ul>
+      <li>Use the <a href="https://tools.acc.org/ascvd-risk-estimator-plus/" target="_blank">ASCVD Risk Estimator Plus (ACC/AHA)</a>.</li>
+      <li>Includes: age, sex, race, total & HDL cholesterol, systolic BP, diabetes, smoking status, and BP treatment.</li>
+    </ul>
+
+    <h3>2. Statin Therapy Recommendations (ACC/AHA 2018)</h3>
+    <table>
+      <tr><th>Risk Group / Condition</th><th>Recommendation</th></tr>
+      <tr>
+        <td><strong>Clinical ASCVD</strong></td>
+        <td>High-intensity statin (goal ≥50% LDL reduction)</td>
+      </tr>
+      <tr>
+        <td><strong>LDL ≥ 190 mg/dL</strong></td>
+        <td>High-intensity statin; consider PCSK9 inhibitor if not controlled</td>
+      </tr>
+      <tr>
+        <td><strong>Diabetes (age 40–75)</strong></td>
+        <td>Moderate- to high-intensity statin regardless of calculated risk</td>
+      </tr>
+      <tr>
+        <td><strong>No diabetes, age 40–75, LDL 70–189 mg/dL</strong></td>
+        <td>
+          Base on 10-year ASCVD risk:<br>
+          • &lt;5%: lifestyle only<br>
+          • 5–7.5%: consider moderate statin<br>
+          • 7.5–20%: moderate to high statin<br>
+          • &gt;20%: high-intensity statin
+        </td>
+      </tr>
+      <tr>
+        <td><strong>Adults &gt;75 years</strong></td>
+        <td>Individualized decision based on benefit vs. risk</td>
+      </tr>
+    </table>
+
+    <h3>3. Statin Intensity (Typical Dosing)</h3>
+    <table>
+      <tr><th>Intensity</th><th>Statin Examples</th></tr>
+      <tr>
+        <td><strong>High</strong></td>
+        <td>Atorvastatin 40–80 mg, Rosuvastatin 20–40 mg</td>
+      </tr>
+      <tr>
+        <td><strong>Moderate</strong></td>
+        <td>Atorvastatin 10–20 mg, Rosuvastatin 5–10 mg, Simvastatin 20–40 mg, Pravastatin 40–80 mg</td>
+      </tr>
+      <tr>
+        <td><strong>Low</strong></td>
+        <td>Simvastatin 10 mg, Pravastatin 10–20 mg, Lovastatin 20 mg</td>
+      </tr>
+    </table>
+
+    <h3>4. Monitoring & Follow-up</h3>
+    <ul>
+      <li>Recheck lipids 6–12 weeks after therapy initiation or adjustment.</li>
+      <li>Assess adherence and tolerance at every visit.</li>
+      <li>Recalculate ASCVD risk every 4–6 years in adults 20–79 years without ASCVD.</li>
+    </ul>
+  </section>
+
+  <p class="source">
+    Sources:<br>
+    <a href="https://www.amboss.com/us/knowledge/lipid-disorders?utm_medium=chatgpt-plugin&utm_source=chatgpt" target="_blank">AMBOSS: Lipid Disorders</a><br>
+    <a href="https://tools.acc.org/ascvd-risk-estimator-plus/" target="_blank">ACC/AHA ASCVD Risk Estimator</a><br>
+    <a href="https://www.amboss.com/us/knowledge/hypothyroidism?utm_medium=chatgpt-plugin&utm_source=chatgpt" target="_blank">AMBOSS: Hypothyroidism</a>
+  </p>
 
 </body>
 </html>
