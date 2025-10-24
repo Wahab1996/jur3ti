@@ -3,72 +3,366 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>مولّد Anki من نص — أنيق وسهل</title>
-<meta name="color-scheme" content="dark light">
+<title>مولّد ملف Anki من نص (Front,Back + حرف فقط)</title>
 <style>
-  :root{
-    --bg:#0b1220; --surface:#0e1628; --surface-2:#111c32; --border:#1f2a44; --text:#e5eaf3; --muted:#9aa4b2; --accent:#22c55e; --radius:14px; --shadow:0 10px 30px rgba(0,0,0,.25); --gap:14px;
-  }
-  @media (prefers-color-scheme: light){
-    :root{ --bg:#f6f7fb; --surface:#fff; --surface-2:#f2f5fb; --border:#e6e8ee; --text:#0f172a; --muted:#5b6473; --shadow:0 8px 28px rgba(2,6,23,.08); }
-    body{ background: linear-gradient(180deg,#f7fbff, #f6f7fb 40%); }
-  }
-  *{box-sizing:border-box}
-  body{margin:0;font-family:system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-  .wrap{max-width:1150px;margin:32px auto;padding:0 18px}
-  .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow)}
-  header.app{background:var(--surface-2);border-bottom:1px solid var(--border)}
-  .head-inner{display:flex;align-items:center;justify-content:space-between;padding:16px 18px}
-  h1{margin:0;font-size:18px}
-  .grid{display:grid;gap:var(--gap);grid-template-columns:1fr;padding:16px}
-  @media(min-width:980px){.grid.cols{grid-template-columns:1.25fr .85fr}}
-  label{font-size:12px;color:var(--muted);display:block;margin:6px 0}
-  textarea,input[type="text"],select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:var(--surface-2);color:var(--text)}
-  textarea{min-height:420px;line-height:1.7;resize:vertical;direction:ltr;text-align:left}
-  table{width:100%;border-collapse:collapse;min-width:680px}
-  th,td{text-align:center;padding:10px 12px;border-bottom:1px solid var(--border)}
-  th{background:var(--surface-2);font-weight:700}
-  tbody tr:hover td{background:rgba(56,189,248,.05)}
+  :root { --gap:12px; --radius:12px; --shadow:0 6px 18px rgba(0,0,0,.08); }
+  body { font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; background:#0f172a; color:#e2e8f0; margin:0; }
+  .wrap { max-width:1100px; margin:40px auto; padding:0 16px; }
+  .card { background:#0b1220; border:1px solid #1f2937; border-radius:var(--radius); box-shadow:var(--shadow); }
+  header { padding:18px 20px; border-bottom:1px solid #1f2937; display:flex; gap:10px; align-items:center; justify-content:space-between; }
+  header h1 { font-size:18px; margin:0; font-weight:700; letter-spacing:.3px; }
+  .grid { display:grid; gap:var(--gap); grid-template-columns:1fr; padding:16px; }
+  @media (min-width:960px){ .grid{ grid-template-columns:1.2fr .8fr; } }
+  /* textarea LTR */
+  textarea { width:100%; min-height:380px; resize:vertical; padding:14px; border-radius:10px; border:1px solid #23304a; background:#0b1426; color:#e2e8f0; line-height:1.6; direction:ltr; text-align:left; }
+  .panel { display:grid; gap:var(--gap); }
+  .row { display:grid; gap:10px; grid-template-columns:1fr 1fr; }
+  label { font-size:13px; opacity:.9; margin-bottom:6px; display:block; }
+  input[type="text"],select { width:100%; padding:12px; border-radius:10px; border:1px solid #23304a; background:#0b1426; color:#e2e8f0; }
+  .inline { display:flex; align-items:center; gap:8px; }
+  button { padding:12px 14px; border-radius:10px; border:1px solid #334155; background:#1e293b; color:#e2e8f0; cursor:pointer; font-weight:600; }
+  button.primary { background:#22c55e; border-color:#16a34a; color:#062d17; }
+  button.ghost { background:transparent; }
+  .help { font-size:13px; line-height:1.7; background:#0a1222; border:1px dashed #29354e; padding:12px; border-radius:10px; }
+  table { width:100%; border-collapse:collapse; background:#0b1426; border:1px solid #22314f; border-radius:10px; overflow:hidden; }
+  th,td { text-align:start; padding:10px 12px; border-bottom:1px solid #1e2a45; vertical-align:top; }
+  th { background:#0e1830; font-weight:700; }
+  .muted { opacity:.7; font-size:12px; }
+  .badge { display:inline-block; padding:4px 8px; border-radius:999px; background:#0b1d39; border:1px solid #1f3b70; font-size:12px; }
+  .footer { padding:14px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between; border-top:1px solid #1f2937; }
+  .note { font-size:12px; opacity:.8; }
+  .pill { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
 </style>
 </head>
 <body>
 <div class="wrap">
-  <div class="card" id="app">
-    <header class="app">
-      <div class="head-inner">
-        <h1>مولّد ملف Anki من نص</h1>
-      </div>
+  <div class="card">
+    <header>
+      <h1>مولّد ملف Anki من نص</h1>
+      <small class="badge">Basic • Cloze • MCQ • Front,Back</small>
     </header>
 
-    <div class="grid cols">
+    <div class="grid">
       <section>
         <label for="inputText">الصق النص هنا</label>
-        <textarea id="inputText" placeholder="Front,Back\nQuestion?<br>A)... ,B) ..."></textarea>
+        <textarea id="inputText" placeholder="مثال لصيغتك بالضبط:
+Front,Back
+Preferred insulin delivery method for T1DM?&lt;br&gt;A) ...&lt;br&gt;B) ... ,B) ...
+..."></textarea>
+
+        <div class="help">
+          <b>الأوضاع:</b>
+          <ul>
+            <li><b>Front,Back (MCQ بصيغتك):</b> أول سطر <code>Front,Back</code> ثم كل سطر: <code>Front,Back</code>. نفصل عند <u>آخر فاصلة</u> بالسطر.</li>
+            <li><b>MCQ (حر):</b> فقرة لكل سؤال وخيارات، والصحيح يوضع في Back.</li>
+            <li><b>Q→A</b> و<b>Cloze</b> كما سبق.</li>
+          </ul>
+          الناتج CSV بترميز UTF-8 + BOM واقتباس تلقائي.
+        </div>
       </section>
-      <aside>
-        <!-- نفس عناصر التحكم الأخرى -->
+
+      <aside class="panel">
+        <div class="row">
+          <div>
+            <label for="mode">الوضع</label>
+            <select id="mode">
+              <option value="frontback">Front,Back (صيغة جاهزة)</option>
+              <option value="mcq">MCQ (اختيار من متعدد)</option>
+              <option value="qa">سؤال → جواب (Q→A)</option>
+              <option value="cloze">Cloze (إخفاء)</option>
+              <option value="one">سطر → بطاقة (وجه واحد)</option>
+            </select>
+          </div>
+          <div>
+            <label for="deck">اسم المجموعة (Deck) — اختياري</label>
+            <input id="deck" type="text" placeholder="مثال: Diabetes MCQs">
+          </div>
+        </div>
+
+        <div id="qaOptions" style="display:none;">
+          <div class="row">
+            <div>
+              <label for="delimiter">الفاصل لـ Q→A</label>
+              <input id="delimiter" type="text" value="::">
+            </div>
+            <div>
+              <label for="tags">وسوم (Tags) — اختياري</label>
+              <input id="tags" type="text" placeholder="مثال: MCQ;exam">
+            </div>
+          </div>
+        </div>
+
+        <div class="inline" style="margin-top:6px;">
+          <input type="checkbox" id="letterOnly">
+          <label for="letterOnly" class="inline">جعل <b>Back</b> حرف الخيار فقط (مثل: B)</label>
+        </div>
+
+        <div class="pill" style="margin-top:10px;">
+          <button id="previewBtn">معاينة</button>
+          <button id="downloadBtn" class="primary">تنزيل CSV</button>
+          <button id="clearBtn" class="ghost">تفريغ</button>
+        </div>
+
+        <div class="note">
+          عند الاستيراد في Anki: Note Type **Basic**، وربط الأعمدة: <b>Front</b> ← العمود 1، <b>Back</b> ← العمود 2، <b>Tags</b> ← العمود 3. (الـ Deck تختاره من نافذة الاستيراد).
+        </div>
       </aside>
     </div>
 
-    <div class="grid" style="grid-template-columns:1fr; padding-top:0">
+    <div class="grid" style="grid-template-columns:1fr;">
       <section>
-        <label>المعاينة</label>
-        <div class="tbl-wrap" id="preview"></div>
+        <label>المعاينة <span class="muted">(أول 100 بطاقة)</span></label>
+        <div id="preview"></div>
       </section>
+    </div>
+
+    <div class="footer">
+      <div class="note">يدعم &lt;br&gt; داخل الواجهة الأمامية.</div>
+      <div class="note">يعمل محليًا — بدون إنترنت.</div>
     </div>
   </div>
 </div>
+
 <script>
 (function(){
-  const inputText=document.querySelector('#inputText');
-  const previewEl=document.querySelector('#preview');
-  function renderPreview(){
-    const headers=['Front','Back','Deck','Tags'];
-    const rows=[['مثال Front','مثال Back','Deck1','tag1']];
-    const head='<thead><tr>'+headers.map(h=>`<th>${h}</th>`).join('')+'</tr></thead>';
-    const body='<tbody>'+rows.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')+'</tbody>';
-    previewEl.innerHTML='<table>'+head+body+'</table>';
+  const $ = s => document.querySelector(s);
+
+  const inputText = $('#inputText');
+  const mode = $('#mode');
+  const deck = $('#deck');
+  const delimiter = $('#delimiter');
+  const tagsInput = $('#tags');
+  const qaOptions = $('#qaOptions');
+  const letterOnly = $('#letterOnly');
+  const previewEl = $('#preview');
+  const previewBtn = $('#previewBtn');
+  const downloadBtn = $('#downloadBtn');
+  const clearBtn = $('#clearBtn');
+
+  mode.addEventListener('change', ()=>{
+    qaOptions.style.display = (mode.value === 'qa') ? 'grid' : 'none';
+    renderPreview();
+  });
+
+  letterOnly.addEventListener('change', renderPreview);
+
+  clearBtn.addEventListener('click', ()=>{
+    inputText.value = '';
+    previewEl.innerHTML = '';
+  });
+
+  previewBtn.addEventListener('click', renderPreview);
+  inputText.addEventListener('input', debounce(renderPreview, 250));
+
+  downloadBtn.addEventListener('click', ()=>{
+    const {rows, headers} = buildRows();
+    if(!rows.length){ alert('لا توجد بطاقات للتصدير.'); return; }
+    const csv = toCSV([headers, ...rows]);
+    const deckName = (deck.value || 'anki').trim().replace(/[\\/:*?"<>|]+/g,'-');
+    const blob = new Blob([bomUtf8()+csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = `${deckName || 'anki'}.csv`;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+  });
+
+  function buildRows(){
+    const text = inputText.value.replace(/\r\n/g, '\n');
+    const tagString = normalizeTags(tagsInput?.value || '');
+    const deckName = (deck.value || '').trim();
+
+    if(mode.value === 'frontback'){
+      return parseFrontBack(text, deckName, tagString);
+    }
+
+    if(mode.value === 'qa'){
+      const delim = delimiter.value || '::';
+      const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
+      const rows = lines.map(line=>{
+        const idx = line.indexOf(delim);
+        let front = line, back = '';
+        if(idx >= 0){ front = line.slice(0, idx).trim(); back  = line.slice(idx + delim.length).trim(); }
+        return [front, back, tagString, deckName];
+      });
+      return { headers: ['Front','Back','Tags','Deck'], rows };
+    }
+
+    if(mode.value === 'one'){
+      const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
+      const rows = lines.map(line=>[line, '', tagString, deckName]);
+      return { headers: ['Front','Back','Tags','Deck'], rows };
+    }
+
+    if(mode.value === 'cloze'){
+      const chunks = splitParagraphs(text).filter(s=>s.trim().length>0);
+      const rows = chunks.map(ch => [ch.trim(), '', tagString, deckName]);
+      return { headers: ['Front','Back','Tags','Deck'], rows };
+    }
+
+    // MCQ (حر) — فقرة لكل سؤال
+    const paras = splitParagraphs(text).filter(p=>p.trim().length>0);
+    const rows = [];
+    for(const p of paras){
+      const parsed = parseMCQParagraph(p);
+      if(parsed){
+        const {question, options, correctIndex} = parsed;
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const optLines = options.map((opt,i)=>`${letters[i]}. ${opt}`).join('<br>');
+        const front = `${question}<br><br>${optLines}`;
+        let back = '';
+        if(correctIndex != null){
+          const L = letters[correctIndex];
+          back = letterOnly.checked ? L : `${L}. ${options[correctIndex]}`;
+        }
+        rows.push([front, back, tagString, deckName]);
+      }
+    }
+    return { headers: ['Front','Back','Tags','Deck'], rows };
   }
+
+  // ====== Front,Back parser (يفصل عند آخر فاصلة) ======
+  function parseFrontBack(text, deckName, tagString){
+    const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
+    const rows = [];
+    let startIndex = 0;
+    if(lines.length && /^front\s*,\s*back$/i.test(lines[0])) startIndex = 1;
+
+    for(let i=startIndex; i<lines.length; i++){
+      const line = lines[i];
+      const lastComma = line.lastIndexOf(',');
+      if(lastComma === -1) continue;
+
+      const front = line.slice(0, lastComma).trim();
+      let back = line.slice(lastComma+1).trim();
+
+      if(letterOnly.checked){
+        const letter = deriveLetterFromFrontBack(front, back);
+        if(letter) back = letter; // إن قدر يحدد الحرف، يحوله لحرف فقط
+      }
+
+      rows.push([front, back, tagString, deckName]);
+    }
+    return { headers: ['Front','Back','Tags','Deck'], rows };
+  }
+
+  // يستخرج حرف الخيار من Front/Back
+  function deriveLetterFromFrontBack(front, back){
+    // 1) لو Back يبدأ بحرف خيار واضح
+    const m1 = back.match(/^\s*([A-Za-z])\s*[\)\.\-]?\s/);
+    if(m1) return m1[1].toUpperCase();
+
+    // 2) جرّب مطابقته بنص أحد الخيارات الموجودين في Front
+    const opts = extractOptionLinesFromFront(front); // [{letter:'A', text:'...'}]
+    const nb = normalize(back);
+    const byText = opts.find(o => normalize(o.text) === nb);
+    if(byText) return byText.letter;
+
+    // 3) لو Back يساوي حرفًا منفردًا أصلًا
+    const m2 = back.match(/^\s*([A-Za-z])\s*$/);
+    if(m2) return m2[1].toUpperCase();
+
+    return ''; // ما قدر يحدد
+  }
+
+  function extractOptionLinesFromFront(front){
+    // front يحتوي <br>؛ نقسمه ونلتقط خطوط بصيغة "A) ..." أو "A. ..."
+    const parts = front.split(/<br\s*\/?>/i).map(s=>s.trim()).filter(Boolean);
+    const out = [];
+    for(const ln of parts){
+      const m = ln.match(/^\s*([A-Za-z])\s*[\)\.\-]\s*(.+)$/);
+      if(m){ out.push({letter: m[1].toUpperCase(), text: m[2].trim()}); }
+    }
+    return out;
+  }
+
+  // ====== MCQ paragraph parser ======
+  function parseMCQParagraph(p){
+    const lines = p.split('\n').map(s=>s.trim()).filter(Boolean);
+    if(!lines.length) return null;
+    const question = lines[0];
+    const rest = lines.slice(1);
+
+    let options = [];
+    let answerExplicit = null;
+
+    for(const ln of rest){
+      const m = ln.match(/^(?:answer|ans|correct)\s*[:\-]\s*(.+)$/i);
+      if(m){ answerExplicit = m[1].trim(); }
+    }
+
+    for(let ln of rest){
+      if(/^(?:answer|ans|correct)\s*[:\-]/i.test(ln)) continue;
+      let m;
+      m = ln.match(/^(?:[-•▪—–]|\*)\s*(.+)$/); if(m){ options.push(m[1].trim()); continue; }
+      m = ln.match(/^[A-Za-z]\s*[\)\.\-]\s*(.+)$/); if(m){ options.push(m[1].trim()); continue; }
+      if(options.length>0){ options.push(ln); }
+    }
+    if(options.length===0) return null;
+
+    let correctIndex = null;
+    for(let i=0;i<rest.length;i++){
+      const raw = rest[i];
+      if(/^(?:answer|ans|correct)\s*[:\-]/i.test(raw)) continue;
+      const starStart = raw.match(/^\*\s*(.+)$/);
+      const starEnd   = raw.match(/^(.+?)\s*\*$/);
+      if(starStart || starEnd){
+        const clean = (starStart? starStart[1] : starEnd[1]).trim();
+        const idx = options.findIndex(o=>normalize(o)===normalize(clean));
+        if(idx>=0) correctIndex = idx;
+      }
+    }
+
+    if(answerExplicit && correctIndex==null){
+      const ans = answerExplicit.trim();
+      const letter = ans.match(/^[A-Za-z]$/) || ans.match(/^[A-Za-z][\)\.\-]?$/);
+      if(letter){
+        const L = ans[0].toUpperCase();
+        const idx = L.charCodeAt(0) - 65;
+        if(idx>=0 && idx<options.length) correctIndex = idx;
+      } else {
+        const idxByText = options.findIndex(o=>normalize(o)===normalize(ans));
+        if(idxByText>=0) correctIndex = idxByText;
+      }
+    }
+    return {question, options, correctIndex};
+  }
+
+  // ====== helpers ======
+  function toCSV(rows){
+    return rows.map(r => r.map(csvEscape).join(',')).join('\n');
+  }
+  function csvEscape(v){
+    v = (v ?? '').toString();
+    if(/[",\n]/.test(v)){ v = '"' + v.replace(/"/g,'""') + '"'; }
+    return v;
+  }
+  function renderPreview(){
+    const {rows, headers} = buildRows();
+    const max = Math.min(rows.length, 100);
+    if(max === 0){ previewEl.innerHTML = '<div class="muted">لا توجد معاينة بعد.</div>'; return; }
+    const head = '<tr>' + headers.map(h=>`<th>${escapeHtml(h)}</th>`).join('') + '</tr>';
+    const body = rows.slice(0, max).map(r => '<tr>'+ r.map(c=>`<td>${escapeHtmlHTML(c)}</td>`).join('') + '</tr>').join('');
+    previewEl.innerHTML = `<div style="overflow:auto; border-radius:10px;"><table>${head}${body}</table></div>
+      <div class="muted" style="margin-top:8px;">إجمالي البطاقات: ${rows.length}${rows.length>max?` — المعروض ${max}`:''}</div>`;
+  }
+  function escapeHtml(s){
+    return (s??'').toString()
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+      .replace(/'/g,'&#039;');
+  }
+  function escapeHtmlHTML(s){
+    const safe = escapeHtml(s);
+    return safe.replace(/&lt;br&gt;/g,'<br>');
+  }
+  function splitParagraphs(t){ return t.split(/\n\s*\n+/); }
+  function normalize(s){ return (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase(); }
+  function normalizeTags(s){ return (s||'').trim().replace(/[;,]+/g,' ').replace(/\s+/g,' '); }
+  function bomUtf8(){ return '\uFEFF'; }
+  function debounce(fn, ms){ let id; return (...a)=>{ clearTimeout(id); id=setTimeout(()=>fn.apply(null,a),ms);} }
+
+  // معاينة أولية
   renderPreview();
 })();
 </script>
