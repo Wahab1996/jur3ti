@@ -1,162 +1,362 @@
 <!doctype html>
-<html lang="ar">
+<html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>CSV Generator for Anki</title>
-  <style>
-    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;direction:rtl;padding:18px;background:#f7f8fb;color:#111}
-    h1{font-size:18px;margin:0 0 12px}
-    textarea{width:100%;height:340px;padding:10px;font-size:14px;box-sizing:border-box;resize:vertical}
-    .row{display:flex;gap:8px;margin-top:10px}
-    button{padding:10px 14px;border:0;background:#0b74de;color:white;border-radius:8px;cursor:pointer}
-    button.secondary{background:#6c757d}
-    label{display:flex;align-items:center;gap:8px;font-size:14px}
-    .note{font-size:13px;color:#444;margin-top:8px}
-    .out{margin-top:12px;word-break:break-word}
-    .small{font-size:13px;color:#333}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مولّد ملف Anki من نص (يدعم MCQ)</title>
+<style>
+  :root { --gap:12px; --radius:12px; --shadow:0 6px 18px rgba(0,0,0,.08); }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; }
+  .wrap { max-width: 1100px; margin: 40px auto; padding: 0 16px; }
+  .card { background:#0b1220; border:1px solid #1f2937; border-radius: var(--radius); box-shadow: var(--shadow); }
+  header { padding: 18px 20px; border-bottom:1px solid #1f2937; display:flex; gap:10px; align-items:center; justify-content:space-between; }
+  header h1 { font-size: 18px; margin:0; font-weight:700; letter-spacing:.3px; }
+  header small { opacity:.8; }
+  .grid { display:grid; gap: var(--gap); grid-template-columns: 1fr; padding: 16px; }
+  @media (min-width: 960px){ .grid{ grid-template-columns: 1.2fr .8fr; } }
+  textarea { width: 100%; min-height: 380px; resize: vertical; padding:14px; border-radius: 10px; border:1px solid #23304a; background:#0b1426; color:#e2e8f0; line-height:1.6; }
+  .panel { display:grid; gap: var(--gap); }
+  .row { display:grid; gap:10px; grid-template-columns: 1fr 1fr; }
+  label { font-size: 13px; opacity:.9; margin-bottom:6px; display:block; }
+  input, select { width:100%; padding:12px; border-radius:10px; border:1px solid #23304a; background:#0b1426; color:#e2e8f0; }
+  input::placeholder { color:#94a3b8; opacity:.7; }
+  button { padding: 12px 14px; border-radius: 10px; border:1px solid #334155; background:#1e293b; color:#e2e8f0; cursor:pointer; font-weight:600; }
+  button.primary { background: #22c55e; border-color:#16a34a; color:#062d17; }
+  button.ghost { background: transparent; }
+  .help { font-size:13px; line-height:1.7; background:#0a1222; border:1px dashed #29354e; padding:12px; border-radius:10px; }
+  table { width:100%; border-collapse: collapse; background:#0b1426; border:1px solid #22314f; border-radius:10px; overflow:hidden; }
+  th, td { text-align: start; padding: 10px 12px; border-bottom:1px solid #1e2a45; vertical-align: top; }
+  th { background:#0e1830; font-weight:700; }
+  .muted { opacity:.7; font-size:12px; }
+  .badge { display:inline-block; padding:4px 8px; border-radius:999px; background:#0b1d39; border:1px solid #1f3b70; font-size:12px; }
+  .footer { padding:14px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between; border-top:1px solid #1f2937;}
+  .note { font-size:12px; opacity:.8; }
+  .pill { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+</style>
 </head>
 <body>
-  <h1>مولّد ملف CSV لأنكي — الصق النص ثم حمّل الملف</h1>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <h1>مولّد ملف Anki من نص</h1>
+        <small class="badge">Basic • Cloze • MCQ</small>
+      </header>
 
-  <label class="small">1) الصق هنا نص البطاقات (بصيغة CSV: <code>Front,Back</code>) أو الصق النص كما في المحادثة:</label>
-  <textarea id="inputArea" placeholder="أمثلة مقبولة:
-Front,Back
-سؤال 1?,إجابة 1
-... أو الصق النص الذي يولّد أسئلة مع خيارات مثل: Preferred insulin delivery method for T1DM?<br>A) ..."></textarea>
+      <div class="grid">
+        <section>
+          <label for="inputText">الصق النص هنا</label>
+          <textarea id="inputText" placeholder="أمثلة سريعة:
 
-  <div class="row">
-    <label><input type="checkbox" id="stripHtml" checked> إزالة وسوم &lt;br&gt; وتحويلها إلى فواصل أسطر داخل حقل السؤال</label>
+[MCQ: كل سؤال فقرة مستقلة]
+ما هو الهرمون الذي يخفض سكر الدم؟
+- *الأنسولين
+- الجلوكاجون
+- الكورتيزول
+- هرمون النمو
+
+What is the HbA1c diagnostic cutoff for diabetes?
+A) 5.6%
+B) 6.5% *
+C) 7.0%
+D) 8.0%
+
+Vitamin B12 deficiency causes:
+• Macrocytic anemia *
+• Microcytic anemia
+• Normocytic anemia
+Answer: A
+
+[Q→A]
+What is insulin? :: A hormone that lowers blood glucose
+
+[Cloze]
+Insulin is secreted by the {{c1::beta cells}} of the {{c2::pancreas}}."></textarea>
+
+          <div class="help">
+            <b>أوضاع التحويل:</b>
+            <ul>
+              <li><b>MCQ:</b> كل سؤال فقرة (افصل بأسطر فارغة). أول سطر هو السؤال، والأسطر التالية خيارات. صيغ الخيارات المقبولة:
+                <br>• <code>- الخيار</code> أو <code>• الخيار</code> أو <code>A) الخيار</code> أو <code>A. الخيار</code>.
+                <br>• ضع نجمة <code>*</code> على الخيار الصحيح (قبل النص أو بعده)، أو أضف سطرًا: <code>Answer: A</code> أو <code>Answer: النص الصحيح</code>.
+              </li>
+              <li><b>سؤال→جواب (Q→A):</b> كل سطر بطاقة، افصل بـ <code>::</code>.</li>
+              <li><b>Cloze:</b> استخدم <code>{{c1::...}}</code>. كل فقرة بطاقة.</li>
+            </ul>
+            في وضع MCQ، عمود <b>Front</b> يحتوي السؤال + الخيارات، وعمود <b>Back</b> هو الإجابة الصحيحة فقط.
+          </div>
+        </section>
+
+        <aside class="panel">
+          <div class="row">
+            <div>
+              <label for="mode">الوضع</label>
+              <select id="mode">
+                <option value="mcq">MCQ (اختيار من متعدد)</option>
+                <option value="qa">سؤال → جواب (Q→A)</option>
+                <option value="cloze">Cloze (إخفاء)</option>
+                <option value="one">سطر → بطاقة (وجه واحد)</option>
+              </select>
+            </div>
+            <div>
+              <label for="deck">اسم المجموعة (Deck) — اختياري</label>
+              <input id="deck" type="text" placeholder="مثال: Internal Medicine" />
+            </div>
+          </div>
+
+          <div class="row" id="qaOptions">
+            <div>
+              <label for="delimiter">الفاصل بين السؤال والجواب (لوضع Q→A)</label>
+              <input id="delimiter" type="text" value="::">
+            </div>
+            <div>
+              <label for="tags">وسوم (Tags) — اختياري</label>
+              <input id="tags" type="text" placeholder="مثال: MCQ;exam;cards">
+            </div>
+          </div>
+
+          <div class="pill">
+            <button id="previewBtn">معاينة البطاقات</button>
+            <button id="downloadBtn" class="primary">تنزيل ملف CSV للـ Anki</button>
+            <button id="clearBtn" class="ghost">تفريغ الحقول</button>
+          </div>
+
+          <div class="note">
+            CSV بترميز UTF-8 (مع BOM). عند الاستيراد اختر نوع المذكرة <b>Basic</b> واربط الأعمدة: Front → Back. (أو Cloze لو وضع الإخفاء).
+          </div>
+        </aside>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr;">
+        <section>
+          <label>المعاينة <span class="muted">(أول 100 بطاقة)</span></label>
+          <div id="preview"></div>
+        </section>
+      </div>
+
+      <div class="footer">
+        <div class="note">تلميح: في MCQ سيعرض الوجه الأمامي السؤال + الخيارات، والوجه الخلفي الإجابة الصحيحة (حرف الخيار + النص).</div>
+        <div class="note">يعمل محليًا بدون إنترنت.</div>
+      </div>
+    </div>
   </div>
-
-  <div class="row">
-    <button id="generateBtn">إنشاء ملف CSV للأنكي</button>
-    <button id="clearBtn" class="secondary">مسح</button>
-  </div>
-
-  <div class="note" id="hint">
-    ملاحظة: هذا مولّد CSV فقط. الملف الناتج قابل للاستيراد في AnkiMobile/Anki Desktop كنمط "Basic". إذا أردت ملف <code>.apkg</code> فذلك يتطلب أدوات (مثل genanki) على جهاز الكمبيوتر.
-  </div>
-
-  <div class="out" id="outputInfo"></div>
 
 <script>
 (function(){
-  const input = document.getElementById('inputArea');
-  const generateBtn = document.getElementById('generateBtn');
-  const clearBtn = document.getElementById('clearBtn');
-  const outputInfo = document.getElementById('outputInfo');
-  const stripHtml = document.getElementById('stripHtml');
+  const $ = (s)=>document.querySelector(s);
 
-  // Example prefill (optional) — comment out if undesired
-  input.value = `Front,Back
-Preferred insulin delivery method for T1DM?<br>A) Single daily injection<br>B) Multiple daily injections or insulin pump<br>C) Oral agents<br>D) Sliding-scale insulin only,B) Multiple daily injections or insulin pump
-Usual starting insulin dose for T1DM (units/kg/day)?<br>A) 0.1<br>B) 0.25<br>C) 0.5<br>D) 1.5,C) 0.5
-Ratio of basal to prandial insulin in T1DM?<br>A) 70/30<br>B) 60/40<br>C) 50/50<br>D) 40/60,C) 50/50
-What happens to insulin needs during the “honeymoon phase” of T1DM?<br>A) Increase<br>B) Stay same<br>C) Decrease<br>D) Stop entirely,C) Decrease`;
+  const inputText = $('#inputText');
+  const mode = $('#mode');
+  const deck = $('#deck');
+  const delimiter = $('#delimiter');
+  const tagsInput = $('#tags');
+  const qaOptions = $('#qaOptions');
+  const previewEl = $('#preview');
+  const previewBtn = $('#previewBtn');
+  const downloadBtn = $('#downloadBtn');
+  const clearBtn = $('#clearBtn');
 
-  function sanitizeLine(line) {
-    // Remove code fences if pasted
-    line = line.replace(/^```.+/g,'').replace(/```/g,'').trim();
-    return line;
-  }
+  mode.addEventListener('change', ()=> {
+    qaOptions.style.display = (mode.value === 'qa') ? 'grid' : 'none';
+    renderPreview();
+  });
+  qaOptions.style.display = (mode.value === 'qa') ? 'grid' : 'none';
 
-  function htmlBreakToNewline(text) {
-    // Replace <br> and variants with literal newline inside the Front field (keeps readability in Anki)
-    return text.replace(/<br\s*\/?>/gi,'\\n');
-  }
+  clearBtn.addEventListener('click', ()=>{
+    inputText.value = '';
+    previewEl.innerHTML = '';
+  });
 
-  function csvEscape(field) {
-    // Escape double quotes by doubling them, and wrap in quotes if needed
-    if (field == null) field = '';
-    const needs = /[,"\n\r]/.test(field);
-    let v = String(field);
-    v = v.replace(/"/g,'""');
-    return needs ? `"${v}"` : v;
-  }
+  previewBtn.addEventListener('click', renderPreview);
+  inputText.addEventListener('input', debounce(renderPreview, 250));
 
-  function prepareCSV(raw) {
-    const lines = raw.split(/\r?\n/).map(sanitizeLine).filter(l=>l.trim()!=='');
-    // If first line starts with Front,Back treat it as header and keep
-    let hasHeader = false;
-    if (lines.length && /^front\s*,\s*back$/i.test(lines[0])) {
-      hasHeader = true;
-      lines.shift(); // remove header for processing; we'll add proper header later
-    }
-
-    const rows = [];
-    for (let i=0;i<lines.length;i++){
-      let line = lines[i];
-
-      // If the line already looks like CSV with a comma separating front and back
-      if (line.indexOf(',') !== -1) {
-        // Split only on the first comma to allow commas in answers
-        const idx = line.indexOf(',');
-        let front = line.slice(0, idx).trim();
-        let back = line.slice(idx+1).trim();
-
-        if (stripHtml.checked) front = htmlBreakToNewline(front);
-        // Convert any HTML entities basic (like &lt; &gt;) — minimal
-        front = front.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
-
-        rows.push([front, back]);
-        continue;
-      }
-
-      // Otherwise — try to parse block: question line followed by answer line
-      // Look ahead: if next line exists, use it as back
-      if (i+1 < lines.length) {
-        const front = line;
-        const back = lines[i+1];
-        if (stripHtml.checked) rows.push([htmlBreakToNewline(front), back]);
-        else rows.push([front, back]);
-        i++; // skip next line
-      } else {
-        // single leftover line -> treat as front with empty back
-        rows.push([line, '']);
-      }
-    }
-
-    // Build CSV content with UTF-8 BOM to ensure Arabic shows correctly in some apps
-    const BOM = '\uFEFF';
-    const header = 'Front,Back';
-    const csvLines = rows.map(r => `${csvEscape(r[0])},${csvEscape(r[1])}`);
-    return BOM + header + "\n" + csvLines.join("\n");
-  }
-
-  function download(filename, content) {
-    const blob = new Blob([content], {type: 'text/csv;charset=utf-8;'});
+  downloadBtn.addEventListener('click', ()=>{
+    const {rows, headers} = buildRows();
+    if(!rows.length){ alert('لا توجد بطاقات لتصديرها.'); return; }
+    const csv = toCSV([headers, ...rows]);
+    const deckName = (deck.value || 'anki').trim().replace(/[\\/:*?"<>|]+/g,'-');
+    const blob = new Blob([bomUtf8()+csv], {type:'text/csv;charset=utf-8;'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
-    a.href = url;
-    a.download = filename;
-    document.body.appendChild(a);
-    a.click();
-    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
+    a.href = url; a.download = `${deckName || 'anki'}.csv`;
+    document.body.appendChild(a); a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+  });
+
+  function buildRows(){
+    const text = inputText.value.replace(/\r\n/g, '\n');
+    const tagString = normalizeTags(tagsInput.value);
+    const deckName = (deck.value || '').trim();
+
+    if(mode.value === 'qa'){
+      const delim = delimiter.value || '::';
+      const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
+      const rows = lines.map(line=>{
+        const idx = line.indexOf(delim);
+        let front = line, back = '';
+        if(idx >= 0){ front = line.slice(0, idx).trim(); back  = line.slice(idx + delim.length).trim(); }
+        return [front, back, deckName, tagString];
+      });
+      return { headers: ['Front','Back','Deck','Tags'], rows };
+    }
+
+    if(mode.value === 'one'){
+      const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
+      const rows = lines.map(line=>[line, '', deckName, tagString]);
+      return { headers: ['Front','Back','Deck','Tags'], rows };
+    }
+
+    if(mode.value === 'cloze'){
+      const chunks = splitParagraphs(text).filter(s=>s.trim().length>0);
+      const rows = chunks.map(ch => [ch.trim(), deckName, tagString]);
+      return { headers: ['Text','Deck','Tags'], rows };
+    }
+
+    // MCQ
+    const paras = splitParagraphs(text).filter(p=>p.trim().length>0);
+    const rows = [];
+    for(const p of paras){
+      const parsed = parseMCQParagraph(p);
+      if(parsed){
+        const {question, options, correctIndex} = parsed;
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const optLines = options.map((opt,i)=>`${letters[i]}. ${opt}`).join('<br>');
+        const front = `${question}<br><br>${optLines}`;
+        let back = '';
+        if(correctIndex != null){
+          const letter = letters[correctIndex];
+          back = `${letter}. ${options[correctIndex]}`;
+        }
+        rows.push([front, back, deckName, tagString]);
+      }
+    }
+    return { headers: ['Front','Back','Deck','Tags'], rows };
   }
 
-  generateBtn.addEventListener('click', () => {
-    const raw = input.value;
-    if (!raw.trim()) {
-      outputInfo.innerHTML = '<span style="color:#b00">الرجاء لصق نص البطاقة أولاً.</span>';
-      return;
-    }
-    try {
-      const csv = prepareCSV(raw);
-      const filename = 'Diabetes_MCQ_Flashcards.csv';
-      download(filename, csv);
-      outputInfo.innerHTML = `<span style="color:green">تم إنشاء الملف: <strong>${filename}</strong> — افتحه في AnkiMobile أو استورده في Anki Desktop.</span>`;
-    } catch (e) {
-      outputInfo.innerHTML = `<span style="color:#b00">خطأ أثناء الإنشاء: ${e.message}</span>`;
-    }
-  });
+  function parseMCQParagraph(p){
+    const lines = p.split('\n').map(s=>s.trim()).filter(Boolean);
+    if(!lines.length) return null;
+    const question = lines[0];
+    const rest = lines.slice(1);
 
-  clearBtn.addEventListener('click', () => {
-    input.value = '';
-    outputInfo.innerHTML = '';
-  });
+    let options = [];
+    let answerExplicit = null;
 
+    // detect explicit answer line
+    for(const ln of rest){
+      const m = ln.match(/^(?:answer|ans|correct)\s*[:\-]\s*(.+)$/i);
+      if(m){ answerExplicit = m[1].trim(); }
+    }
+
+    // extract option lines
+    for(let ln of rest){
+      // skip answer line
+      if(/^(?:answer|ans|correct)\s*[:\-]/i.test(ln)) continue;
+
+      // Accept forms: "- text", "• text", "* text", "A) text", "A. text", "a) text"
+      let m;
+      // leading bullet with optional star
+      m = ln.match(/^(?:[-•▪—–]|\*)\s*(.+)$/);
+      if(m){ options.push(m[1].trim()); continue; }
+      // lettered A) or A. or A-
+      m = ln.match(/^[A-Za-z]\s*[\)\.\-]\s*(.+)$/);
+      if(m){ options.push(m[1].trim()); continue; }
+      // plain line (fallback): treat as option if we already have at least one option
+      if(options.length>0){ options.push(ln); }
+    }
+
+    if(options.length === 0) return null;
+
+    // find correct index
+    let correctIndex = null;
+
+    // star-marked options: allow "*" anywhere around start or end
+    for(let i=0;i<rest.length;i++){
+      let raw = rest[i];
+      if(/^(?:answer|ans|correct)\s*[:\-]/i.test(raw)) continue;
+      // capture if the same text appears with * at start or end
+      const starStart = raw.match(/^\*\s*(.+)$/);
+      const starEnd   = raw.match(/^(.+?)\s*\*$/);
+      if(starStart || starEnd){
+        const clean = (starStart? starStart[1] : starEnd[1]).trim();
+        // find index in options by text
+        const idx = options.findIndex(o=>normalize(o)===normalize(clean));
+        if(idx>=0) correctIndex = idx;
+      }
+    }
+
+    // explicit answer resolution
+    if(answerExplicit && correctIndex==null){
+      const ans = answerExplicit.trim();
+      // letter form
+      const letter = ans.match(/^[A-Za-z]$/) || ans.match(/^[A-Za-z][\)\.\-]?$/);
+      if(letter){
+        const L = ans[0].toUpperCase();
+        const idx = L.charCodeAt(0) - 65;
+        if(idx>=0 && idx<options.length) correctIndex = idx;
+      } else {
+        // match by text
+        const idxByText = options.findIndex(o=>normalize(o)===normalize(ans));
+        if(idxByText>=0) correctIndex = idxByText;
+      }
+    }
+
+    return {question, options, correctIndex};
+  }
+
+  function normalize(s){ return (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase(); }
+
+  function renderPreview(){
+    const {rows, headers} = buildRows();
+    const max = Math.min(rows.length, 100);
+    if(max === 0){ previewEl.innerHTML = '<div class="muted">لا توجد معاينة بعد.</div>'; return; }
+    const head = '<tr>' + headers.map(h=>`<th>${escapeHtml(h)}</th>`).join('') + '</tr>';
+    const body = rows.slice(0, max).map(r => '<tr>'+ r.map(c=>`<td>${escapeHtmlHTML(c)}</td>`).join('') + '</tr>').join('');
+    previewEl.innerHTML = `<div style="overflow:auto; border-radius:10px;"><table>${head}${body}</table></div>
+      <div class="muted" style="margin-top:8px;">إجمالي البطاقات: ${rows.length}${rows.length>max?` — المعروض ${max}`:''}</div>`;
+  }
+
+  function toCSV(rows){
+    return rows.map(r=> r.map(csvEscape).join(',')).join('\n');
+  }
+
+  function csvEscape(v){
+    v = (v ?? '').toString();
+    if(/[",\n]/.test(v)){ v = '"' + v.replace(/"/g,'""') + '"'; }
+    return v;
+  }
+
+  function escapeHtml(s){
+    return (s??'').toString()
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+      .replace(/'/g,'&#039;');
+  }
+
+  // for preview: allow <br> in MCQ front
+  function escapeHtmlHTML(s){
+    const safe = (s??'').toString()
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+      .replace(/'/g,'&#039;');
+    return safe.replace(/&lt;br&gt;/g,'<br>');
+  }
+
+  function splitParagraphs(t){
+    return t.split(/\n\s*\n+/);
+  }
+
+  function normalizeTags(s){
+    return (s||'').trim().replace(/[;,]+/g,' ').replace(/\s+/g,' ');
+  }
+
+  function bomUtf8(){ return '\uFEFF'; }
+
+  function debounce(fn, ms){
+    let id; return (...args)=>{ clearTimeout(id); id = setTimeout(()=>fn.apply(null,args), ms); }
+  }
+
+  // initial
+  renderPreview();
 })();
 </script>
 </body>
