@@ -3,188 +3,280 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>مولّد ملف Anki من نص (Front,Back + حرف فقط)</title>
+<title>مولّد Anki من نص — أنيق وسهل</title>
+<meta name="color-scheme" content="dark light">
 <style>
-  /* ===== Reset & Base ===== */
-  *, *::before, *::after { box-sizing: border-box; }
-  :root { --gap:14px; --radius:12px; --shadow:0 6px 18px rgba(0,0,0,.08); }
-  html, body { height:100%; }
-  body {
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-    background:#0f172a; color:#e2e8f0; margin:0; -webkit-font-smoothing:antialiased;
+  /* ===== Theme ===== */
+  :root{
+    --bg: #0b1220;
+    --surface: #0e1628;
+    --surface-2:#111c32;
+    --border:#1f2a44;
+    --text:#e5eaf3;
+    --muted:#9aa4b2;
+    --accent:#22c55e;
+    --accent-2:#38bdf8;
+    --radius:14px;
+    --shadow:0 10px 30px rgba(0,0,0,.25);
+    --gap:14px;
   }
-
-  /* ===== Shell ===== */
-  .wrap { max-width:1100px; margin:36px auto; padding:0 16px; }
-  .card { background:#0b1220; border:1px solid #1f2937; border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden; }
-  header { padding:18px 20px; border-bottom:1px solid #1f2937; display:flex; gap:12px; align-items:center; justify-content:space-between; flex-wrap:wrap; }
-  header h1 { font-size:18px; margin:0; font-weight:700; letter-spacing:.3px; }
-  .badge { display:inline-block; padding:4px 8px; border-radius:999px; background:#0b1d39; border:1px solid #1f3b70; font-size:12px; white-space:nowrap; }
+  @media (prefers-color-scheme: light){
+    :root{ --bg:#f6f7fb; --surface:#ffffff; --surface-2:#f2f5fb; --border:#e6e8ee; --text:#0f172a; --muted:#5b6473; --shadow:0 8px 28px rgba(2,6,23,.08); }
+    body{ background: linear-gradient(180deg,#f7fbff, #f6f7fb 40%); }
+  }
 
   /* ===== Layout ===== */
-  .grid { display:grid; gap:var(--gap); grid-template-columns:minmax(0,1fr); padding:16px; }
-  @media (min-width: 980px) {
-    .grid { grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr); }
-  }
-  .panel { display:grid; gap:var(--gap); align-content:start; }
-  .row { display:grid; gap:var(--gap); grid-template-columns: minmax(0,1fr) minmax(0,1fr); }
-  @media (max-width: 520px) { .row { grid-template-columns:minmax(0,1fr); } }
+  *{ box-sizing:border-box }
+  html,body{ height:100% }
+  body{ margin:0; font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif; background: radial-gradient(1200px 600px at 80% -100px, rgba(56,189,248,.10), transparent 60%), radial-gradient(900px 500px at -10% -40px, rgba(34,197,94,.08), transparent 55%), var(--bg); color:var(--text); }
+
+  .wrap{ max-width:1150px; margin:32px auto; padding:0 18px; }
+  .card{ background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)); border:1px solid var(--border); border-radius:var(--radius); box-shadow:var(--shadow); overflow:hidden }
+
+  header.app{ position:sticky; top:0; z-index:10; background:linear-gradient(135deg, rgba(56,189,248,.16), rgba(34,197,94,.12)); border-bottom:1px solid var(--border); backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .head-inner{ display:flex; align-items:center; justify-content:space-between; padding:16px 18px }
+  h1{ margin:0; font-size:18px; letter-spacing:.2px }
+  .subtitle{ font-size:12px; opacity:.9 }
+
+  .grid{ display:grid; gap:var(--gap); grid-template-columns:1fr; padding:16px; }
+  @media (min-width: 980px){ .grid.cols{ grid-template-columns: 1.25fr .85fr } }
 
   /* ===== Controls ===== */
-  label { font-size:13px; opacity:.95; margin-bottom:6px; display:block; }
-  textarea, input[type="text"], select {
-    width:100%; padding:12px 12px; border-radius:10px; border:1px solid #23304a;
-    background:#0b1426; color:#e2e8f0; line-height:1.6; min-height:44px;
-  }
-  textarea { min-height:380px; resize:vertical; direction:ltr; text-align:left; }
-  .inline { display:flex; align-items:center; gap:10px; }
-  input[type="checkbox"] { width:18px; height:18px; }
+  label{ font-size:12px; color:var(--muted); display:block; margin:6px 0 }
+  textarea, input[type="text"], select{ width:100%; padding:12px 14px; border-radius:12px; border:1px solid var(--border); background:var(--surface); color:var(--text); outline:none; }
+  textarea{ min-height:420px; line-height:1.7; resize:vertical; /* طلب سابق: اتجاه الإدخال من اليسار لليمين */ direction:ltr; text-align:left; }
+  input:focus, textarea:focus, select:focus{ border-color: color-mix(in oklch, var(--accent) 60%, white 0%); box-shadow:0 0 0 4px color-mix(in oklch, var(--accent) 20%, transparent 80%); }
 
-  button {
-    padding:12px 14px; border-radius:10px; border:1px solid #334155;
-    background:#1e293b; color:#e2e8f0; cursor:pointer; font-weight:600; min-height:44px;
-  }
-  button.primary { background:#22c55e; border-color:#16a34a; color:#062d17; }
-  button.ghost { background:transparent; }
+  .panel{ display:grid; gap:var(--gap) }
+  .row{ display:grid; gap:10px; grid-template-columns:1fr 1fr }
+  @media (max-width:640px){ .row{ grid-template-columns:1fr } }
 
-  .pill { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-  .pill > button { flex: 0 1 auto; }
-  @media (max-width:520px){ .pill > button { flex:1 1 100%; } }
+  .inline{ display:flex; align-items:center; gap:8px }
+  .muted{ color:var(--muted); font-size:12px }
+  .badge{ display:inline-flex; align-items:center; gap:6px; padding:4px 10px; background:var(--surface-2); border:1px solid var(--border); border-radius:999px; font-size:12px }
 
-  .help { font-size:13px; line-height:1.7; background:#0a1222; border:1px dashed #29354e; padding:12px; border-radius:10px; }
+  .bar{ display:flex; flex-wrap:wrap; gap:8px }
+  button{ padding:12px 14px; border-radius:12px; border:1px solid var(--border); background:var(--surface-2); color:var(--text); cursor:pointer; font-weight:700; transition: transform .04s ease, background .2s ease, border-color .2s ease; }
+  button:hover{ transform: translateY(-1px) }
+  button.primary{ background: color-mix(in oklch, var(--accent) 85%, black 15%); color:#071d11; border-color: color-mix(in oklch, var(--accent) 70%, black 30%); }
+  button.ghost{ background:transparent }
+  button:active{ transform: translateY(0) scale(.99) }
 
-  /* ===== Table/Preview ===== */
-  table { width:100%; border-collapse:separate; border-spacing:0; background:#0b1426; border:1px solid #22314f; border-radius:10px; overflow:hidden; }
-  th, td { text-align:start; padding:10px 12px; border-bottom:1px solid #1e2a45; vertical-align:top; word-break:break-word; }
-  th { background:#0e1830; font-weight:700; position:sticky; top:0; }
-  .muted { opacity:.75; font-size:12px; }
-  .footer { padding:14px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between; border-top:1px solid #1f2937; flex-wrap:wrap; }
-  .note { font-size:12px; opacity:.85; }
+  .kbd{ font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace; font-size:11px; padding:2px 6px; border-radius:6px; background:var(--surface-2); border:1px solid var(--border) }
 
+  /* ===== Preview Table ===== */
+  .tbl-wrap{ border:1px solid var(--border); border-radius:12px; overflow:auto; background:var(--surface); /* طلب سابق: ترتيب الأعمدة LTR */ direction:ltr; }
+  table{ width:100%; border-collapse:separate; border-spacing:0; min-width:680px }
+  th, td{ text-align:start; padding:10px 12px; border-bottom:1px solid var(--border); vertical-align:top; }
+  th{ position:sticky; top:0; background:linear-gradient(180deg, var(--surface-2), var(--surface)); z-index:1 }
+  tbody tr:hover td{ background: rgba(56,189,248,.05) }
+
+  .footer{ padding:14px 16px; display:flex; flex-wrap:wrap; gap:10px; align-items:center; justify-content:space-between; border-top:1px solid var(--border); background: linear-gradient(180deg, transparent, rgba(255,255,255,.02)); }
+  .pill{ display:flex; align-items:center; gap:10px; flex-wrap:wrap }
+
+  /* Small helpers */
+  .spacer{ height:6px }
+  .note{ font-size:12px; opacity:.85 }
+  .right{ margin-inline-start:auto }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <div class="card">
-    <header>
-      <h1>مولّد ملف Anki من نص</h1>
-      <small class="badge">Basic • Cloze • MCQ • Front,Back</small>
-    </header>
-
-    <div class="grid">
-      <!-- Left: Input -->
-      <section>
-        <label for="inputText">الصق النص هنا</label>
-        <textarea id="inputText" placeholder="مثال لصيغتك بالضبط:
-Front,Back
-Preferred insulin delivery method for T1DM?&lt;br&gt;A) ...&lt;br&gt;B) ... ,B) ...
-..."></textarea>
-
-        <div class="help">
-          <b>الأوضاع:</b>
-          <ul>
-            <li><b>Front,Back (MCQ بصيغتك):</b> أول سطر <code>Front,Back</code> ثم كل سطر: <code>Front,Back</code>. نفصل عند <u>آخر فاصلة</u> بالسطر.</li>
-            <li><b>MCQ (حر):</b> فقرة لكل سؤال وخيارات، والصحيح يوضع في Back.</li>
-            <li><b>Q→A</b> و<b>Cloze</b> كما سبق.</li>
-          </ul>
-          الناتج CSV بترميز UTF-8 + BOM واقتباس تلقائي.
-        </div>
-      </section>
-
-      <!-- Right: Controls -->
-      <aside class="panel">
-        <div class="row">
-          <div>
-            <label for="mode">الوضع</label>
-            <select id="mode">
-              <option value="frontback">Front,Back (صيغة جاهزة)</option>
-              <option value="mcq">MCQ (اختيار من متعدد)</option>
-              <option value="qa">سؤال → جواب (Q→A)</option>
-              <option value="cloze">Cloze (إخفاء)</option>
-              <option value="one">سطر → بطاقة (وجه واحد)</option>
-            </select>
+  <div class="wrap">
+    <div class="card" id="app">
+      <header class="app">
+        <div class="head-inner">
+          <div style="display:flex; align-items:center; gap:10px">
+            <div class="badge" title="يدعم Basic • Cloze • MCQ • Front,Back">
+              <span>🧠</span>
+              <span>Basic • Cloze • MCQ • Front,Back</span>
+            </div>
+            <h1>مولّد ملف Anki من نص</h1>
           </div>
-          <div>
-            <label for="deck">اسم المجموعة (Deck) — اختياري</label>
-            <input id="deck" type="text" placeholder="مثال: Diabetes MCQs">
-          </div>
+          <div class="subtitle">يحفظ مدخلاتك تلقائيًا • يعمل محليًا</div>
         </div>
+      </header>
 
-        <div id="qaOptions" style="display:none;">
+      <div class="grid cols">
+        <section>
+          <label for="inputText">الصق النص هنا</label>
+          <textarea id="inputText" placeholder="Front,Back\nPreferred insulin delivery method for T1DM?<br>A) ...<br>B) ... ,B) ...\n...\n\nأو استخدم: MCQ (حر): فقرة لكل سؤال وخيارات، والصحيح يوضع في Back"></textarea>
+
+          <div class="spacer"></div>
+          <details class="help" style="background:var(--surface-2); border:1px dashed var(--border); padding:12px; border-radius:12px;">
+            <summary style="cursor:pointer; font-weight:700">كيف تَكتب الإدخال؟</summary>
+            <ul style="line-height:1.9; margin:8px 0 0 0; padding-inline-start:18px">
+              <li><b>Front,Back (MCQ بصيغتك):</b> أول سطر <code>Front,Back</code> ثم كل سطر: <code>Front,Back</code>. نفصل عند <u>آخر فاصلة</u> بالسطر.</li>
+              <li><b>MCQ (حر):</b> فقرة لكل سؤال وخيارات، والصحيح يوضع في Back.</li>
+              <li><b>Q→A</b> و<b>Cloze</b> كما سبق. الناتج CSV بترميز UTF‑8 + BOM.</li>
+            </ul>
+            <div class="muted">تلميح: استخدم <span class="kbd">Shift+Enter</span> لسطر جديد داخل الواجهة.</div>
+          </details>
+        </section>
+
+        <aside class="panel">
           <div class="row">
             <div>
-              <label for="delimiter">الفاصل لـ Q→A</label>
-              <input id="delimiter" type="text" value="::">
+              <label for="mode">الوضع</label>
+              <select id="mode">
+                <option value="frontback">Front,Back (صيغة جاهزة)</option>
+                <option value="mcq">MCQ (اختيار من متعدد)</option>
+                <option value="qa">سؤال → جواب (Q→A)</option>
+                <option value="cloze">Cloze (إخفاء)</option>
+                <option value="one">سطر → بطاقة (وجه واحد)</option>
+              </select>
             </div>
             <div>
-              <label for="tags">وسوم (Tags) — اختياري</label>
-              <input id="tags" type="text" placeholder="مثال: MCQ;exam">
+              <label for="deck">اسم المجموعة (Deck) — اختياري</label>
+              <input id="deck" type="text" placeholder="مثال: Diabetes MCQs">
             </div>
           </div>
-        </div>
 
-        <div class="inline">
-          <input type="checkbox" id="letterOnly">
-          <label for="letterOnly" class="inline">جعل <b>Back</b> حرف الخيار فقط (مثل: B)</label>
-        </div>
+          <div id="qaOptions" style="display:none;">
+            <div class="row">
+              <div>
+                <label for="delimiter">الفاصل لـ Q→A</label>
+                <input id="delimiter" type="text" value="::">
+              </div>
+              <div>
+                <label for="tags">وسوم (Tags) — اختياري</label>
+                <input id="tags" type="text" placeholder="مثال: MCQ;exam">
+              </div>
+            </div>
+          </div>
 
+          <div class="inline" style="margin-top:6px">
+            <input type="checkbox" id="letterOnly">
+            <label for="letterOnly" class="inline">جعل <b>Back</b> حرف الخيار فقط (مثل: B)</label>
+          </div>
+
+          <div class="bar" style="margin-top:10px">
+            <button id="previewBtn" title="معاينة (Ctrl/⌘+Enter)">معاينة</button>
+            <button id="downloadBtn" class="primary" title="تنزيل CSV (Ctrl/⌘+S)">تنزيل CSV</button>
+            <button id="clearBtn" class="ghost" title="تفريغ الحقول">تفريغ</button>
+            <button id="sampleBtn" class="ghost" title="ملء مثال Front,Back">ملء مثال Front,Back</button>
+            <button id="mcqSampleBtn" class="ghost" title="إدراج مثال MCQ (حر)">إدراج مثال MCQ (حر)</button>
+          </div>
+
+          <div class="bar" style="margin-top:6px">
+            <input type="file" id="importFile" accept=".txt,.csv" style="display:none">
+            <button id="importBtn" class="ghost" title="استيراد نص من ملف .txt أو .csv">استيراد ملف</button>
+            <button id="copyCsvBtn" class="ghost" title="نسخ CSV إلى الحافظة">نسخ CSV</button>
+          </div>
+
+          <div class="note">في الاستيراد اختر نوع المذكرة <b>Basic</b>، واربط الأعمدة: Front → Back.</div>
+          <div class="muted">اختصارات: <span class="kbd">Ctrl/⌘ + Enter</span> معاينة • <span class="kbd">Ctrl/⌘ + S</span> تنزيل</div>
+        </aside>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr; padding-top:0">
+        <section>
+          <div style="display:flex; align-items:center; gap:10px; justify-content:space-between">
+            <label>المعاينة <span class="muted">(أول 100 بطاقة)</span></label>
+            <div class="muted" id="stats">—</div>
+          </div>
+          <div class="tbl-wrap" id="preview"></div>
+        </section>
+      </div>
+
+      <div class="footer">
         <div class="pill">
-          <button id="previewBtn">معاينة</button>
-          <button id="downloadBtn" class="primary">تنزيل CSV</button>
-          <button id="clearBtn" class="ghost">تفريغ</button>
+          <span class="note">يدعم &lt;br&gt; داخل الواجهة الأمامية.</span>
+          <span class="note">يحفظ الإعدادات تلقائيًا في المتصفح.</span>
+          <span class="note">يعمل محليًا — بدون إنترنت.</span>
         </div>
-
-        <div class="note">
-          عند الاستيراد في Anki: Note Type **Basic**، وربط الأعمدة: <b>Front</b> ← العمود 1، <b>Back</b> ← العمود 2، <b>Tags</b> ← العمود 3. الـ <b>Deck</b> تختاره من نافذة الاستيراد.
+        <div class="pill right">
+          <span class="badge">إجمالي البطاقات: <b id="totalCount">0</b></span>
         </div>
-      </aside>
-    </div>
-
-    <!-- Preview -->
-    <div class="grid" style="grid-template-columns:minmax(0,1fr);">
-      <section>
-        <label>المعاينة <span class="muted">(أول 100 بطاقة)</span></label>
-        <div id="preview"></div>
-      </section>
-    </div>
-
-    <div class="footer">
-      <div class="note">يدعم &lt;br&gt; داخل الواجهة الأمامية. يعمل محليًا — بدون إنترنت.</div>
+      </div>
     </div>
   </div>
-</div>
 
 <script>
 (function(){
   const $ = s => document.querySelector(s);
-
-  const inputText   = $('#inputText');
-  const mode        = $('#mode');
-  const deck        = $('#deck');
-  const delimiter   = $('#delimiter');
-  const tagsInput   = $('#tags');
-  const qaOptions   = $('#qaOptions');
-  const letterOnly  = $('#letterOnly');
-  const previewEl   = $('#preview');
-  const previewBtn  = $('#previewBtn');
+  const inputText = $('#inputText');
+  const mode = $('#mode');
+  const deck = $('#deck');
+  const delimiter = $('#delimiter');
+  const tagsInput = $('#tags');
+  const qaOptions = $('#qaOptions');
+  const letterOnly = $('#letterOnly');
+  const previewEl = $('#preview');
+  const previewBtn = $('#previewBtn');
   const downloadBtn = $('#downloadBtn');
-  const clearBtn    = $('#clearBtn');
+  const clearBtn = $('#clearBtn');
+  const sampleBtn = $('#sampleBtn');
+  const mcqSampleBtn = $('#mcqSampleBtn');
+  const copyCsvBtn = $('#copyCsvBtn');
+  const importBtn = $('#importBtn');
+  const importFile = $('#importFile');
+  const totalCountEl = $('#totalCount');
+  const statsEl = $('#stats');
+
+  const LS_KEY = 'anki-gen-state-v2';
+  restoreState();
 
   mode.addEventListener('change', ()=>{
     qaOptions.style.display = (mode.value === 'qa') ? 'grid' : 'none';
+    saveState();
     renderPreview();
   });
-  letterOnly.addEventListener('change', renderPreview);
+  [deck, delimiter, tagsInput, letterOnly].forEach(el=> el && el.addEventListener('input', ()=>{ saveState(); renderPreview(); }));
 
   clearBtn.addEventListener('click', ()=>{
+    if(!confirm('متأكد من تفريغ المدخلات؟')) return;
     inputText.value = '';
-    previewEl.innerHTML = '';
+    saveState();
+    renderPreview();
+  });
+
+  sampleBtn.addEventListener('click', ()=>{
+    inputText.value = `Front,Back\nWhich of the following best describes the pathogenesis of type 1 diabetes mellitus (T1DM)?<br>A) Insulin resistance due to obesity<br>B) Autoimmune destruction of β-cells in the pancreas<br>C) Mutation in the glucokinase gene<br>D) Amyloid deposition in islets,B) Autoimmune destruction of β-cells in the pancreas\n\nWhat is the first-line therapy for type 2 diabetes in most patients?<br>A) Insulin<br>B) Sulfonylureas<br>C) Metformin<br>D) Thiazolidinediones,C) Metformin`;
+    mode.value = 'frontback';
+    saveState();
+    renderPreview();
+  });
+
+  // NEW: مثال تلقائي لصيغة MCQ (حر)
+  mcqSampleBtn.addEventListener('click', ()=>{
+    mode.value = 'mcq';
+    const example = `MCQ (حر): فقرة لكل سؤال وخيارات، والصحيح يوضع في Back\n\nWhat is the capital of France?\nA) Berlin\nB) Madrid\nC) Paris\nD) Rome\nAnswer: C\n\nWhich hormone lowers blood glucose?\nA) Glucagon\nB) Cortisol\nC) Insulin\nD) Growth hormone\nAnswer: C`;
+    inputText.value = example;
+    saveState();
+    renderPreview();
   });
 
   previewBtn.addEventListener('click', renderPreview);
-  inputText.addEventListener('input', debounce(renderPreview, 250));
+  inputText.addEventListener('input', debounce(()=>{ saveState(); renderPreview(); }, 250));
 
-  downloadBtn.addEventListener('click', ()=>{
+  // keyboard shortcuts
+  document.addEventListener('keydown', (e)=>{
+    const meta = e.ctrlKey || e.metaKey;
+    if(meta && e.key === 'Enter'){ e.preventDefault(); renderPreview(); }
+    if(meta && (e.key === 's' || e.key === 'S')){ e.preventDefault(); downloadCSV(); }
+  });
+
+  downloadBtn.addEventListener('click', downloadCSV);
+  copyCsvBtn.addEventListener('click', async ()=>{
+    const {rows, headers} = buildRows();
+    if(!rows.length){ alert('لا توجد بطاقات للنسخ.'); return; }
+    const csv = toCSV([headers, ...rows]);
+    try{
+      await navigator.clipboard.writeText('\uFEFF' + csv);
+      copyCsvBtn.textContent = '✓ تم النسخ';
+      setTimeout(()=> copyCsvBtn.textContent = 'نسخ CSV', 1200);
+    }catch(err){ alert('تعذّر النسخ إلى الحافظة.'); }
+  });
+
+  importBtn.addEventListener('click', ()=> importFile.click());
+  importFile.addEventListener('change', async ()=>{
+    const f = importFile.files[0];
+    if(!f) return;
+    const txt = await f.text();
+    inputText.value = txt; saveState(); renderPreview();
+  });
+
+  function downloadCSV(){
     const {rows, headers} = buildRows();
     if(!rows.length){ alert('لا توجد بطاقات للتصدير.'); return; }
     const csv = toCSV([headers, ...rows]);
@@ -195,12 +287,12 @@ Preferred insulin delivery method for T1DM?&lt;br&gt;A) ...&lt;br&gt;B) ... ,B) 
     a.href = url; a.download = `${deckName || 'anki'}.csv`;
     document.body.appendChild(a); a.click();
     setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
-  });
+  }
 
   function buildRows(){
-    const text = inputText.value.replace(/\r\n/g, '\n');
+    const text = (inputText.value || '').replace(/\r\n/g, '\n');
     const tagString = normalizeTags(tagsInput?.value || '');
-    const deckName  = (deck.value || '').trim();
+    const deckName = (deck.value || '').trim();
 
     if(mode.value === 'frontback'){
       return parseFrontBack(text, deckName, tagString);
@@ -212,49 +304,49 @@ Preferred insulin delivery method for T1DM?&lt;br&gt;A) ...&lt;br&gt;B) ... ,B) 
       const rows = lines.map(line=>{
         const idx = line.indexOf(delim);
         let front = line, back = '';
-        if(idx >= 0){ front = line.slice(0, idx).trim(); back = line.slice(idx + delim.length).trim(); }
-        return [front, back, tagString, deckName];
+        if(idx >= 0){ front = line.slice(0, idx).trim(); back  = line.slice(idx + delim.length).trim(); }
+        return [front, back, deckName, tagString];
       });
-      return { headers: ['Front','Back','Tags','Deck'], rows };
+      return { headers: ['Front','Back','Deck','Tags'], rows };
     }
 
     if(mode.value === 'one'){
       const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
-      const rows  = lines.map(line=>[line, '', tagString, deckName]);
-      return { headers: ['Front','Back','Tags','Deck'], rows };
+      const rows = lines.map(line=>[line, '', deckName, tagString]);
+      return { headers: ['Front','Back','Deck','Tags'], rows };
     }
 
     if(mode.value === 'cloze'){
       const chunks = splitParagraphs(text).filter(s=>s.trim().length>0);
-      const rows   = chunks.map(ch => [ch.trim(), '', tagString, deckName]);
-      return { headers: ['Front','Back','Tags','Deck'], rows };
+      const rows = chunks.map(ch => [ch.trim(), deckName, tagString]);
+      return { headers: ['Text','Deck','Tags'], rows };
     }
 
-    // MCQ (فقرة لكل سؤال)
+    // MCQ (حر) — فقرة لكل سؤال
     const paras = splitParagraphs(text).filter(p=>p.trim().length>0);
-    const rows  = [];
+    const rows = [];
     for(const p of paras){
       const parsed = parseMCQParagraph(p);
       if(parsed){
         const {question, options, correctIndex} = parsed;
-        const letters  = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
         const optLines = options.map((opt,i)=>`${letters[i]}. ${opt}`).join('<br>');
-        const front    = `${question}<br><br>${optLines}`;
+        const front = `${question}<br><br>${optLines}`;
         let back = '';
         if(correctIndex != null){
           const L = letters[correctIndex];
           back = letterOnly.checked ? L : `${L}. ${options[correctIndex]}`;
         }
-        rows.push([front, back, tagString, deckName]);
+        rows.push([front, back, deckName, tagString]);
       }
     }
-    return { headers: ['Front','Back','Tags','Deck'], rows };
+    return { headers: ['Front','Back','Deck','Tags'], rows };
   }
 
-  // ===== Front,Back parser (يفصل عند آخر فاصلة) =====
+  // ====== Front,Back parser (يفصل عند آخر فاصلة) ======
   function parseFrontBack(text, deckName, tagString){
     const lines = text.split('\n').map(s=>s.trim()).filter(Boolean);
-    const rows  = [];
+    const rows = [];
     let startIndex = 0;
     if(lines.length && /^front\s*,\s*back$/i.test(lines[0])) startIndex = 1;
 
@@ -262,44 +354,52 @@ Preferred insulin delivery method for T1DM?&lt;br&gt;A) ...&lt;br&gt;B) ... ,B) 
       const line = lines[i];
       const lastComma = line.lastIndexOf(',');
       if(lastComma === -1) continue;
+
       const front = line.slice(0, lastComma).trim();
-      let back    = line.slice(lastComma+1).trim();
+      let back = line.slice(lastComma+1).trim();
 
       if(letterOnly.checked){
         const letter = deriveLetterFromFrontBack(front, back);
-        if(letter) back = letter;
+        if(letter) back = letter; // إن قدر يحدد الحرف، يحوله لحرف فقط
       }
-      rows.push([front, back, tagString, deckName]);
+
+      rows.push([front, back, deckName, tagString]);
     }
-    return { headers: ['Front','Back','Tags','Deck'], rows };
+    return { headers: ['Front','Back','Deck','Tags'], rows };
   }
 
   // يستخرج حرف الخيار من Front/Back
   function deriveLetterFromFrontBack(front, back){
+    // 1) لو Back يبدأ بحرف خيار واضح
     const m1 = back.match(/^\s*([A-Za-z])\s*[\)\.\-]?\s/);
     if(m1) return m1[1].toUpperCase();
 
-    const opts = extractOptionLinesFromFront(front);
-    const nb   = normalize(back);
+    // 2) جرّب مطابقته بنص أحد الخيارات الموجودين في Front
+    const opts = extractOptionLinesFromFront(front); // [{letter:'A', text:'...'}]
+    const nb = normalize(back);
     const byText = opts.find(o => normalize(o.text) === nb);
     if(byText) return byText.letter;
 
+    // 3) لو Back يساوي حرفًا منفردًا أصلًا
     const m2 = back.match(/^\s*([A-Za-z])\s*$/);
     if(m2) return m2[1].toUpperCase();
+
     return '';
   }
 
   function extractOptionLinesFromFront(front){
-    const parts = front.split(/<br\s*\/?>/i).map(s=>s.trim()).filter(Boolean);
-    const out   = [];
-    for(const ln of parts){
+    // front يحتوي <br>؛ نقسمه ونلتقط خطوط بصيغة "A) ..." أو "A. ..."
+    const parts = front.split(/<br\s*\/?>(?![^]*<br)/i).map(s=>s.trim()).filter(Boolean);
+    const all = front.split(/<br\s*\/?/i).map(s=>s.trim()).filter(Boolean);
+    const out = [];
+    for(const ln of all){
       const m = ln.match(/^\s*([A-Za-z])\s*[\)\.\-]\s*(.+)$/);
       if(m){ out.push({letter: m[1].toUpperCase(), text: m[2].trim()}); }
     }
     return out;
   }
 
-  // ===== MCQ paragraph parser =====
+  // ====== MCQ paragraph parser ======
   function parseMCQParagraph(p){
     const lines = p.split('\n').map(s=>s.trim()).filter(Boolean);
     if(!lines.length) return null;
@@ -353,43 +453,59 @@ Preferred insulin delivery method for T1DM?&lt;br&gt;A) ...&lt;br&gt;B) ... ,B) 
 
   // ===== Helpers =====
   function toCSV(rows){ return rows.map(r => r.map(csvEscape).join(',')).join('\n'); }
-  function csvEscape(v){
-    v = (v ?? '').toString();
-    if(/[",\n]/.test(v)){ v = '"' + v.replace(/"/g,'""') + '"'; }
-    return v;
-  }
-
-  function renderPreview(){
-    const {rows, headers} = buildRows();
-    const max = Math.min(rows.length, 100);
-    if(max === 0){
-      previewEl.innerHTML = '<div class="muted">لا توجد معاينة بعد.</div>'; return;
-    }
-    const head = '<tr>' + headers.map(h=>`<th>${escapeHtml(h)}</th>`).join('') + '</tr>';
-    const body = rows.slice(0, max)
-      .map(r => '<tr>'+ r.map(c=>`<td>${escapeHtmlHTML(c)}</td>`).join('') + '</tr>').join('');
-    previewEl.innerHTML = `<div style="overflow:auto; border-radius:10px; max-height:420px;">
-      <table>${head}${body}</table></div>
-      <div class="muted" style="margin-top:8px;">إجمالي البطاقات: ${rows.length}${rows.length>max?` — المعروض ${max}`:''}</div>`;
-  }
-
-  function escapeHtml(s){
-    return (s??'').toString()
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
-      .replace(/'/g,'&#039;');
-  }
-  function escapeHtmlHTML(s){
-    const safe = escapeHtml(s);
-    return safe.replace(/&lt;br&gt;/g,'<br>');
-  }
+  function csvEscape(v){ v = (v ?? '').toString(); if(/[",\n]/.test(v)){ v = '"' + v.replace(/"/g,'""') + '"'; } return v; }
+  function escapeHtml(s){ return (s??'').toString().replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#039;'); }
+  function escapeHtmlHTML(s){ const safe = escapeHtml(s); return safe.replace(/&lt;br&gt;/g,'<br>'); }
   function splitParagraphs(t){ return t.split(/\n\s*\n+/); }
   function normalize(s){ return (s||'').toString().replace(/\s+/g,' ').trim().toLowerCase(); }
   function normalizeTags(s){ return (s||'').trim().replace(/[;,]+/g,' ').replace(/\s+/g,' '); }
   function bomUtf8(){ return '\uFEFF'; }
   function debounce(fn, ms){ let id; return (...a)=>{ clearTimeout(id); id=setTimeout(()=>fn.apply(null,a),ms);} }
 
-  // init
+  function saveState(){
+    const state = {
+      text: inputText.value,
+      mode: mode.value,
+      deck: deck.value,
+      delimiter: delimiter?.value || '::',
+      tags: tagsInput?.value || '',
+      letterOnly: !!letterOnly.checked,
+    };
+    try{ localStorage.setItem(LS_KEY, JSON.stringify(state)); }catch(_){ }
+  }
+  function restoreState(){
+    try{
+      const raw = localStorage.getItem(LS_KEY);
+      if(!raw) return;
+      const s = JSON.parse(raw);
+      if(typeof s.text === 'string') inputText.value = s.text;
+      if(s.mode) mode.value = s.mode;
+      if(typeof s.deck === 'string') deck.value = s.deck;
+      if(typeof s.delimiter === 'string' && delimiter) delimiter.value = s.delimiter;
+      if(typeof s.tags === 'string' && tagsInput) tagsInput.value = s.tags;
+      if(typeof s.letterOnly === 'boolean') letterOnly.checked = s.letterOnly;
+      qaOptions.style.display = (mode.value === 'qa') ? 'grid' : 'none';
+    }catch(_){ }
+  }
+
+  function renderPreview(){
+    const t0 = performance.now();
+    const {rows, headers} = buildRows();
+    const max = Math.min(rows.length, 100);
+    totalCountEl.textContent = rows.length;
+
+    if(max === 0){ previewEl.innerHTML = '<div class="muted" style="padding:16px">لا توجد معاينة بعد.</div>'; statsEl.textContent = '—'; return; }
+
+    // ترتيب الأعمدة Front ثم Back ثم Deck ثم Tags (LTR)
+    const head = '<thead><tr>' + headers.map(h=>`<th>${escapeHtml(h)}</th>`).join('') + '</tr></thead>';
+    const body = '<tbody>' + rows.slice(0, max).map(r => '<tr>'+ r.map(c=>`<td>${escapeHtmlHTML(c)}</td>`).join('') + '</tr>').join('') + '</tbody>';
+    previewEl.innerHTML = `<table>${head}${body}</table>`;
+
+    const dt = Math.max(1, Math.round(performance.now() - t0));
+    statsEl.textContent = `المعروض ${max} / ${rows.length} • الزمن ${dt}ms`;
+  }
+
+  // أول معاينة
   renderPreview();
 })();
 </script>
