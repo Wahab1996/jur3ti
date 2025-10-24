@@ -1,255 +1,162 @@
 <!doctype html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>مولّد ملف Anki من نص</title>
-<style>
-  :root { --gap:12px; --radius:12px; --shadow:0 6px 18px rgba(0,0,0,.08); }
-  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; }
-  .wrap { max-width: 1100px; margin: 40px auto; padding: 0 16px; }
-  .card { background:#0b1220; border:1px solid #1f2937; border-radius: var(--radius); box-shadow: var(--shadow); }
-  header { padding: 18px 20px; border-bottom:1px solid #1f2937; display:flex; gap:10px; align-items:center; justify-content:space-between; }
-  header h1 { font-size: 18px; margin:0; font-weight:700; letter-spacing:.3px; }
-  header small { opacity:.8; }
-  .grid { display:grid; gap: var(--gap); grid-template-columns: 1fr; padding: 16px; }
-  @media (min-width: 960px){ .grid{ grid-template-columns: 1.2fr .8fr; } }
-  textarea { width: 100%; min-height: 360px; resize: vertical; padding:14px; border-radius: 10px; border:1px solid #23304a; background:#0b1426; color:#e2e8f0; line-height:1.6; }
-  .panel { display:grid; gap: var(--gap); }
-  .row { display:grid; gap:10px; grid-template-columns: 1fr 1fr; }
-  label { font-size: 13px; opacity:.9; margin-bottom:6px; display:block; }
-  input, select { width:100%; padding:12px; border-radius:10px; border:1px solid #23304a; background:#0b1426; color:#e2e8f0; }
-  input::placeholder { color:#94a3b8; opacity:.7; }
-  button { padding: 12px 14px; border-radius: 10px; border:1px solid #334155; background:#1e293b; color:#e2e8f0; cursor:pointer; font-weight:600; }
-  button.primary { background: #22c55e; border-color:#16a34a; color:#062d17; }
-  button.ghost { background: transparent; }
-  .help { font-size:13px; line-height:1.7; background:#0a1222; border:1px dashed #29354e; padding:12px; border-radius:10px; }
-  table { width:100%; border-collapse: collapse; background:#0b1426; border:1px solid #22314f; border-radius:10px; overflow:hidden; }
-  th, td { text-align: start; padding: 10px 12px; border-bottom:1px solid #1e2a45; vertical-align: top; }
-  th { background:#0e1830; font-weight:700; }
-  .muted { opacity:.7; font-size:12px; }
-  .badge { display:inline-block; padding:4px 8px; border-radius:999px; background:#0b1d39; border:1px solid #1f3b70; font-size:12px; }
-  .footer { padding:14px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between; border-top:1px solid #1f2937;}
-  .note { font-size:12px; opacity:.8; }
-  .pill { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
-</style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CSV Generator for Anki</title>
+  <style>
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;direction:rtl;padding:18px;background:#f7f8fb;color:#111}
+    h1{font-size:18px;margin:0 0 12px}
+    textarea{width:100%;height:340px;padding:10px;font-size:14px;box-sizing:border-box;resize:vertical}
+    .row{display:flex;gap:8px;margin-top:10px}
+    button{padding:10px 14px;border:0;background:#0b74de;color:white;border-radius:8px;cursor:pointer}
+    button.secondary{background:#6c757d}
+    label{display:flex;align-items:center;gap:8px;font-size:14px}
+    .note{font-size:13px;color:#444;margin-top:8px}
+    .out{margin-top:12px;word-break:break-word}
+    .small{font-size:13px;color:#333}
+  </style>
 </head>
 <body>
-  <div class="wrap">
-    <div class="card">
-      <header>
-        <h1>مولّد ملف Anki من نص</h1>
-        <small class="badge">يدعم Basic &amp; Cloze</small>
-      </header>
+  <h1>مولّد ملف CSV لأنكي — الصق النص ثم حمّل الملف</h1>
 
-      <div class="grid">
-        <section>
-          <label for="inputText">الصق النص الكامل هنا</label>
-          <textarea id="inputText" placeholder="أمثلة سريعة:
-(وضع Q→A)
-What is insulin? :: A hormone that lowers blood glucose
-Basal insulin :: Long-acting insulin to cover fasting needs
+  <label class="small">1) الصق هنا نص البطاقات (بصيغة CSV: <code>Front,Back</code>) أو الصق النص كما في المحادثة:</label>
+  <textarea id="inputArea" placeholder="أمثلة مقبولة:
+Front,Back
+سؤال 1?,إجابة 1
+... أو الصق النص الذي يولّد أسئلة مع خيارات مثل: Preferred insulin delivery method for T1DM?<br>A) ..."></textarea>
 
-(وضع Cloze)
-Insulin is secreted by the {{c1::beta cells}} of the {{c2::pancreas}}.
-
-(وضع سطر→بطاقة)
-Hemoglobin A1c
-Fasting plasma glucose
-Oral glucose tolerance test"></textarea>
-
-          <div class="help">
-            <b>طرق التحويل:</b><br>
-            <ul>
-              <li><b>سؤال→جواب (Q→A):</b> كل سطر بطاقة. افصل السؤال والجواب بالرمز <code>::</code>. إن لم يوجد، يصبح السطر هو الوجه الأمامي فقط.</li>
-              <li><b>Cloze:</b> استخدم أقواس الإخفاء على النص مثل <code>{{c1::text}}</code>. كل فقرة (سطر فارغ يفصل) بطاقة مستقلة.</li>
-              <li><b>سطر → بطاقة:</b> كل سطر يصبح وجه أمامي فقط.</li>
-            </ul>
-            عند الاستيراد في Anki اختر نوع المذكرة المناسب (Basic لِـ Q→A/سطر، أو Cloze لوضع الإخفاء).
-          </div>
-        </section>
-
-        <aside class="panel">
-          <div class="row">
-            <div>
-              <label for="mode">الوضع</label>
-              <select id="mode">
-                <option value="qa">سؤال → جواب (Q→A)</option>
-                <option value="cloze">Cloze (إخفاء)</option>
-                <option value="one">سطر → بطاقة (وجه واحد)</option>
-              </select>
-            </div>
-            <div>
-              <label for="deck">اسم المجموعة (Deck) — اختياري</label>
-              <input id="deck" type="text" placeholder="مثال: Endocrinology" />
-            </div>
-          </div>
-
-          <div class="row" id="qaOptions">
-            <div>
-              <label for="delimiter">الفاصل بين السؤال والجواب</label>
-              <input id="delimiter" type="text" value="::">
-            </div>
-            <div>
-              <label for="tags">وسوم (Tags) — اختياري</label>
-              <input id="tags" type="text" placeholder="مثال: T1DM;exam;high_yield">
-            </div>
-          </div>
-
-          <div class="pill">
-            <button id="previewBtn">معاينة البطاقات</button>
-            <button id="downloadBtn" class="primary">تنزيل ملف CSV للـ Anki</button>
-            <button id="clearBtn" class="ghost">تفريغ الحقول</button>
-          </div>
-
-          <div class="note">
-            سيُحفظ الملف بترميز UTF-8 (مع BOM). داخل Anki اختر <b>Import</b> ثم حدّد نوع المذكرة وحقول CSV بالترتيب.
-          </div>
-        </aside>
-      </div>
-
-      <div class="grid" style="grid-template-columns:1fr;">
-        <section>
-          <label>المعاينة <span class="muted">(أول 100 بطاقة)</span></label>
-          <div id="preview"></div>
-        </section>
-      </div>
-
-      <div class="footer">
-        <div class="note">نصيحة: لو تستخدم Cloze، اختر نوع المذكرة “Cloze” عند الاستيراد.</div>
-        <div class="note">تم التصميم للعمل بالكامل بدون إنترنت.</div>
-      </div>
-    </div>
+  <div class="row">
+    <label><input type="checkbox" id="stripHtml" checked> إزالة وسوم &lt;br&gt; وتحويلها إلى فواصل أسطر داخل حقل السؤال</label>
   </div>
+
+  <div class="row">
+    <button id="generateBtn">إنشاء ملف CSV للأنكي</button>
+    <button id="clearBtn" class="secondary">مسح</button>
+  </div>
+
+  <div class="note" id="hint">
+    ملاحظة: هذا مولّد CSV فقط. الملف الناتج قابل للاستيراد في AnkiMobile/Anki Desktop كنمط "Basic". إذا أردت ملف <code>.apkg</code> فذلك يتطلب أدوات (مثل genanki) على جهاز الكمبيوتر.
+  </div>
+
+  <div class="out" id="outputInfo"></div>
 
 <script>
 (function(){
-  const $ = (s)=>document.querySelector(s);
-  const $$ = (s)=>Array.from(document.querySelectorAll(s));
+  const input = document.getElementById('inputArea');
+  const generateBtn = document.getElementById('generateBtn');
+  const clearBtn = document.getElementById('clearBtn');
+  const outputInfo = document.getElementById('outputInfo');
+  const stripHtml = document.getElementById('stripHtml');
 
-  const inputText = $('#inputText');
-  const mode = $('#mode');
-  const deck = $('#deck');
-  const delimiter = $('#delimiter');
-  const tagsInput = $('#tags');
-  const qaOptions = $('#qaOptions');
-  const previewEl = $('#preview');
-  const previewBtn = $('#previewBtn');
-  const downloadBtn = $('#downloadBtn');
-  const clearBtn = $('#clearBtn');
+  // Example prefill (optional) — comment out if undesired
+  input.value = `Front,Back
+Preferred insulin delivery method for T1DM?<br>A) Single daily injection<br>B) Multiple daily injections or insulin pump<br>C) Oral agents<br>D) Sliding-scale insulin only,B) Multiple daily injections or insulin pump
+Usual starting insulin dose for T1DM (units/kg/day)?<br>A) 0.1<br>B) 0.25<br>C) 0.5<br>D) 1.5,C) 0.5
+Ratio of basal to prandial insulin in T1DM?<br>A) 70/30<br>B) 60/40<br>C) 50/50<br>D) 40/60,C) 50/50
+What happens to insulin needs during the “honeymoon phase” of T1DM?<br>A) Increase<br>B) Stay same<br>C) Decrease<br>D) Stop entirely,C) Decrease`;
 
-  mode.addEventListener('change', ()=> {
-    qaOptions.style.display = (mode.value === 'qa') ? 'grid' : 'none';
-    renderPreview();
-  });
-  qaOptions.style.display = 'grid';
+  function sanitizeLine(line) {
+    // Remove code fences if pasted
+    line = line.replace(/^```.+/g,'').replace(/```/g,'').trim();
+    return line;
+  }
 
-  clearBtn.addEventListener('click', ()=>{
-    inputText.value = '';
-    previewEl.innerHTML = '';
-  });
+  function htmlBreakToNewline(text) {
+    // Replace <br> and variants with literal newline inside the Front field (keeps readability in Anki)
+    return text.replace(/<br\s*\/?>/gi,'\\n');
+  }
 
-  previewBtn.addEventListener('click', renderPreview);
-  inputText.addEventListener('input', debounce(renderPreview, 300));
+  function csvEscape(field) {
+    // Escape double quotes by doubling them, and wrap in quotes if needed
+    if (field == null) field = '';
+    const needs = /[,"\n\r]/.test(field);
+    let v = String(field);
+    v = v.replace(/"/g,'""');
+    return needs ? `"${v}"` : v;
+  }
 
-  downloadBtn.addEventListener('click', ()=>{
-    const {rows, headers} = buildRows();
-    if(!rows.length){ alert('لا توجد بطاقات لتصديرها.'); return; }
-    const csv = toCSV([headers, ...rows]);
-    const deckName = (deck.value || 'anki').trim().replace(/[\\/:*?"<>|]+/g,'-');
-    const blob = new Blob([bomUtf8()+csv], {type:'text/csv;charset=utf-8;'});
+  function prepareCSV(raw) {
+    const lines = raw.split(/\r?\n/).map(sanitizeLine).filter(l=>l.trim()!=='');
+    // If first line starts with Front,Back treat it as header and keep
+    let hasHeader = false;
+    if (lines.length && /^front\s*,\s*back$/i.test(lines[0])) {
+      hasHeader = true;
+      lines.shift(); // remove header for processing; we'll add proper header later
+    }
+
+    const rows = [];
+    for (let i=0;i<lines.length;i++){
+      let line = lines[i];
+
+      // If the line already looks like CSV with a comma separating front and back
+      if (line.indexOf(',') !== -1) {
+        // Split only on the first comma to allow commas in answers
+        const idx = line.indexOf(',');
+        let front = line.slice(0, idx).trim();
+        let back = line.slice(idx+1).trim();
+
+        if (stripHtml.checked) front = htmlBreakToNewline(front);
+        // Convert any HTML entities basic (like &lt; &gt;) — minimal
+        front = front.replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&amp;/g,'&');
+
+        rows.push([front, back]);
+        continue;
+      }
+
+      // Otherwise — try to parse block: question line followed by answer line
+      // Look ahead: if next line exists, use it as back
+      if (i+1 < lines.length) {
+        const front = line;
+        const back = lines[i+1];
+        if (stripHtml.checked) rows.push([htmlBreakToNewline(front), back]);
+        else rows.push([front, back]);
+        i++; // skip next line
+      } else {
+        // single leftover line -> treat as front with empty back
+        rows.push([line, '']);
+      }
+    }
+
+    // Build CSV content with UTF-8 BOM to ensure Arabic shows correctly in some apps
+    const BOM = '\uFEFF';
+    const header = 'Front,Back';
+    const csvLines = rows.map(r => `${csvEscape(r[0])},${csvEscape(r[1])}`);
+    return BOM + header + "\n" + csvLines.join("\n");
+  }
+
+  function download(filename, content) {
+    const blob = new Blob([content], {type: 'text/csv;charset=utf-8;'});
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${deckName || 'anki'}.csv`;
+    a.download = filename;
     document.body.appendChild(a);
     a.click();
-    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 500);
+  }
+
+  generateBtn.addEventListener('click', () => {
+    const raw = input.value;
+    if (!raw.trim()) {
+      outputInfo.innerHTML = '<span style="color:#b00">الرجاء لصق نص البطاقة أولاً.</span>';
+      return;
+    }
+    try {
+      const csv = prepareCSV(raw);
+      const filename = 'Diabetes_MCQ_Flashcards.csv';
+      download(filename, csv);
+      outputInfo.innerHTML = `<span style="color:green">تم إنشاء الملف: <strong>${filename}</strong> — افتحه في AnkiMobile أو استورده في Anki Desktop.</span>`;
+    } catch (e) {
+      outputInfo.innerHTML = `<span style="color:#b00">خطأ أثناء الإنشاء: ${e.message}</span>`;
+    }
   });
 
-  function buildRows(){
-    const text = inputText.value.replace(/\r\n/g, '\n');
-    const tagString = normalizeTags(tagsInput.value);
-    const deckName = (deck.value || '').trim();
+  clearBtn.addEventListener('click', () => {
+    input.value = '';
+    outputInfo.innerHTML = '';
+  });
 
-    if(mode.value === 'qa'){
-      const delim = delimiter.value || '::';
-      const lines = text.split('\n').map(s=>s.trim()).filter(s=>s.length>0);
-      const rows = lines.map(line=>{
-        const idx = line.indexOf(delim);
-        let front = line, back = '';
-        if(idx >= 0){
-          front = line.slice(0, idx).trim();
-          back  = line.slice(idx + delim.length).trim();
-        }
-        return [front, back, deckName, tagString];
-      });
-      return { headers: ['Front','Back','Deck','Tags'], rows };
-    }
-
-    if(mode.value === 'one'){
-      const lines = text.split('\n').map(s=>s.trim()).filter(s=>s.length>0);
-      const rows = lines.map(line=>[line, '', deckName, tagString]);
-      return { headers: ['Front','Back','Deck','Tags'], rows };
-    }
-
-    // cloze
-    const chunks = splitParagraphs(text).filter(s=>s.trim().length>0);
-    const rows = chunks.map(ch => [ch.trim(), deckName, tagString]);
-    return { headers: ['Text','Deck','Tags'], rows };
-  }
-
-  function renderPreview(){
-    const {rows, headers} = buildRows();
-    const max = Math.min(rows.length, 100);
-    if(max === 0){ previewEl.innerHTML = '<div class="muted">لا توجد معاينة بعد.</div>'; return; }
-    const head = '<tr>' + headers.map(h=>`<th>${escapeHtml(h)}</th>`).join('') + '</tr>';
-    const body = rows.slice(0, max).map(r => '<tr>'+ r.map(c=>`<td>${escapeHtml(truncate(c, 240))}</td>`).join('') + '</tr>').join('');
-    previewEl.innerHTML = `<div style="overflow:auto; border-radius:10px;"><table>${head}${body}</table></div>
-      <div class="muted" style="margin-top:8px;">إجمالي البطاقات: ${rows.length}${rows.length>max?` — المعروض ${max}`:''}</div>`;
-  }
-
-  function toCSV(rows){
-    return rows.map(r=> r.map(csvEscape).join(',')).join('\n');
-  }
-
-  function csvEscape(v){
-    v = (v ?? '').toString();
-    // Excel/Anki-safe double-quote escaping
-    if(/[",\n]/.test(v)){ v = '"' + v.replace(/"/g,'""') + '"'; }
-    return v;
-  }
-
-  function escapeHtml(s){
-    return (s??'').toString()
-      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
-      .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
-      .replace(/'/g,'&#039;');
-  }
-
-  function truncate(s, n){
-    s = (s ?? '').toString();
-    return s.length>n ? s.slice(0,n-1)+'…' : s;
-  }
-
-  function splitParagraphs(t){
-    // فقرة = مقطع يفصلُه سطرٌ فارغ أو سطر يحتوي فقط على وسم --- مثلاً.
-    return t.split(/\n\s*\n+/);
-  }
-
-  function normalizeTags(s){
-    // يقبل ; أو , أو مسافة فاصلة — يحولها لمسافة واحدة (تنسيق أنكي للوسوم).
-    return (s||'').trim().replace(/[;,]+/g,' ').replace(/\s+/g,' ');
-  }
-
-  function bomUtf8(){ return '\uFEFF'; } // لتفادي مشاكل العربية في Excel/Windows
-
-  function debounce(fn, ms){
-    let id; return (...args)=>{ clearTimeout(id); id = setTimeout(()=>fn.apply(null,args), ms); }
-  }
-
-  // معاينة أولية
-  renderPreview();
 })();
 </script>
 </body>
