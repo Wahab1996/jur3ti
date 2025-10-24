@@ -1,21 +1,256 @@
-Front,Back
-What is the preferred insulin delivery method for Type 1 Diabetes Mellitus?,Multiple daily injections (MDI) or insulin pump
-Typical starting total daily insulin dose for T1DM (units/kg/day)?,0.4–1.0 (usually 0.5)
-In T1DM, insulin is divided into what ratio between basal and prandial doses?,50% basal / 50% prandial
-During the T1DM “honeymoon phase,” insulin requirements should be reduced.
-Which injectable amylin analog may be used (rarely) as adjunct therapy in T1DM?,Pramlintide
-Indication for pancreas or islet transplantation in diabetes?,Recurrent DKA or severe hypoglycemia despite optimal therapy
-First-line pharmacologic therapy for newly diagnosed Type 2 Diabetes?,Metformin
-Metformin should be avoided if eGFR is below 30 mL/min/1.73m².
-Which diabetes drug class provides cardiorenal protection and may cause genital infections?,SGLT-2 inhibitors
-GLP-1 receptor agonists (e.g., Semaglutide) are preferred in which comorbidities?,ASCVD, CKD, or obesity
-Sulfonylureas increase risk of what adverse effect?,Hypoglycemia
-Pioglitazone is contraindicated in which comorbidity?,Congestive heart failure
-Expected HbA1c reduction with monotherapy of most oral agents?,About 1%
-Basal–bolus insulin regimen composition ratio?,50% basal / 50% bolus
-Example basal insulins used in basal–bolus therapy?,Glargine, Detemir, Degludec
-Basal-only insulin regimen is suitable for which patients?,Fasting hyperglycemia or new-onset T2DM
-In basal insulin titration, increase by how many units every 3 days until fasting glucose target is reached?,2 units
-Sliding-scale insulin should not be used alone; what should it always be combined with?,Basal insulin
-Preferred antihyperglycemic agents in heart failure?,SGLT-2 inhibitors (Empagliflozin, Dapagliflozin)
-Target HbA1c monitoring frequency for uncontrolled diabetes?,Every 3 months
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>مولّد ملف Anki من نص</title>
+<style>
+  :root { --gap:12px; --radius:12px; --shadow:0 6px 18px rgba(0,0,0,.08); }
+  body { font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; background:#0f172a; color:#e2e8f0; margin:0; }
+  .wrap { max-width: 1100px; margin: 40px auto; padding: 0 16px; }
+  .card { background:#0b1220; border:1px solid #1f2937; border-radius: var(--radius); box-shadow: var(--shadow); }
+  header { padding: 18px 20px; border-bottom:1px solid #1f2937; display:flex; gap:10px; align-items:center; justify-content:space-between; }
+  header h1 { font-size: 18px; margin:0; font-weight:700; letter-spacing:.3px; }
+  header small { opacity:.8; }
+  .grid { display:grid; gap: var(--gap); grid-template-columns: 1fr; padding: 16px; }
+  @media (min-width: 960px){ .grid{ grid-template-columns: 1.2fr .8fr; } }
+  textarea { width: 100%; min-height: 360px; resize: vertical; padding:14px; border-radius: 10px; border:1px solid #23304a; background:#0b1426; color:#e2e8f0; line-height:1.6; }
+  .panel { display:grid; gap: var(--gap); }
+  .row { display:grid; gap:10px; grid-template-columns: 1fr 1fr; }
+  label { font-size: 13px; opacity:.9; margin-bottom:6px; display:block; }
+  input, select { width:100%; padding:12px; border-radius:10px; border:1px solid #23304a; background:#0b1426; color:#e2e8f0; }
+  input::placeholder { color:#94a3b8; opacity:.7; }
+  button { padding: 12px 14px; border-radius: 10px; border:1px solid #334155; background:#1e293b; color:#e2e8f0; cursor:pointer; font-weight:600; }
+  button.primary { background: #22c55e; border-color:#16a34a; color:#062d17; }
+  button.ghost { background: transparent; }
+  .help { font-size:13px; line-height:1.7; background:#0a1222; border:1px dashed #29354e; padding:12px; border-radius:10px; }
+  table { width:100%; border-collapse: collapse; background:#0b1426; border:1px solid #22314f; border-radius:10px; overflow:hidden; }
+  th, td { text-align: start; padding: 10px 12px; border-bottom:1px solid #1e2a45; vertical-align: top; }
+  th { background:#0e1830; font-weight:700; }
+  .muted { opacity:.7; font-size:12px; }
+  .badge { display:inline-block; padding:4px 8px; border-radius:999px; background:#0b1d39; border:1px solid #1f3b70; font-size:12px; }
+  .footer { padding:14px 16px; display:flex; gap:10px; align-items:center; justify-content:space-between; border-top:1px solid #1f2937;}
+  .note { font-size:12px; opacity:.8; }
+  .pill { display:flex; gap:8px; align-items:center; flex-wrap:wrap; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <header>
+        <h1>مولّد ملف Anki من نص</h1>
+        <small class="badge">يدعم Basic &amp; Cloze</small>
+      </header>
+
+      <div class="grid">
+        <section>
+          <label for="inputText">الصق النص الكامل هنا</label>
+          <textarea id="inputText" placeholder="أمثلة سريعة:
+(وضع Q→A)
+What is insulin? :: A hormone that lowers blood glucose
+Basal insulin :: Long-acting insulin to cover fasting needs
+
+(وضع Cloze)
+Insulin is secreted by the {{c1::beta cells}} of the {{c2::pancreas}}.
+
+(وضع سطر→بطاقة)
+Hemoglobin A1c
+Fasting plasma glucose
+Oral glucose tolerance test"></textarea>
+
+          <div class="help">
+            <b>طرق التحويل:</b><br>
+            <ul>
+              <li><b>سؤال→جواب (Q→A):</b> كل سطر بطاقة. افصل السؤال والجواب بالرمز <code>::</code>. إن لم يوجد، يصبح السطر هو الوجه الأمامي فقط.</li>
+              <li><b>Cloze:</b> استخدم أقواس الإخفاء على النص مثل <code>{{c1::text}}</code>. كل فقرة (سطر فارغ يفصل) بطاقة مستقلة.</li>
+              <li><b>سطر → بطاقة:</b> كل سطر يصبح وجه أمامي فقط.</li>
+            </ul>
+            عند الاستيراد في Anki اختر نوع المذكرة المناسب (Basic لِـ Q→A/سطر، أو Cloze لوضع الإخفاء).
+          </div>
+        </section>
+
+        <aside class="panel">
+          <div class="row">
+            <div>
+              <label for="mode">الوضع</label>
+              <select id="mode">
+                <option value="qa">سؤال → جواب (Q→A)</option>
+                <option value="cloze">Cloze (إخفاء)</option>
+                <option value="one">سطر → بطاقة (وجه واحد)</option>
+              </select>
+            </div>
+            <div>
+              <label for="deck">اسم المجموعة (Deck) — اختياري</label>
+              <input id="deck" type="text" placeholder="مثال: Endocrinology" />
+            </div>
+          </div>
+
+          <div class="row" id="qaOptions">
+            <div>
+              <label for="delimiter">الفاصل بين السؤال والجواب</label>
+              <input id="delimiter" type="text" value="::">
+            </div>
+            <div>
+              <label for="tags">وسوم (Tags) — اختياري</label>
+              <input id="tags" type="text" placeholder="مثال: T1DM;exam;high_yield">
+            </div>
+          </div>
+
+          <div class="pill">
+            <button id="previewBtn">معاينة البطاقات</button>
+            <button id="downloadBtn" class="primary">تنزيل ملف CSV للـ Anki</button>
+            <button id="clearBtn" class="ghost">تفريغ الحقول</button>
+          </div>
+
+          <div class="note">
+            سيُحفظ الملف بترميز UTF-8 (مع BOM). داخل Anki اختر <b>Import</b> ثم حدّد نوع المذكرة وحقول CSV بالترتيب.
+          </div>
+        </aside>
+      </div>
+
+      <div class="grid" style="grid-template-columns:1fr;">
+        <section>
+          <label>المعاينة <span class="muted">(أول 100 بطاقة)</span></label>
+          <div id="preview"></div>
+        </section>
+      </div>
+
+      <div class="footer">
+        <div class="note">نصيحة: لو تستخدم Cloze، اختر نوع المذكرة “Cloze” عند الاستيراد.</div>
+        <div class="note">تم التصميم للعمل بالكامل بدون إنترنت.</div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(function(){
+  const $ = (s)=>document.querySelector(s);
+  const $$ = (s)=>Array.from(document.querySelectorAll(s));
+
+  const inputText = $('#inputText');
+  const mode = $('#mode');
+  const deck = $('#deck');
+  const delimiter = $('#delimiter');
+  const tagsInput = $('#tags');
+  const qaOptions = $('#qaOptions');
+  const previewEl = $('#preview');
+  const previewBtn = $('#previewBtn');
+  const downloadBtn = $('#downloadBtn');
+  const clearBtn = $('#clearBtn');
+
+  mode.addEventListener('change', ()=> {
+    qaOptions.style.display = (mode.value === 'qa') ? 'grid' : 'none';
+    renderPreview();
+  });
+  qaOptions.style.display = 'grid';
+
+  clearBtn.addEventListener('click', ()=>{
+    inputText.value = '';
+    previewEl.innerHTML = '';
+  });
+
+  previewBtn.addEventListener('click', renderPreview);
+  inputText.addEventListener('input', debounce(renderPreview, 300));
+
+  downloadBtn.addEventListener('click', ()=>{
+    const {rows, headers} = buildRows();
+    if(!rows.length){ alert('لا توجد بطاقات لتصديرها.'); return; }
+    const csv = toCSV([headers, ...rows]);
+    const deckName = (deck.value || 'anki').trim().replace(/[\\/:*?"<>|]+/g,'-');
+    const blob = new Blob([bomUtf8()+csv], {type:'text/csv;charset=utf-8;'});
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${deckName || 'anki'}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    setTimeout(()=>{ URL.revokeObjectURL(url); a.remove(); }, 0);
+  });
+
+  function buildRows(){
+    const text = inputText.value.replace(/\r\n/g, '\n');
+    const tagString = normalizeTags(tagsInput.value);
+    const deckName = (deck.value || '').trim();
+
+    if(mode.value === 'qa'){
+      const delim = delimiter.value || '::';
+      const lines = text.split('\n').map(s=>s.trim()).filter(s=>s.length>0);
+      const rows = lines.map(line=>{
+        const idx = line.indexOf(delim);
+        let front = line, back = '';
+        if(idx >= 0){
+          front = line.slice(0, idx).trim();
+          back  = line.slice(idx + delim.length).trim();
+        }
+        return [front, back, deckName, tagString];
+      });
+      return { headers: ['Front','Back','Deck','Tags'], rows };
+    }
+
+    if(mode.value === 'one'){
+      const lines = text.split('\n').map(s=>s.trim()).filter(s=>s.length>0);
+      const rows = lines.map(line=>[line, '', deckName, tagString]);
+      return { headers: ['Front','Back','Deck','Tags'], rows };
+    }
+
+    // cloze
+    const chunks = splitParagraphs(text).filter(s=>s.trim().length>0);
+    const rows = chunks.map(ch => [ch.trim(), deckName, tagString]);
+    return { headers: ['Text','Deck','Tags'], rows };
+  }
+
+  function renderPreview(){
+    const {rows, headers} = buildRows();
+    const max = Math.min(rows.length, 100);
+    if(max === 0){ previewEl.innerHTML = '<div class="muted">لا توجد معاينة بعد.</div>'; return; }
+    const head = '<tr>' + headers.map(h=>`<th>${escapeHtml(h)}</th>`).join('') + '</tr>';
+    const body = rows.slice(0, max).map(r => '<tr>'+ r.map(c=>`<td>${escapeHtml(truncate(c, 240))}</td>`).join('') + '</tr>').join('');
+    previewEl.innerHTML = `<div style="overflow:auto; border-radius:10px;"><table>${head}${body}</table></div>
+      <div class="muted" style="margin-top:8px;">إجمالي البطاقات: ${rows.length}${rows.length>max?` — المعروض ${max}`:''}</div>`;
+  }
+
+  function toCSV(rows){
+    return rows.map(r=> r.map(csvEscape).join(',')).join('\n');
+  }
+
+  function csvEscape(v){
+    v = (v ?? '').toString();
+    // Excel/Anki-safe double-quote escaping
+    if(/[",\n]/.test(v)){ v = '"' + v.replace(/"/g,'""') + '"'; }
+    return v;
+  }
+
+  function escapeHtml(s){
+    return (s??'').toString()
+      .replace(/&/g,'&amp;').replace(/</g,'&lt;')
+      .replace(/>/g,'&gt;').replace(/"/g,'&quot;')
+      .replace(/'/g,'&#039;');
+  }
+
+  function truncate(s, n){
+    s = (s ?? '').toString();
+    return s.length>n ? s.slice(0,n-1)+'…' : s;
+  }
+
+  function splitParagraphs(t){
+    // فقرة = مقطع يفصلُه سطرٌ فارغ أو سطر يحتوي فقط على وسم --- مثلاً.
+    return t.split(/\n\s*\n+/);
+  }
+
+  function normalizeTags(s){
+    // يقبل ; أو , أو مسافة فاصلة — يحولها لمسافة واحدة (تنسيق أنكي للوسوم).
+    return (s||'').trim().replace(/[;,]+/g,' ').replace(/\s+/g,' ');
+  }
+
+  function bomUtf8(){ return '\uFEFF'; } // لتفادي مشاكل العربية في Excel/Windows
+
+  function debounce(fn, ms){
+    let id; return (...args)=>{ clearTimeout(id); id = setTimeout(()=>fn.apply(null,args), ms); }
+  }
+
+  // معاينة أولية
+  renderPreview();
+})();
+</script>
+</body>
+</html>
