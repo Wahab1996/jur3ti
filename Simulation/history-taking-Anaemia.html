@@ -1,71 +1,45 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="utf-8" />
+  <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Focused History — Arabic + Brief English</title>
+  <title>Focused History — Case Scenarios (Arabic + Brief English)</title>
   <style>
-    /* ====== Simple, clean, white page ====== */
+    /* ===== Simple white documentation-like page ===== */
+    :root{
+      --ink:#111827;        /* text */
+      --muted:#6b7280;      /* hints */
+      --blue:#1e3a8a;       /* headings */
+      --line:#e5e7eb;       /* borders */
+      --card:#ffffff;       /* cards */
+      --bg:#ffffff;         /* page background */
+    }
     html,body{margin:0;padding:0}
     body{
-      background:#ffffff;
-      color:#111827;
+      background:var(--bg);
+      color:var(--ink);
       font-family: system-ui,-apple-system,Segoe UI,Roboto,"Noto Naskh Arabic","Noto Sans Arabic",Tahoma,Arial,sans-serif;
       line-height:1.8;
       font-size:16px;
     }
-    .container{
-      max-width:900px;
-      margin:32px auto;
-      padding:0 16px;
-    }
-    h1{
-      margin:0 0 8px;
-      font-size:28px;
-      font-weight:800;
-      color:#0f172a;
-    }
-    .sub{
-      margin:0 0 24px;
-      color:#475569;
-      font-size:14px;
-    }
-    /* Vertical sections like cards but very light */
-    section{
-      background:#fff;
-      border:1px solid #e5e7eb;
+    .container{max-width:900px;margin:0 auto;padding:24px 16px 32px}
+    h1{margin:0 0 8px;text-align:center;color:var(--blue);font-size:28px;font-weight:800}
+    .sub{margin:0 0 28px;text-align:center;color:#374151;font-size:14px}
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
       border-radius:10px;
-      padding:16px 16px 4px;
-      margin:16px 0;
+      padding:20px;
+      margin-bottom:20px;
+      box-shadow:0 1px 3px rgba(0,0,0,.05);
     }
-    section h2{
-      margin:0 0 10px;
-      font-size:20px;
-      font-weight:700;
-      color:#111827;
-    }
-    .en-line{
-      direction:ltr;
-      text-align:left;
-      font-size:14px;
-      color:#334155;
-      margin-top:4px;
-    }
-    .block{
-      border-top:1px solid #f1f5f9;
-      padding-top:12px;
-      margin-top:12px;
-    }
-    h3{
-      margin:0 0 6px;
-      font-size:16px;
-      color:#0f172a;
-    }
-    .hint{color:#64748b; font-size:13px; font-weight:400}
-    ul{margin:0 0 10px 1rem; padding:0}
+    h2{margin:0 0 6px;color:var(--blue);font-size:20px}
+    h3{margin:16px 0 6px;font-size:16px;color:#0f172a}
+    ul{margin:0 0 10px 1.2rem;padding:0}
     li{margin:.4rem 0}
-    /* Small footer */
-    footer{color:#64748b; font-size:13px; text-align:center; margin:28px 0 8px}
+    .en{direction:ltr;text-align:left;color:#374151;font-size:14px;margin-top:2px;margin-bottom:10px}
+    .hint{color:var(--muted);font-size:13px}
+    .divider{height:1px;background:var(--line);margin:12px 0}
   </style>
 </head>
 <body>
@@ -73,238 +47,222 @@
     <h1>Focused History Templates</h1>
     <p class="sub">Case scenarios are kept in <b>English</b>. Question prompts are in <b>Arabic</b> with a brief English hint.</p>
 
-    <!-- ============== Case 1 ============== -->
-    <section id="case-1">
+    <!-- ========================= CASE 1 ========================= -->
+    <div class="card" id="case-1">
       <h2>Case Scenario — Number 1</h2>
-      <p class="en-line">A 47-year-old man came with fatigue; Hb 9.5 g/dL. Take a focused history in 7 minutes.</p>
+      <p class="en">A 47-year-old man came to your office with fatigue; Hb 9.5 g/dL. Take a focused history in the next 7 minutes.</p>
 
-      <div class="block">
-        <h3>التقديم والتعريف <span class="hint">(Introduce & ask permission)</span></h3>
-        <ul>
-          <li>عرّف بنفسك واطلب الإذن، وأكد على السرية والراحة. <span class="hint">(Role, consent, privacy)</span></li>
-        </ul>
-      </div>
+      <div class="divider"></div>
 
-      <div class="block">
-        <h3>البيانات الشخصية <span class="hint">(Personal data)</span></h3>
-        <ul><li>العمر، المهنة، الحالة الاجتماعية/الوظيفية. <span class="hint">(Age, job, function)</span></li></ul>
-      </div>
+      <h3>التقديم والتعريف <span class="hint">(Introduce yourself & ask permission)</span></h3>
+      <ul>
+        <li>عرّف بنفسك ووضح دورك واطلب الإذن لأخذ التاريخ والفحص. <span class="hint">(Intro, role, consent, privacy)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>الشكوى الرئيسية <span class="hint">(Chief complaint)</span></h3>
-        <ul><li>ما المشكلة الأساسية ومدة حدوثها؟ <span class="hint">(Main symptom & duration)</span></li></ul>
-      </div>
+      <h3>البيانات الشخصية <span class="hint">(Personal data)</span></h3>
+      <ul>
+        <li>الاسم، العمر، المهنة، الحالة الاجتماعية والوظيفية. <span class="hint">(ID, age, job, marital, function)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>القصة المرضية الحالية والأعراض المصاحبة <span class="hint">(HPI & associated symptoms)</span></h3>
-        <ul>
-          <li>متى بدأت الأعراض؟ <span class="hint">(Onset)</span></li>
-          <li>ما الأعراض؟ إعياء/ضيق نفس/خفقان. <span class="hint">(Fatigue, SOB, palpitations)</span></li>
-          <li>دم بالبراز، <span dir="ltr">melena</span>، أو قيء دموي؟ <span class="hint">(GI blood loss → IDA)</span></li>
-          <li>تناول مواد غير غذائية مثل الثلج؟ <span class="hint">(Pagophagia → iron deficiency)</span></li>
-          <li>خدر/تنميل أو ضعف بالأطراف؟ <span class="hint">(Peripheral neuropathy → B12)</span></li>
-        </ul>
-      </div>
+      <h3>الشكوى الرئيسية <span class="hint">(Chief complaint)</span></h3>
+      <ul>
+        <li>“إرهاق/تعب”. المدة وشدة التأثير. <span class="hint">(Problem, duration, impact)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ الطبي والجراحي السابق <span class="hint">(PMH & PSH)</span></h3>
-        <ul>
-          <li>نوبات مماثلة سابقًا؟ <span class="hint">(Prior episodes)</span></li>
-          <li>نقل دم سابق؟ <span class="hint">(Transfusions → marrow failure)</span></li>
-          <li>أمراض سوء امتصاص؟ ملاريا/طفيليات مزمنة؟ <span class="hint">(Malabsorption; chronic anemia)</span></li>
-          <li>مشاكل كلوية أو التهاب مفاصل مزمن شديد؟ <span class="hint">(Anemia of chronic disease)</span></li>
-          <li>عملية/إجراء حديث؟ <span class="hint">(Blood loss)</span></li>
-          <li>استئصال معدة أو دقاق نهائي؟ <span class="hint">(B12 deficiency)</span></li>
-        </ul>
-      </div>
+      <h3>القصة المرضية الحالية والأعراض المصاحبة <span class="hint">(History of Presenting Illness & associated symptoms)</span></h3>
+      <ul>
+        <li>متى بدأت الأعراض؟ <span class="hint">(Onset)</span></li>
+        <li>أعراضك الحالية: إعياء، ضيق نفس، خفقان. <span class="hint">(Fatigue, SOB, palpitations)</span></li>
+        <li>هل لاحظت دمًا بالبراز، <span dir="ltr">melena</span>، أو تقيؤ دم؟ <span class="hint">(GI blood loss → iron deficiency)</span></li>
+        <li>هل تتناول مواد غير غذائية مثل الثلج؟ <span class="hint">(Pagophagia → iron deficiency)</span></li>
+        <li>هل لديك خدر/تنميل/ألم أو ضعف في اليدين أو القدمين؟ <span class="hint">(Peripheral neuropathy → B12 deficiency)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>الأدوية <span class="hint">(Medication history)</span></h3>
-        <ul>
-          <li>مسكنات/مضادات التهابات/وارفارين؟ <span class="hint">(Bleeding risk)</span></li>
-          <li>كيماوي/كلورامفينيكول/سلفوناميدات؟ <span class="hint">(Marrow suppression)</span></li>
-        </ul>
-      </div>
+      <h3>التاريخ الطبي والجراحي السابق <span class="hint">(Past medical & surgical history)</span></h3>
+      <ul>
+        <li>هل تكررت لديك حالات مشابهة؟ <span class="hint">(Previous similar episodes)</span></li>
+        <li>هل احتجت إلى نقل دم سابقًا؟ <span class="hint">(Transfusions → myelofibrosis/bone marrow failure)</span></li>
+        <li>هل شُخصت بأمراض سوء امتصاص؟ <span class="hint">(Malabsorption anemia)</span></li>
+        <li>عدوى ملارية مزمنة أو طفيليات معوية؟ <span class="hint">(May cause chronic anemia)</span></li>
+        <li>أمراض كلوية أو التهاب مفاصل مزمن شديد؟ <span class="hint">(Anemia of chronic disease)</span></li>
+        <li>عمليات/إجراءات حديثة؟ <span class="hint">(Blood loss)</span></li>
+        <li>استئصال معدة أو الدقاق النهائي؟ <span class="hint">(B12 deficiency)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ العائلي <span class="hint">(Family history)</span></h3>
-        <ul><li>حالات مشابهة أو أمراض دم بالعائلة؟ <span class="hint">(Inherited causes)</span></li></ul>
-      </div>
+      <h3>الأدوية <span class="hint">(Medication history)</span></h3>
+      <ul>
+        <li>أدوية حالية/حديثة: أسبرين، NSAIDs، مضادات التخثر (وارفارين). <span class="hint">(May cause bleeding)</span></li>
+        <li>أدوية مثبطة للنخاع: كيماوي، كلورامفينيكول، سلفوناميدات. <span class="hint">(Bone marrow failure)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ التناسلي (للنساء) <span class="hint">(Menstrual history)</span></h3>
-        <ul><li>غزارة الطمث؟ <span class="hint">(HMB → iron deficiency)</span></li></ul>
-      </div>
+      <h3>التاريخ العائلي <span class="hint">(Family history)</span></h3>
+      <ul>
+        <li>حالات مشابهة أو أمراض دم في العائلة؟ <span class="hint">(Inherited/ familial blood disorders)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ الاجتماعي ونمط الحياة <span class="hint">(Social history)</span></h3>
-        <ul>
-          <li>كحول؟ <span class="hint">(Macrocytic anemia)</span></li>
-          <li>النظام الغذائي (نباتي صارم/مدخول فقير)؟ <span class="hint">(B12/folate/iron)</span></li>
-          <li>الأصل الجغرافي: المتوسط/الشرق الأوسط/جنوب آسيا/جنوب وشرق السعودية؟ <span class="hint">(Thalassemia/SCD)</span></li>
-          <li>سفر حديث ومكانه؟ <span class="hint">(Malaria exposure)</span></li>
-        </ul>
-      </div>
+      <h3>التاريخ التناسلي (للنساء) <span class="hint">(Menstrual history)</span></h3>
+      <ul>
+        <li>هل لديكِ غزارة طمث؟ <span class="hint">(HMB → iron deficiency)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>المراجعة الجهازية <span class="hint">(Systemic review)</span></h3>
-        <ul>
-          <li>عدوى مزمنة، فقدان وزن، تعرّق ليلي. <span class="hint">(Chronic disease)</span></li>
-          <li>أعراض صدرية/دوار/إغماء. <span class="hint">(Cardiorespiratory)</span></li>
-          <li>يرقان/بول داكن. <span class="hint">(Hemolysis/Liver)</span></li>
-        </ul>
-      </div>
-    </section>
+      <h3>التاريخ الاجتماعي <span class="hint">(Social history)</span></h3>
+      <ul>
+        <li>هل تتناول الكحول؟ <span class="hint">(Macrocytic anemia)</span></li>
+        <li>النظام الغذائي: نباتي صارم؟ مدخول فقير؟ <span class="hint">(B12/folate/iron deficiency)</span></li>
+        <li>الأصل الجغرافي: المتوسط/الشرق الأوسط/جنوب آسيا؛ جنوب وشرق السعودية. <span class="hint">(Thalassemia / Sickle cell)</span></li>
+        <li>سفرت مؤخرًا؟ إلى أين؟ <span class="hint">(Malaria endemic areas)</span></li>
+      </ul>
 
-    <!-- ============== Case 2 ============== -->
-    <section id="case-2">
+      <h3>المراجعة الجهازية <span class="hint">(Systemic review)</span></h3>
+      <ul>
+        <li>دوخة، صداع، ألم صدري مع الجهد، إغماء. <span class="hint">(Cardiorespiratory)</span></li>
+        <li>يرقان/بول داكن/اصفرار عيون. <span class="hint">(Hemolysis/Liver)</span></li>
+        <li>فقدان وزن، تعرّق ليلي. <span class="hint">(Chronic disease/malignancy)</span></li>
+      </ul>
+    </div>
+
+    <!-- ========================= CASE 2 ========================= -->
+    <div class="card" id="case-2">
       <h2>Case Scenario — Number 2</h2>
-      <p class="en-line">A 17-year-old woman was brought with epistaxis. Take a focused history in 7 minutes.</p>
+      <p class="en">A 17-year-old woman was brought to the ED by her father with epistaxis. Take a focused history in the next 7 minutes.</p>
 
-      <div class="block">
-        <h3>التقديم والتعريف <span class="hint">(Introduce & permission)</span></h3>
-        <ul><li>التعريف، الإذن، التحقق من البيانات. <span class="hint">(Consent & ID)</span></li></ul>
-      </div>
+      <div class="divider"></div>
 
-      <div class="block">
-        <h3>البيانات الشخصية <span class="hint">(Personal data)</span></h3>
-        <ul><li>العمر، الدراسة/النشاطات، المرافِق. <span class="hint">(Context)</span></li></ul>
-      </div>
+      <h3>التقديم والتعريف <span class="hint">(Introduce & ask permission)</span></h3>
+      <ul>
+        <li>التعريف بالنفس، الإذن، التحقق من الهوية والراحة. <span class="hint">(Consent & ID)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>الشكوى الرئيسية <span class="hint">(Chief complaint)</span></h3>
-        <ul><li>نزف أنفي: جانب واحد/جانبان، مدة، التكرار. <span class="hint">(CC details)</span></li></ul>
-      </div>
+      <h3>البيانات الشخصية <span class="hint">(Personal data)</span></h3>
+      <ul>
+        <li>العمر، الدراسة/النشاطات، وجود مرافق. <span class="hint">(Context)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>القصة المرضية الحالية <span class="hint">(HPI)</span></h3>
-        <ul>
-          <li>موضع النزف وهل يتكرر من نفس الموضع؟ <span class="hint">(Local lesion if single)</span></li>
-          <li>نزف سطحي/كدمات أم نزف عميق؟ <span class="hint">(Platelet/vascular vs coagulation)</span></li>
-          <li>بداية الأعراض وهل هناك رضّ/عملية أم تلقائي؟ <span class="hint">(Onset & severity)</span></li>
-        </ul>
-      </div>
+      <h3>الشكوى الرئيسية <span class="hint">(Chief complaint)</span></h3>
+      <ul>
+        <li>نزف أنفي: جانب واحد أم جانبان، التكرار، الكمية. <span class="hint">(Site, frequency, amount)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ الطبي والجراحي السابق <span class="hint">(PMH & PSH)</span></h3>
-        <ul>
-          <li>نوبات سابقة وسهولة الكدمات؟ <span class="hint">(Bleeding tendency)</span></li>
-          <li>نزف مفاصل؟ <span class="hint">(Hemarthrosis → Hemophilia)</span></li>
-          <li>عمليات سابقة: مباشرة (صفائح) أم بعد ساعات (تخثّر)؟ <span class="hint">(Timing clue)</span></li>
-          <li>أمراض كبد/كلى؟ أو نقص فيتامين ك/اعتلالات مكتسبة؟ <span class="hint">(Coagulation & uremia)</span></li>
-          <li>اضطرابات خلقية: الناعور A/B أو فون فيليبراند؟ <span class="hint">(Congenital)</span></li>
-        </ul>
-      </div>
+      <h3>القصة المرضية الحالية والأعراض المصاحبة <span class="hint">(HPI & associated symptoms)</span></h3>
+      <ul>
+        <li>ما موضع النزف؟ وهل يتكرر من نفس الموضع؟ <span class="hint">(Recurrent single site → local structural lesion)</span></li>
+        <li>نزف/كدمات سطحية أم نزف عميق؟ <span class="hint">(Platelet/vascular vs coagulation disorders)</span></li>
+        <li>متى بدأت الأعراض؟ هل وُجدت إصابة/عملية أم يحدث تلقائيًا؟ <span class="hint">(Onset; trauma vs spontaneous)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>الأدوية <span class="hint">(Medication history)</span></h3>
-        <ul><li>NSAIDs ومضادات التخثر (هيبارين/وارفارين). <span class="hint">(May cause bleeding)</span></li></ul>
-      </div>
+      <h3>التاريخ الطبي والجراحي السابق <span class="hint">(Past medical & surgical history)</span></h3>
+      <ul>
+        <li>هل لديكِ نوبات نزف سابقة؟ وهل دائمًا لديك سهولة نزف/كدمات؟ <span class="hint">(Bleeding tendency)</span></li>
+        <li>نزف في المفاصل؟ <span class="hint">(Hemarthrosis → Hemophilia)</span></li>
+        <li>عمليات سابقة: هل بدأ النزف فورًا بعد الجراحة (خلل صفائح) أم بعد ساعات (خلل تخثّر)؟ <span class="hint">(Timing clue)</span></li>
+        <li>أمراض كبد أو كلى؟ <span class="hint">(Liver → coag defect; Renal failure/uremia → platelet dysfunction)</span></li>
+        <li>اعتلالات مُكتسَبة: نقص فيتامين ك، مضادات التخثر (هيبارين/وارفارين)، اعتلال تخثّر منتشر داخل الأوعية. <span class="hint">(Acquired coagulation disorders)</span></li>
+        <li>اضطرابات خلقية: الناعور A/B أو داء فون فيليبراند. <span class="hint">(Congenital coagulation disorders)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ العائلي <span class="hint">(Family history)</span></h3>
-        <ul><li>حالات مشابهة/أمراض نزفية بالعائلة. <span class="hint">(Hemophilia/vWD)</span></li></ul>
-      </div>
+      <h3>الأدوية <span class="hint">(Medication history)</span></h3>
+      <ul>
+        <li>NSAIDs، مضادات التخثر (هيبارين/وارفارين) أو أدوية أخرى مميعة؟ <span class="hint">(May cause bleeding)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ التناسلي <span class="hint">(Menstrual history)</span></h3>
-        <ul><li>غزارة الطمث. <span class="hint">(Suggests vWD)</span></li></ul>
-      </div>
+      <h3>التاريخ العائلي <span class="hint">(Family history)</span></h3>
+      <ul>
+        <li>أفراد بالعائلة لديهم نزف مشابه أو أمراض دم؟ <span class="hint">(Hemophilia / von Willebrand disease)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ الاجتماعي <span class="hint">(Social history)</span></h3>
-        <ul><li>كحول؟ <span class="hint">(Liver disease → coag defects)</span></li></ul>
-      </div>
+      <h3>التاريخ التناسلي <span class="hint">(Menstrual history)</span></h3>
+      <ul>
+        <li>هل لديكِ غزارة طمث؟ <span class="hint">(Suggests vWD)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>المراجعة الجهازية <span class="hint">(Systemic review)</span></h3>
-        <ul>
-          <li>نزف لثوي/بول دموي/براز أسود/نمشات/كدمات. <span class="hint">(Other sites)</span></li>
-          <li>أعراض كبدية/كلوية مرافقة. <span class="hint">(System clues)</span></li>
-        </ul>
-      </div>
-    </section>
+      <h3>التاريخ الاجتماعي <span class="hint">(Social history)</span></h3>
+      <ul>
+        <li>تناول الكحول؟ <span class="hint">(Liver disease → coagulation defects)</span></li>
+      </ul>
 
-    <!-- ============== Case 3 ============== -->
-    <section id="case-3">
+      <h3>المراجعة الجهازية <span class="hint">(Systemic review)</span></h3>
+      <ul>
+        <li>نزف لثوي/بول دموي/براز أسود/نمشات/كدمات واسعة. <span class="hint">(Other bleeding sites)</span></li>
+        <li>أعراض كبدية (يرقان/حكة/تورم) أو كلوية (تورم/بول رغوي). <span class="hint">(System clues)</span></li>
+      </ul>
+    </div>
+
+    <!-- ========================= CASE 3 ========================= -->
+    <div class="card" id="case-3">
       <h2>Case Scenario — Number 3</h2>
-      <p class="en-line">A 47-year-old man felt a few lumps in his groins. Take a focused history in 7 minutes.</p>
+      <p class="en">A 47-year-old man came because he felt a few lumps in his groins. Take a focused history in the next 7 minutes.</p>
 
-      <div class="block">
-        <h3>التقديم والتعريف <span class="hint">(Introduce & permission)</span></h3>
-        <ul><li>التعريف بالنفس، الإذن، السرية. <span class="hint">(Intro & consent)</span></li></ul>
-      </div>
+      <div class="divider"></div>
 
-      <div class="block">
-        <h3>البيانات الشخصية <span class="hint">(Personal data)</span></h3>
-        <ul><li>العمر، المهنة، التعرضات. <span class="hint">(Exposures)</span></li></ul>
-      </div>
+      <h3>التقديم والتعريف <span class="hint">(Introduce & ask permission)</span></h3>
+      <ul>
+        <li>التعريف، الإذن، السرية. <span class="hint">(Intro, consent, privacy)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>الشكوى الرئيسية <span class="hint">(Chief complaint)</span></h3>
-        <ul><li>“كتل بالأربية”. <span class="hint">(Inguinal lumps)</span></li></ul>
-      </div>
+      <h3>البيانات الشخصية <span class="hint">(Personal data)</span></h3>
+      <ul>
+        <li>العمر، المهنة، عوامل التعرض. <span class="hint">(Age, job, exposures)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>القصة المرضية الحالية والأعراض المصاحبة <span class="hint">(HPI & symptoms)</span></h3>
-        <ul>
-          <li>الموضع: إبط/أربية/معمّم؟ <span class="hint">(Axillary→breast; Inguinal→STI; Generalized→HIV/IM/lymphoma/leukemia/SLE)</span></li>
-          <li>متى بدأت؟ أكثر من شهر؟ <span class="hint">(Duration → malignancy)</span></li>
-          <li>تطور الحجم: متزايد/ثابت/متراجع؟ <span class="hint">(Course)</span></li>
-          <li>حمّى/نقص وزن/تعرّق ليلي غزير؟ <span class="hint">(B symptoms → lymphoma)</span></li>
-          <li>إعياء/ضيق نفس/خفقان؟ <span class="hint">(Anemia from marrow)</span></li>
-          <li>سهولة نزف/كدمات؟ <span class="hint">(Thrombocytopenia from marrow)</span></li>
-          <li>سعال مع نفث دموي؟ <span class="hint">(TB)</span></li>
-          <li>قرحات تناسلية/إفرازات؟ <span class="hint">(STIs)</span></li>
-          <li>طفح جلدي/آلام مفاصل؟ <span class="hint">(SLE)</span></li>
-          <li>هل هي مؤلمة؟ الألم يرجّح سببًا إنتانيًا. <span class="hint">(Pain → infection)</span></li>
-        </ul>
-      </div>
+      <h3>الشكوى الرئيسية <span class="hint">(Chief complaint)</span></h3>
+      <ul>
+        <li>“كتل في المنطقة الأربية/الفخذين”. <span class="hint">(Inguinal lumps)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ الطبي والجراحي السابق <span class="hint">(PMH & PSH)</span></h3>
-        <ul>
-          <li>عروض سابقة؟ والتهابات تنفسية علوية حديثة؟ <span class="hint">(Reactive nodes)</span></li>
-          <li>التهابات متكررة؟ <span class="hint">(Leukopenia/Marrow dysfunction)</span></li>
-          <li>أمراض مناعية (روماتويد/ذئبة)؟ <span class="hint">(Autoimmune)</span></li>
-          <li>HIV أو داء وحيدات النوى؟ <span class="hint">(Generalized LAD; EBV → Burkitt risk)</span></li>
-          <li>سلّ أو مخالطة مصاب؟ <span class="hint">(TB)</span></li>
-          <li>تعرض لإشعاع؟ <span class="hint">(Malignancy risk)</span></li>
-        </ul>
-      </div>
+      <h3>القصة المرضية الحالية والأعراض المصاحبة <span class="hint">(History of Presenting Illness & associated symptoms)</span></h3>
+      <ul>
+        <li>أين تشعر بالكتل؟ إبط/أربية/معمّم؟ <span class="hint">(Axillary → breast cancer; Inguinal → STIs; Generalized → HIV/IM/Lymphoma/Leukemia/SLE)</span></li>
+        <li>متى لاحظتها أول مرة؟ وهل استمرت لأكثر من شهر؟ <span class="hint">(Duration >1 month → consider malignancy)</span></li>
+        <li>هل الحجم في ازدياد أم ثابت أم يتراجع؟ <span class="hint">(Course)</span></li>
+        <li>حمّى، نقص وزن، تعرّق ليلي غزير؟ <span class="hint">(B symptoms → lymphoma)</span></li>
+        <li>إعياء، ضيق نفس، خفقان؟ <span class="hint">(Anemia from marrow dysfunction)</span></li>
+        <li>سهولة نزف أو كدمات؟ <span class="hint">(Thrombocytopenia from marrow dysfunction)</span></li>
+        <li>سعال مع نفث دموي؟ <span class="hint">(Pulmonary TB)</span></li>
+        <li>قروح تناسلية أو إفرازات؟ <span class="hint">(Sexually transmitted diseases)</span></li>
+        <li>طفح جلدي أو آلام مفاصل؟ <span class="hint">(Systemic lupus erythematosus)</span></li>
+        <li>هل العقد مؤلمة؟ الألم يرجّح سببًا إنتانيًا. <span class="hint">(Pain → infection)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>الأدوية <span class="hint">(Medication history)</span></h3>
-        <ul><li>أدوية قد تسبب ضخامة عقدية: ألوبورينول/أتينولول/كابتوبريل/بنسلين. <span class="hint">(Drug-induced LAD)</span></li></ul>
-      </div>
+      <h3>التاريخ الطبي والجراحي السابق <span class="hint">(Past medical & surgical history)</span></h3>
+      <ul>
+        <li>عروض سابقة مشابهة؟ <span class="hint">(Prior presentation)</span></li>
+        <li>عدوى تنفسية علوية حديثة؟ <span class="hint">(Reactive lymphadenopathy)</span></li>
+        <li>التهابات متكررة؟ <span class="hint">(Leukopenia from marrow dysfunction)</span></li>
+        <li>أمراض مناعية (روماتويد/ذئبة)؟ <span class="hint">(Autoimmune causes of LAD)</span></li>
+        <li>HIV؟ <span class="hint">(Generalized lymphadenopathy)</span></li>
+        <li>عدوى إبشتاين–بار؟ <span class="hint">(EBV → risk of Burkitt lymphoma)</span></li>
+        <li>سُلّ أو مخالطة لمصاب بالسُلّ؟ <span class="hint">(TB)</span></li>
+        <li>تعرض لإشعاع سابقًا؟ <span class="hint">(Malignancy risk)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ العائلي <span class="hint">(Family history)</span></h3>
-        <ul><li>حالات مشابهة أو أورام دموية/لمفوما بالعائلة؟ <span class="hint">(FH of blood cancers)</span></li></ul>
-      </div>
+      <h3>الأدوية <span class="hint">(Medication history)</span></h3>
+      <ul>
+        <li>أدوية قد تسبب ضخامة عقدية: ألوبورينول/أتينولول/كابتوبريل/بنسلين. <span class="hint">(Drug-induced lymphadenopathy)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>التاريخ الاجتماعي وعوامل الخطورة <span class="hint">(Social history & risks)</span></h3>
-        <ul>
-          <li>تدخين/كحول؟ <span class="hint">(Malignancy risk)</span></li>
-          <li>سفر حديث؟ <span class="hint">(Infectious causes)</span></li>
-          <li>علاقات غير محمية/تعاطي وريدي؟ <span class="hint">(STI/HIV)</span></li>
-          <li>حيوانات أليفة؟ <span class="hint">(Toxoplasmosis)</span></li>
-          <li>منتجات ألبان غير مبسترة؟ <span class="hint">(Brucellosis)</span></li>
-          <li>المهنة والتعرضات (مثل البنزين). <span class="hint">(Leukemia/NHL risk)</span></li>
-        </ul>
-      </div>
+      <h3>التاريخ العائلي <span class="hint">(Family history)</span></h3>
+      <ul>
+        <li>حالات مشابهة أو سرطانات دم/لمفوما في العائلة؟ <span class="hint">(Family history of blood cancers/lymphoma)</span></li>
+      </ul>
 
-      <div class="block">
-        <h3>المراجعة الجهازية <span class="hint">(Systemic review)</span></h3>
-        <ul>
-          <li>طفح/حكة/تقرحات فموية/التهاب حلق متكرر. <span class="hint">(Derm/ENT)</span></li>
-          <li>سعال مزمن/تعرّق ليلي/نقص شهية. <span class="hint">(TB/lymphoma)</span></li>
-        </ul>
-      </div>
-    </section>
+      <h3>التاريخ الاجتماعي وعوامل الخطورة <span class="hint">(Social history & risk factors)</span></h3>
+      <ul>
+        <li>تدخين؟ كحول؟ <span class="hint">(Malignancy risk)</span></li>
+        <li>سفر حديث؟ <span class="hint">(Infectious causes)</span></li>
+        <li>علاقات جنسية غير محمية؟ <span class="hint">(STIs/HIV)</span></li>
+        <li>تعاطي وريدي؟ <span class="hint">(HIV risk)</span></li>
+        <li>اقتناء حيوانات أليفة؟ <span class="hint">(Toxoplasmosis)</span></li>
+        <li>تناول حليب/أجبان غير مبسترة؟ <span class="hint">(Brucellosis)</span></li>
+        <li>المهنة: تعرض للمواد السامة (مثل البنزين). <span class="hint">(Benzene → leukemia/NHL)</span></li>
+      </ul>
 
-    <footer>© Simple white layout — ready for reading/printing.</footer>
+      <h3>المراجعة الجهازية <span class="hint">(Systemic review)</span></h3>
+      <ul>
+        <li>طفح، حكة، تقرحات فموية، التهاب حلق متكرر. <span class="hint">(Derm/ENT clues)</span></li>
+        <li>سعال مزمن، تعرّق ليلي، نقص شهية. <span class="hint">(TB/Lymphoma)</span></li>
+      </ul>
+    </div>
+
   </div>
 </body>
 </html>
