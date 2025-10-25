@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medical Topics Library</title>
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
+    integrity="sha512-9k3eYcEQmRnpKtwO8qC6U+/8Cpg/6fSzhOZQKxNRkh3Zdr5E5Ece5Z1nlPaO3OG/Tbmfvu2TboJZJz3D7Y2z+w=="
+    crossorigin="anonymous"
+    referrerpolicy="no-referrer"
+  />
+
+  <style>
+    :root {
+      --bg-color: #f8fbff;
+      --text-color: #0d47a1;
+      --card-bg: #ffffff;
+      --card-hover-bg: #1565c0;
+      --card-hover-text: #ffffff;
+      --shadow-color: rgba(0, 0, 0, 0.1);
+    }
+
+    [data-theme="dark"] {
+      --bg-color: #121212;
+      --text-color: #bbdefb;
+      --card-bg: #1e1e1e;
+      --card-hover-bg: #0d47a1;
+      --card-hover-text: #ffffff;
+      --shadow-color: rgba(0, 0, 0, 0.5);
+    }
+
+    body {
+      font-family: "Segoe UI", Roboto, sans-serif;
+      background: var(--bg-color);
+      margin: 0;
+      color: var(--text-color);
+      transition: background 0.3s ease, color 0.3s ease;
+    }
+
+    header {
+      background-color: var(--card-hover-bg);
+      color: white;
+      text-align: center;
+      padding: 1.5rem 1rem;
+      position: relative;
+      box-shadow: 0 2px 8px var(--shadow-color);
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 1.8rem;
+    }
+
+    #toggle-mode {
+      position: absolute;
+      top: 1rem;
+      right: 1rem;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    #toggle-mode:hover {
+      transform: rotate(20deg);
+    }
+
+    main {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 2rem;
+      gap: 1rem;
+    }
+
+    a.card {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-decoration: none;
+      background: var(--card-bg);
+      color: var(--text-color);
+      border-radius: 10px;
+      padding: 1rem 1.5rem;
+      width: 220px;
+      height: 120px;
+      text-align: center;
+      font-weight: 600;
+      box-shadow: 0 4px 10px var(--shadow-color);
+      transition: all 0.25s ease;
+    }
+
+    a.card:hover {
+      background-color: var(--card-hover-bg);
+      color: var(--card-hover-text);
+      transform: translateY(-4px);
+      box-shadow: 0 6px 14px var(--shadow-color);
+    }
+
+    a.card i {
+      font-size: 1.8rem;
+      margin-bottom: 0.5rem;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem;
+      font-size: 0.9rem;
+      color: #888;
+      background: var(--card-bg);
+      border-top: 1px solid #ddd;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>📘 Medical Topics Library</h1>
+    <p>Select a topic below to view details</p>
+    <button id="toggle-mode" title="Toggle Dark/Light Mode">
+      🌙
+    </button>
+  </header>
+
+  <main>
+    <a class="card" href="Simulation/simulation-anaemia.html"><i class="fas fa-lungs"></i> simulation {ANAEMIA} </a>
+  </main>
+
+  <footer>
+    &copy; 2025 Medical Notes by Wahab1996 | All Rights Reserved
+  </footer>
+
+  <script src="theme.js"></script>
+</body>
+</html>
