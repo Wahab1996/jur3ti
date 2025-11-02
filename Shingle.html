@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Shingle Card Example</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f2f2f2;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      margin: 0;
+    }
+
+    .shingle {
+      background-color: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      width: 320px;
+      overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+
+    .shingle:hover {
+      transform: translateY(-5px);
+    }
+
+    .shingle img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+    }
+
+    .shingle-content {
+      padding: 20px;
+    }
+
+    .shingle-content h3 {
+      margin: 0 0 10px;
+      color: #333;
+    }
+
+    .shingle-content p {
+      color: #666;
+      line-height: 1.4;
+    }
+
+    .shingle-content a {
+      display: inline-block;
+      margin-top: 10px;
+      color: #007bff;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .shingle-content a:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+<body>
+  <div class="shingle">
+    <img src="https://via.placeholder.com/320x200" alt="Sample image" />
+    <div class="shingle-content">
+      <h3>Shingle Card Title</h3>
+      <p>
+        This is a simple example of a shingle (card/tile) layout using HTML and CSS.
+        You can add text, images, and links here.
+      </p>
+      <a href="#">Learn More →</a>
+    </div>
+  </div>
+</body>
+</html>
