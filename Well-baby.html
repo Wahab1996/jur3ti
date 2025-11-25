@@ -1,91 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Well Baby Clinic - Family Medicine Resident</title>
-  <style>
-    body { font-family: Arial, sans-serif; margin: 30px; }
-    h1 { color: #3498db; }
-    h2 { margin-top: 32px; }
-    label { display: block; margin-top: 10px; font-weight: bold; }
-    input, textarea, select { margin-top: 4px; width: 80%; padding: 5px; }
-    .arabic { font-family: 'Cairo', Arial, sans-serif; direction: rtl; color: #2e4053; }
-    .section { border: 1px solid #ccc; border-radius: 8px; padding: 15px; margin-bottom: 20px;}
-    .button { background: #2ecc71; color: #fff; padding: 10px 18px; border: none; border-radius: 6px; font-weight: bold; margin-top: 15px;}
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Family Medicine Resident - Well Baby Clinic</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            line-height: 1.6;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 10px;
+            background: #f9f9f9;
+            color: #333;
+        }
+        h1, h2 {
+            color: #2a7ae2;
+        }
+        section {
+            background: white;
+            border-radius: 5px;
+            padding: 15px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 8px rgba(0,0,0,0.05);
+        }
+        ul {
+            list-style-type: disc;
+            margin-left: 20px;
+        }
+        .arabic {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            direction: rtl;
+            color: #005f73;
+        }
+    </style>
 </head>
 <body>
 
-  <h1>Well Baby Clinic Form</h1>
-  <div class="section">
-    <h2>Patient Information</h2>
-    <label>Name: <input type="text" name="patient_name"></label>
-    <label>Date of Birth: <input type="date" name="dob"></label>
-    <label>File No./MRN: <input type="text" name="mrn"></label>
-  </div>
+    <h1>Family Medicine Resident - Well Baby Clinic</h1>
 
-  <div class="section">
-    <h2>Visit Details</h2>
-    <label>Date of Visit: <input type="date" name="visit_date"></label>
-    <label>Age (months): <input type="number" name="age_months"></label>
-    <label>Purpose of Visit:
-      <select name="purpose">
-        <option value="vaccination">Vaccination</option>
-        <option value="routine">Routine well baby check</option>
-        <option value="followup">Follow-up</option>
-      </select>
-    </label>
-  </div>
+    <section>
+        <h2>What the Resident Should Do</h2>
+        <ul>
+            <li>Conduct thorough newborn and infant physical examinations.</li>
+            <li>Monitor growth parameters: weight, length, head circumference.</li>
+            <li>Administer and recommend age-appropriate vaccines per immunization schedule.</li>
+            <li>Provide anticipatory guidance on nutrition, sleep, and development.</li>
+            <li>Screen for common pediatric illnesses and developmental delays.</li>
+            <li>Counsel parents on breastfeeding and safe infant care practices.</li>
+            <li><span class="arabic">[translate:تقديم الدعم والنصيحة للأهل حول نمو الطفل]</span></li>
+            <li><span class="arabic">[translate:مراقبة التطورات الحركية واللغوية للرضيع]</span></li>
+            <li>Document all findings and updates in the medical record accurately.</li>
+        </ul>
+    </section>
 
-  <div class="section">
-    <h2>History</h2>
-    <label>Concerns/Complaints:</label>
-    <textarea name="complaints" rows="2" placeholder="No active complaints"></textarea>
-    <label>Feeding/Breastfeeding:</label>
-    <textarea name="feeding" rows="2"></textarea>
-    <label>Developmental Milestones:</label>
-    <textarea name="milestones" rows="2"></textarea>
-  </div>
+    <section>
+        <h2>Essential Needs for the Resident</h2>
+        <ul>
+            <li>Access to up-to-date immunization guidelines and growth charts.</li>
+            <li>Basic examination tools: stethoscope, infant scale, measuring tape.</li>
+            <li>Educational materials for parents in both English and Arabic <span class="arabic">[translate:مواد تعليمية للأهل]</span>.</li>
+            <li>Support from pediatricians and senior family medicine doctors for consultation.</li>
+            <li>Documentation and electronic health record system access.</li>
+            <li>Private and safe examination room suitable for infants.</li>
+            <li><span class="arabic">[translate:معدات طوارئ للأطفال]</span> for handling urgent cases.</li>
+            <li>Time allocated for parental counseling and follow-up planning.</li>
+        </ul>
+    </section>
 
-  <div class="section">
-    <h2>Physical Examination</h2>
-    <label>General Appearance/Observation:</label>
-    <textarea name="appearance" rows="2"></textarea>
-    <label>Vital Signs:</label>
-    <textarea name="vitals" rows="1" placeholder="HR, RR, Temp, etc."></textarea>
-    <label>Systemic Exam:</label>
-    <textarea name="exam" rows="2" placeholder="CVS, Chest, Abdomen, Neuro..."></textarea>
-  </div>
-
-  <div class="section">
-    <h2>Growth Parameters</h2>
-    <label>Height(cm): <input type="number" name="height"></label>
-    <label>Weight(kg): <input type="number" name="weight"></label>
-    <label>Head Circumference(cm): <input type="number" name="hc"></label>
-  </div>
-
-  <div class="section">
-    <h2>Vaccination & Screening</h2>
-    <label>Vaccines due today:</label>
-    <textarea name="vaccines_due" rows="2"></textarea>
-    <label>M-CHAT-R Screening (Autism risk):</label>
-    <select name="mchatr">
-      <option value="done">Done</option>
-      <option value="pending">Pending</option>
-      <option value="not_required">Not Required</option>
-    </select>
-    <p class="arabic">تنبيه: يجب تعبئة نموذج فحص التوحد (M-CHAT-R/TM) إذا كان الطفل بين عمر 16-30 شهر</p>
-  </div>
-
-  <div class="section">
-    <h2>Plan & Advice</h2>
-    <label>Plan of Care / Follow-up:</label>
-    <textarea name="plan" rows="2"></textarea>
-    <label>Advice/Parent Education:</label>
-    <textarea name="advice" rows="2"></textarea>
-    <p class="arabic">نصائح للأم: جدول التطعيمات، التغذية، علامات الخطر، مراجعة الطوارئ إذا ظهرت أعراض شديدة.</p>
-  </div>
-
-  <button class="button" type="submit">Save/Submit</button>
 </body>
 </html>
