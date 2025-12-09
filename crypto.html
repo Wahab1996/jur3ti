@@ -116,35 +116,35 @@
         <div class="tool">
             <h2>💰 حاسبة الربح والخسارة</h2>
             <label>المبلغ المدخل (USDT/SOL): 
-                <input type="number" id="entryAmount" value="10" min="0.01" step="0.01">
+                <input type="number" id="entryAmount" value="10" min="0.01" step="0.01" oninput="calculateProfit()">
             </label>
             <label>سعر الدخول: 
-                <input type="number" id="entryPrice" value="0.00001" min="0" step="0.00000001">
+                <input type="number" id="entryPrice" value="0.00001" min="0" step="0.00000001" oninput="calculateProfit()">
             </label>
             <label>سعر الخروج الحالي: 
-                <input type="number" id="exitPrice" value="0.00031" min="0" step="0.00000001">
+                <input type="number" id="exitPrice" value="0.00031" min="0" step="0.00000001" oninput="calculateProfit()">
             </label>
             <button onclick="calculateProfit()">احسب الربح فوراً</button>
-            <div id="profitResult" class="result"></div>
+            <div id="profitResult" class="result">جرب غيّر الأرقام لرؤية الربح مباشرة!</div>
         </div>
         
         <div class="tool">
             <h2>📈 حاسبة ADX (قوة الاتجاه)</h2>
             <p style="color: #aaa; margin-bottom: 15px;">خذ القيم من TradingView أو المنصة</p>
             <label>+DI (الإيجابي): 
-                <input type="number" id="plusDI" value="30" min="0" max="100">
+                <input type="number" id="plusDI" value="30" min="0" max="100" oninput="calculateADX()">
             </label>
             <label>-DI (السلبي): 
-                <input type="number" id="minusDI" value="20" min="0" max="100">
+                <input type="number" id="minusDI" value="20" min="0" max="100" oninput="calculateADX()">
             </label>
             <button onclick="calculateADX()">احسب إشارة ADX</button>
-            <div id="adxResult" class="result"></div>
+            <div id="adxResult" class="result">غيّر قيم DI لرؤية الإشارة!</div>
         </div>
         
         <div class="tool">
             <h2>📊 رسم بياني سريع للأسعار</h2>
             <label>أسعار متتالية (مفصولة بفاصلة): 
-                <input type="text" id="priceData" value="0.00001,0.00003,0.00008,0.00015,0.00031" style="width:100%">
+                <input type="text" id="priceData" value="0.00001,0.00003,0.00008,0.00015,0.00031" style="width:100%" oninput="drawChart()">
             </label>
             <button onclick="drawChart()">ارسم الشارت الآن</button>
             <div id="chartContainer">
@@ -154,128 +154,148 @@
     </div>
     
     <script>
-        // حاسبة الربح
+        // حاسبة الربح - محدثة تلقائياً
         function calculateProfit() {
-            const amount = parseFloat(document.getElementById('entryAmount').value) || 0;
-            const entry = parseFloat(document.getElementById('entryPrice').value) || 0;
-            const exit = parseFloat(document.getElementById('exitPrice').value) || 0;
-            
-            if (!amount || !entry || !exit || entry <= 0) {
-                document.getElementById('profitResult').innerHTML = '⚠️ أدخل أرقام صحيحة!';
+            try {
+                const amount = parseFloat(document.getElementById('entryAmount').value) || 0;
+                const entry = parseFloat(document.getElementById('entryPrice').value) || 0;
+                const exit = parseFloat(document.getElementById('exitPrice').value) || 0;
+                
+                const resultDiv = document.getElementById('profitResult');
+                
+                if (!amount || !entry || !exit || entry <= 0) {
+                    resultDiv.innerHTML = '⚠️ أدخل أرقام صحيحة!';
+                    resultDiv.className = 'result warning';
+                    return;
+                }
+                
+                const tokens = amount / entry;
+                const finalValue = tokens * exit;
+                const profit = finalValue - amount;
+                const profitPct = ((profit / amount) * 100);
+                
+                let result = `
+                    📊 <strong>الكمية:</strong> ${tokens.toLocaleString('en-US', {maximumFractionDigits: 8})} توكن<br>
+                    💵 <strong>قيمة الخروج:</strong> $${finalValue.toFixed(4)}<br>
+                    ${profit > 0 ? '🚀 <strong>الربح:</strong>' : '📉 <strong>الخسارة:</strong>'} 
+                    $${Math.abs(profit).toFixed(4)} 
+                    <strong>(${profitPct.toFixed(2)}%)</strong>
+                `;
+                
+                resultDiv.innerHTML = result;
+                resultDiv.className = profit > 0 ? 'result' : 'result warning';
+            } catch(e) {
+                document.getElementById('profitResult').innerHTML = '⚠️ خطأ في الحساب!';
                 document.getElementById('profitResult').className = 'result warning';
-                return;
             }
-            
-            const tokens = amount / entry;
-            const finalValue = tokens * exit;
-            const profit = finalValue - amount;
-            const profitPct = ((profit / amount) * 100);
-            
-            let result = `
-                📊 <strong>الكمية المشتراة:</strong> ${tokens.toLocaleString('en-US', {maximumFractionDigits: 8})} توكن<br>
-                💵 <strong>قيمة الخروج:</strong> $${finalValue.toFixed(2)}<br>
-                ${profit > 0 ? '🚀 <strong>الربح:</strong>' : '📉 <strong>الخسارة:</strong>'} 
-                $${Math.abs(profit).toFixed(2)} 
-                <strong>(${profitPct.toFixed(2)}%)</strong>
-            `;
-            
-            const resultDiv = document.getElementById('profitResult');
-            resultDiv.innerHTML = result;
-            resultDiv.className = profit > 0 ? 'result' : 'result warning';
         }
         
-        // حاسبة ADX
+        // حاسبة ADX - محدثة تلقائياً
         function calculateADX() {
-            const plusDI = parseFloat(document.getElementById('plusDI').value) || 0;
-            const minusDI = parseFloat(document.getElementById('minusDI').value) || 0;
-            
-            if (plusDI < 0 || minusDI < 0 || plusDI > 100 || minusDI > 100) {
-                document.getElementById('adxResult').innerHTML = '⚠️ أدخل قيم صحيحة بين 0-100!';
-                document.getElementById('adxResult').className = 'result warning';
-                return;
-            }
-            
-            const adx = Math.abs(plusDI - minusDI) / (plusDI + minusDI) * 100;
-            let signal = '';
-            
-            if (adx > 25) {
-                if (plusDI > minusDI) {
-                    signal = '🚀 <strong>صعود قوي - ادخل LONGLONG</strong>';
-                } else {
-                    signal = '📉 <strong>هبوط قوي - ادخل SHORT</strong>';
+            try {
+                const plusDI = parseFloat(document.getElementById('plusDI').value) || 0;
+                const minusDI = parseFloat(document.getElementById('minusDI').value) || 0;
+                
+                const resultDiv = document.getElementById('adxResult');
+                
+                if (plusDI < 0 || minusDI < 0 || plusDI > 100 || minusDI > 100) {
+                    resultDiv.innerHTML = '⚠️ أدخل قيم صحيحة بين 0-100!';
+                    resultDiv.className = 'result warning';
+                    return;
                 }
-            } else {
-                signal = '⏳ <strong>الاتجاه ضعيف - انتظر</strong>';
+                
+                const adx = Math.abs(plusDI - minusDI) / (plusDI + minusDI) * 100;
+                let signal = '';
+                
+                if (adx > 25) {
+                    if (plusDI > minusDI) {
+                        signal = '🚀 <strong>صعود قوي - ادخل LONG</strong>';
+                    } else {
+                        signal = '📉 <strong>هبوط قوي - ادخل SHORT</strong>';
+                    }
+                } else {
+                    signal = '⏳ <strong>الاتجاه ضعيف - انتظر</strong>';
+                }
+                
+                resultDiv.innerHTML = `
+                    📈 <strong>ADX الحالي:</strong> ${adx.toFixed(1)}<br>
+                    ${signal}
+                `;
+                resultDiv.className = 'result';
+            } catch(e) {
+                document.getElementById('adxResult').innerHTML = '⚠️ خطأ في الحساب!';
+                document.getElementById('adxResult').className = 'result warning';
             }
-            
-            document.getElementById('adxResult').innerHTML = `
-                📈 <strong>ADX الحالي:</strong> ${adx.toFixed(1)}<br>
-                ${signal}
-            `;
         }
         
         // الرسم البياني
         let priceChart;
         function drawChart() {
-            const dataStr = document.getElementById('priceData').value.trim();
-            const data = dataStr.split(',').map(d => parseFloat(d.trim())).filter(d => !isNaN(d));
-            
-            if (data.length < 2) {
-                alert('أدخل أكثر من سعرين مفصولين بفاصلة!');
-                return;
-            }
-            
-            const labels = data.map((_, i) => `P${i+1}`);
-            const ctx = document.getElementById('priceChart').getContext('2d');
-            
-            if (priceChart) priceChart.destroy();
-            
-            priceChart = new Chart(ctx, {
-                type: 'line',
-                 {
-                    labels: labels,
-                    datasets: [{
-                        label: 'سعر التوكن',
-                         data,
-                        borderColor: '#00ff88',
-                        backgroundColor: 'rgba(0,255,136,0.1)',
-                        borderWidth: 3,
-                        fill: true,
-                        tension: 0.4,
-                        pointBackgroundColor: '#00ff88',
-                        pointBorderColor: '#fff',
-                        pointBorderWidth: 2,
-                        pointRadius: 6
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: 'rgba(255,255,255,0.1)' },
-                            ticks: { color: '#ccc' }
-                        },
-                        x: {
-                            grid: { color: 'rgba(255,255,255,0.1)' },
-                            ticks: { color: '#ccc' }
-                        }
+            try {
+                const dataStr = document.getElementById('priceData').value.trim();
+                const data = dataStr.split(',').map(d => parseFloat(d.trim())).filter(d => !isNaN(d));
+                
+                if (data.length < 2) {
+                    alert('أدخل أكثر من سعرين مفصولين بفاصلة!');
+                    return;
+                }
+                
+                const labels = data.map((_, i) => `P${i+1}`);
+                const ctx = document.getElementById('priceChart').getContext('2d');
+                
+                if (priceChart) priceChart.destroy();
+                
+                priceChart = new Chart(ctx, {
+                    type: 'line',
+                     {
+                        labels: labels,
+                        datasets: [{
+                            label: 'سعر التوكن',
+                             data,
+                            borderColor: '#00ff88',
+                            backgroundColor: 'rgba(0,255,136,0.1)',
+                            borderWidth: 3,
+                            fill: true,
+                            tension: 0.4,
+                            pointBackgroundColor: '#00ff88',
+                            pointBorderColor: '#fff',
+                            pointBorderWidth: 2,
+                            pointRadius: 6
+                        }]
                     },
-                    plugins: {
-                        legend: {
-                            labels: { color: '#e0e0e0', font: { size: 14 } }
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: {
+                                beginAtZero: true,
+                                grid: { color: 'rgba(255,255,255,0.1)' },
+                                ticks: { color: '#ccc' }
+                            },
+                            x: {
+                                grid: { color: 'rgba(255,255,255,0.1)' },
+                                ticks: { color: '#ccc' }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: { color: '#e0e0e0', font: { size: 14 } }
+                            }
                         }
                     }
-                }
-            });
+                });
+            } catch(e) {
+                console.log('Chart error:', e);
+            }
         }
         
-        // تشغيل تلقائي عند التحميل
+        // تشغيل عند التحميل
         window.onload = function() {
-            calculateProfit();
-            calculateADX();
-            drawChart();
+            setTimeout(() => {
+                calculateProfit();
+                calculateADX();
+                drawChart();
+            }, 500);
         };
     </script>
 </body>
