@@ -6,82 +6,277 @@
     <title>أدوات تداول العملات المشفرة</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-        body { font-family: Arial, sans-serif; background: #1a1a1a; color: #fff; padding: 20px; }
-        .tool { background: #2a2a2a; margin: 20px 0; padding: 20px; border-radius: 10px; }
-        input, button { padding: 10px; margin: 5px; font-size: 16px; }
-        button { background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
-        button:hover { background: #0056b3; }
-        #chart { max-height: 400px; }
-        canvas { background: #000; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif; 
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%); 
+            color: #e0e0e0; 
+            padding: 20px; 
+            min-height: 100vh;
+        }
+        .container { max-width: 1200px; margin: 0 auto; }
+        h1 { 
+            text-align: center; 
+            color: #00d4ff; 
+            margin-bottom: 30px; 
+            font-size: 2.2em; 
+            text-shadow: 0 0 20px rgba(0,212,255,0.5);
+        }
+        .tool { 
+            background: rgba(42,42,60,0.9); 
+            margin: 25px 0; 
+            padding: 30px; 
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(0,212,255,0.2);
+            transition: transform 0.3s ease;
+        }
+        .tool:hover { transform: translateY(-5px); }
+        h2 { 
+            color: #00ff88; 
+            margin-bottom: 20px; 
+            font-size: 1.5em;
+            border-bottom: 2px solid #00ff88;
+            padding-bottom: 10px;
+        }
+        label { 
+            display: block; 
+            margin: 15px 0; 
+            font-weight: bold; 
+            color: #ccc;
+        }
+        input { 
+            width: 100%; 
+            padding: 15px; 
+            margin-top: 5px; 
+            font-size: 16px; 
+            border: 2px solid #333; 
+            border-radius: 10px; 
+            background: #1e1e2e; 
+            color: #fff;
+            transition: all 0.3s ease;
+        }
+        input:focus { 
+            outline: none; 
+            border-color: #00d4ff; 
+            box-shadow: 0 0 15px rgba(0,212,255,0.3);
+        }
+        button { 
+            background: linear-gradient(45deg, #00d4ff, #0099cc); 
+            color: white; 
+            border: none; 
+            padding: 15px 30px; 
+            font-size: 18px; 
+            border-radius: 10px; 
+            cursor: pointer; 
+            margin: 10px 5px 0 0;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+        button:hover { 
+            transform: scale(1.05); 
+            box-shadow: 0 5px 20px rgba(0,212,255,0.4);
+        }
+        .result { 
+            background: rgba(0,255,136,0.1); 
+            border: 2px solid #00ff88; 
+            padding: 20px; 
+            border-radius: 15px; 
+            margin-top: 20px; 
+            font-size: 18px; 
+            font-weight: bold;
+            min-height: 80px;
+            display: flex;
+            align-items: center;
+        }
+        .warning { 
+            background: rgba(255,100,100,0.1); 
+            border-color: #ff6464; 
+            color: #ffaaaa;
+        }
+        #chartContainer { 
+            position: relative; 
+            height: 400px; 
+            margin-top: 20px;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: inset 0 0 20px rgba(0,0,0,0.5);
+        }
+        @media (max-width: 768px) {
+            .tool { padding: 20px; margin: 15px 0; }
+            h1 { font-size: 1.8em; }
+        }
     </style>
 </head>
 <body>
-    <h1>أدوات تداول مفيدة للعملات المشفرة والميم كوينز</h1>
-    
-    <div class="tool">
-        <h2>حاسبة الربح في الميم كوينز</h2>
-        <label>المبلغ المدخل (USDT): <input type="number" id="entryAmount" value="10"></label><br>
-        <label>سعر الدخول: <input type="number" id="entryPrice" value="0.00001" step="0.00000001"></label><br>
-        <label>سعر الخروج: <input type="number" id="exitPrice" value="0.00031" step="0.00000001"></label><br>
-        <button onclick="calculateProfit()">احسب الربح</button>
-        <p id="profitResult"></p>
-    </div>
-    
-    <div class="tool">
-        <h2>حاسبة ADX بسيطة (للتحقق من قوة الاتجاه)</h2>
-        <p>أدخل قيم +DI, -DI, DX (من TradingView أو منصتك)</p>
-        <label>+DI: <input type="number" id="plusDI" value="30"></label><br>
-        <label>-DI: <input type="number" id="minusDI" value="20"></label><br>
-        <label>DX: <input type="number" id="dx" value="25"></label><br>
-        <button onclick="calculateADX()">احسب ADX</button>
-        <p id="adxResult"></p>
-    </div>
-    
-    <div class="tool">
-        <h2>رسم بياني بسيط للسعر (أدخل بيانات)</h2>
-        <label>بيانات الأسعار (فاصلة): <input type="text" id="priceData" value="0.00001,0.00005,0.0001,0.0002,0.00031" style="width:300px"></label><br>
-        <button onclick="drawChart()">ارسم الشارت</button>
-        <canvas id="chart" width="400" height="200"></canvas>
+    <div class="container">
+        <h1>🪙 أدوات تداول الميم كوينز والعملات المشفرة 🪙</h1>
+        
+        <div class="tool">
+            <h2>💰 حاسبة الربح والخسارة</h2>
+            <label>المبلغ المدخل (USDT/SOL): 
+                <input type="number" id="entryAmount" value="10" min="0.01" step="0.01">
+            </label>
+            <label>سعر الدخول: 
+                <input type="number" id="entryPrice" value="0.00001" min="0" step="0.00000001">
+            </label>
+            <label>سعر الخروج الحالي: 
+                <input type="number" id="exitPrice" value="0.00031" min="0" step="0.00000001">
+            </label>
+            <button onclick="calculateProfit()">احسب الربح فوراً</button>
+            <div id="profitResult" class="result"></div>
+        </div>
+        
+        <div class="tool">
+            <h2>📈 حاسبة ADX (قوة الاتجاه)</h2>
+            <p style="color: #aaa; margin-bottom: 15px;">خذ القيم من TradingView أو المنصة</p>
+            <label>+DI (الإيجابي): 
+                <input type="number" id="plusDI" value="30" min="0" max="100">
+            </label>
+            <label>-DI (السلبي): 
+                <input type="number" id="minusDI" value="20" min="0" max="100">
+            </label>
+            <button onclick="calculateADX()">احسب إشارة ADX</button>
+            <div id="adxResult" class="result"></div>
+        </div>
+        
+        <div class="tool">
+            <h2>📊 رسم بياني سريع للأسعار</h2>
+            <label>أسعار متتالية (مفصولة بفاصلة): 
+                <input type="text" id="priceData" value="0.00001,0.00003,0.00008,0.00015,0.00031" style="width:100%">
+            </label>
+            <button onclick="drawChart()">ارسم الشارت الآن</button>
+            <div id="chartContainer">
+                <canvas id="priceChart"></canvas>
+            </div>
+        </div>
     </div>
     
     <script>
+        // حاسبة الربح
         function calculateProfit() {
-            const amount = parseFloat(document.getElementById('entryAmount').value);
-            const entry = parseFloat(document.getElementById('entryPrice').value);
-            const exit = parseFloat(document.getElementById('exitPrice').value);
+            const amount = parseFloat(document.getElementById('entryAmount').value) || 0;
+            const entry = parseFloat(document.getElementById('entryPrice').value) || 0;
+            const exit = parseFloat(document.getElementById('exitPrice').value) || 0;
+            
+            if (!amount || !entry || !exit || entry <= 0) {
+                document.getElementById('profitResult').innerHTML = '⚠️ أدخل أرقام صحيحة!';
+                document.getElementById('profitResult').className = 'result warning';
+                return;
+            }
+            
             const tokens = amount / entry;
             const finalValue = tokens * exit;
             const profit = finalValue - amount;
-            const profitPct = ((profit / amount) * 100).toFixed(2);
-            document.getElementById('profitResult').innerHTML = 
-                `الكمية المشتراة: ${tokens.toFixed(6)} توكن<br>
-                قيمة الخروج: $${finalValue.toFixed(2)}<br>
-                الربح: $${profit.toFixed(2)} (${profitPct}%)`;
+            const profitPct = ((profit / amount) * 100);
+            
+            let result = `
+                📊 <strong>الكمية المشتراة:</strong> ${tokens.toLocaleString('en-US', {maximumFractionDigits: 8})} توكن<br>
+                💵 <strong>قيمة الخروج:</strong> $${finalValue.toFixed(2)}<br>
+                ${profit > 0 ? '🚀 <strong>الربح:</strong>' : '📉 <strong>الخسارة:</strong>'} 
+                $${Math.abs(profit).toFixed(2)} 
+                <strong>(${profitPct.toFixed(2)}%)</strong>
+            `;
+            
+            const resultDiv = document.getElementById('profitResult');
+            resultDiv.innerHTML = result;
+            resultDiv.className = profit > 0 ? 'result' : 'result warning';
         }
         
+        // حاسبة ADX
         function calculateADX() {
-            const plusDI = parseFloat(document.getElementById('plusDI').value);
-            const minusDI = parseFloat(document.getElementById('minusDI').value);
-            const dx = parseFloat(document.getElementById('dx').value);
-            const adx = (Math.abs(plusDI - minusDI) / (plusDI + minusDI)) * 100; // تقريبي
-            const signal = adx > 25 ? (plusDI > minusDI ? 'صعود قوي - ادخل لونج' : 'هبوط قوي - ادخل شورت') : 'ضعيف - انتظر';
-            document.getElementById('adxResult').innerHTML = `ADX تقريبي: ${adx.toFixed(2)}<br>الإشارة: ${signal}`;
+            const plusDI = parseFloat(document.getElementById('plusDI').value) || 0;
+            const minusDI = parseFloat(document.getElementById('minusDI').value) || 0;
+            
+            if (plusDI < 0 || minusDI < 0 || plusDI > 100 || minusDI > 100) {
+                document.getElementById('adxResult').innerHTML = '⚠️ أدخل قيم صحيحة بين 0-100!';
+                document.getElementById('adxResult').className = 'result warning';
+                return;
+            }
+            
+            const adx = Math.abs(plusDI - minusDI) / (plusDI + minusDI) * 100;
+            let signal = '';
+            
+            if (adx > 25) {
+                if (plusDI > minusDI) {
+                    signal = '🚀 <strong>صعود قوي - ادخل LONGLONG</strong>';
+                } else {
+                    signal = '📉 <strong>هبوط قوي - ادخل SHORT</strong>';
+                }
+            } else {
+                signal = '⏳ <strong>الاتجاه ضعيف - انتظر</strong>';
+            }
+            
+            document.getElementById('adxResult').innerHTML = `
+                📈 <strong>ADX الحالي:</strong> ${adx.toFixed(1)}<br>
+                ${signal}
+            `;
         }
         
-        let chart;
+        // الرسم البياني
+        let priceChart;
         function drawChart() {
-            const dataStr = document.getElementById('priceData').value;
-            const labels = Array.from({length: dataStr.split(',').length}, (_, i) => `وقت ${i+1}`);
-            const data = dataStr.split(',').map(Number);
-            const ctx = document.getElementById('chart').getContext('2d');
-            if (chart) chart.destroy();
-            chart = new Chart(ctx, {
+            const dataStr = document.getElementById('priceData').value.trim();
+            const data = dataStr.split(',').map(d => parseFloat(d.trim())).filter(d => !isNaN(d));
+            
+            if (data.length < 2) {
+                alert('أدخل أكثر من سعرين مفصولين بفاصلة!');
+                return;
+            }
+            
+            const labels = data.map((_, i) => `P${i+1}`);
+            const ctx = document.getElementById('priceChart').getContext('2d');
+            
+            if (priceChart) priceChart.destroy();
+            
+            priceChart = new Chart(ctx, {
                 type: 'line',
-                 { labels, datasets: [{ label: 'السعر', data, borderColor: '#00ff00', fill: false }] },
-                options: { scales: { y: { beginAtZero: true } } }
+                 {
+                    labels: labels,
+                    datasets: [{
+                        label: 'سعر التوكن',
+                         data,
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0,255,136,0.1)',
+                        borderWidth: 3,
+                        fill: true,
+                        tension: 0.4,
+                        pointBackgroundColor: '#00ff88',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#ccc' }
+                        },
+                        x: {
+                            grid: { color: 'rgba(255,255,255,0.1)' },
+                            ticks: { color: '#ccc' }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: '#e0e0e0', font: { size: 14 } }
+                        }
+                    }
+                }
             });
         }
-        drawChart(); // رسم افتراضي
+        
+        // تشغيل تلقائي عند التحميل
+        window.onload = function() {
+            calculateProfit();
+            calculateADX();
+            drawChart();
+        };
     </script>
 </body>
 </html>
