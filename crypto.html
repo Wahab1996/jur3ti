@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أدوات تداول العملات المشفرة</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; background: #1a1a1a; color: #fff; padding: 20px; }
+        .tool { background: #2a2a2a; margin: 20px 0; padding: 20px; border-radius: 10px; }
+        input, button { padding: 10px; margin: 5px; font-size: 16px; }
+        button { background: #007bff; color: white; border: none; border-radius: 5px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        #chart { max-height: 400px; }
+        canvas { background: #000; }
+    </style>
+</head>
+<body>
+    <h1>أدوات تداول مفيدة للعملات المشفرة والميم كوينز</h1>
+    
+    <div class="tool">
+        <h2>حاسبة الربح في الميم كوينز</h2>
+        <label>المبلغ المدخل (USDT): <input type="number" id="entryAmount" value="10"></label><br>
+        <label>سعر الدخول: <input type="number" id="entryPrice" value="0.00001" step="0.00000001"></label><br>
+        <label>سعر الخروج: <input type="number" id="exitPrice" value="0.00031" step="0.00000001"></label><br>
+        <button onclick="calculateProfit()">احسب الربح</button>
+        <p id="profitResult"></p>
+    </div>
+    
+    <div class="tool">
+        <h2>حاسبة ADX بسيطة (للتحقق من قوة الاتجاه)</h2>
+        <p>أدخل قيم +DI, -DI, DX (من TradingView أو منصتك)</p>
+        <label>+DI: <input type="number" id="plusDI" value="30"></label><br>
+        <label>-DI: <input type="number" id="minusDI" value="20"></label><br>
+        <label>DX: <input type="number" id="dx" value="25"></label><br>
+        <button onclick="calculateADX()">احسب ADX</button>
+        <p id="adxResult"></p>
+    </div>
+    
+    <div class="tool">
+        <h2>رسم بياني بسيط للسعر (أدخل بيانات)</h2>
+        <label>بيانات الأسعار (فاصلة): <input type="text" id="priceData" value="0.00001,0.00005,0.0001,0.0002,0.00031" style="width:300px"></label><br>
+        <button onclick="drawChart()">ارسم الشارت</button>
+        <canvas id="chart" width="400" height="200"></canvas>
+    </div>
+    
+    <script>
+        function calculateProfit() {
+            const amount = parseFloat(document.getElementById('entryAmount').value);
+            const entry = parseFloat(document.getElementById('entryPrice').value);
+            const exit = parseFloat(document.getElementById('exitPrice').value);
+            const tokens = amount / entry;
+            const finalValue = tokens * exit;
+            const profit = finalValue - amount;
+            const profitPct = ((profit / amount) * 100).toFixed(2);
+            document.getElementById('profitResult').innerHTML = 
+                `الكمية المشتراة: ${tokens.toFixed(6)} توكن<br>
+                قيمة الخروج: $${finalValue.toFixed(2)}<br>
+                الربح: $${profit.toFixed(2)} (${profitPct}%)`;
+        }
+        
+        function calculateADX() {
+            const plusDI = parseFloat(document.getElementById('plusDI').value);
+            const minusDI = parseFloat(document.getElementById('minusDI').value);
+            const dx = parseFloat(document.getElementById('dx').value);
+            const adx = (Math.abs(plusDI - minusDI) / (plusDI + minusDI)) * 100; // تقريبي
+            const signal = adx > 25 ? (plusDI > minusDI ? 'صعود قوي - ادخل لونج' : 'هبوط قوي - ادخل شورت') : 'ضعيف - انتظر';
+            document.getElementById('adxResult').innerHTML = `ADX تقريبي: ${adx.toFixed(2)}<br>الإشارة: ${signal}`;
+        }
+        
+        let chart;
+        function drawChart() {
+            const dataStr = document.getElementById('priceData').value;
+            const labels = Array.from({length: dataStr.split(',').length}, (_, i) => `وقت ${i+1}`);
+            const data = dataStr.split(',').map(Number);
+            const ctx = document.getElementById('chart').getContext('2d');
+            if (chart) chart.destroy();
+            chart = new Chart(ctx, {
+                type: 'line',
+                 { labels, datasets: [{ label: 'السعر', data, borderColor: '#00ff00', fill: false }] },
+                options: { scales: { y: { beginAtZero: true } } }
+            });
+        }
+        drawChart(); // رسم افتراضي
+    </script>
+</body>
+</html>
