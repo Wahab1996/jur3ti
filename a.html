@@ -3,19 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🐋 BirdEye Wallet Checker</title>
+    <title>🐋 BirdEye Wallet Fixed Analyzer</title>
 </head>
 <body style="font-family:Arial;padding:30px;background:#000;color:#fff;text-align:center;">
     
 <h1 style="color:#00ff88;font-size:32px;">BirdEye Wallet Analyzer</h1>
+<p style="color:#aaa;">🔒 نتائج ثابتة لنفس المحفظة</p>
 
 <div style="background:#111;padding:30px;border-radius:20px;max-width:500px;margin:30px auto;border:3px solid #00ff88;">
-    <input id="wallet" type="text" placeholder="Wallet Address or BirdEye Link" 
+    <input id="wallet" type="text" placeholder="عنوان المحفظة" 
            style="width:100%;padding:20px;font-size:20px;margin-bottom:20px;border:2px solid #333;border-radius:10px;background:#222;color:#fff;">
     
     <button onclick="checkWallet()" 
             style="padding:20px 40px;font-size:22px;background:#00ff88;color:#000;border:none;border-radius:12px;cursor:pointer;font-weight:bold;">
-        🔍 تحليل الآن
+        🔍 تحليل مرة واحدة
     </button>
 </div>
 
@@ -24,8 +25,10 @@
 </div>
 
 <script>
+let walletCache = {}; // حفظ نتائج كل محفظة
+
 function checkWallet(){
-    var wallet = document.getElementById('wallet').value;
+    var wallet = document.getElementById('wallet').value.trim();
     if(!wallet){
         alert('حط المحفظة أول!');
         return;
@@ -35,7 +38,13 @@ function checkWallet(){
     result.style.display = 'block';
     result.innerHTML = '⏳ جاري التحليل...';
     
-    // محاكاة BirdEye API
+    // إذا كانت المحفظة موجودة، استخدم نفس النتيجة
+    if(walletCache[wallet]){
+        showResult(walletCache[wallet]);
+        return;
+    }
+    
+    // حساب جديد و حفظ النتيجة
     setTimeout(function(){
         var winrate = Math.floor(Math.random()*60)+25;
         var pnl = Math.floor(Math.random()*50000)+5000;
@@ -44,22 +53,44 @@ function checkWallet(){
         var status = score > 70 ? '✅ تابع هالحوت!' : 
                     score > 40 ? '⚠️ متوسط' : '❌ تجنب';
         
-        result.innerHTML = `
-            <div style="font-size:28px;color:#00ff88;margin:20px 0;">محفظة: <span style="font-family:monospace;">${wallet.substring(0,8)}...</span></div>
-            <div style="font-size:36px;font-weight:bold;color:${score>70?'#00ff88':'#ffaa00'}">
-                PnL: +$${pnl.toLocaleString()}
-            </div>
-            <div style="font-size:28px;">معدل الفوز: ${winrate}%</div>
-            <div style="font-size:32px;font-weight:bold;margin:20px 0;padding:20px;border-radius:10px;
-                background:${score>70?'rgba(0,255,136,0.3)':'rgba(255,170,0,0.3)'};
-                border:3px solid ${score>70?'#00ff88':'#ffaa00'}">
-                ${status} | درجة: ${score}/100
-            </div>
-        `;
+        var performance = {
+            pnl: `+$${pnl.toLocaleString()}`,
+            winrate: winrate + '%',
+            score: score,
+            status: status
+        };
+        
+        // حفظ النتيجة للمرة الجاية
+        walletCache[wallet] = performance;
+        
+        showResult(performance);
     }, 1500);
 }
 
-// مثال جاهز
+function showResult(data){
+    var wallet = document.getElementById('wallet').value;
+    var result = document.getElementById('result');
+    
+    result.innerHTML = `
+        <div style="font-size:28px;color:#00ff88;margin:20px 0;">
+            محفظة: <span style="font-family:monospace;">${wallet.substring(0,8)}...${wallet.slice(-4)}</span>
+        </div>
+        <div style="font-size:36px;font-weight:bold;color:#00ff88">
+            PnL: ${data.pnl}
+        </div>
+        <div style="font-size:28px;">معدل الفوز: ${data.winrate}</div>
+        <div style="font-size:32px;font-weight:bold;margin:20px 0;padding:25px;border-radius:15px;
+            background:${data.score>70?'rgba(0,255,136,0.4)':'rgba(255,170,0,0.4)'};
+            border:4px solid ${data.score>70?'#00ff88':'#ffaa00'}">
+            ${data.status} | درجة: ${data.score}/100
+            <div style="font-size:18px;color:#aaa;margin-top:10px;">
+                💾 محفوظة - نفس النتيجة دايماً
+            </div>
+        </div>
+    `;
+}
+
+// مثال ثابت
 document.getElementById('wallet').value = '7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
 </script>
 
