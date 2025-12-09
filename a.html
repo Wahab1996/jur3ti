@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محلل أداء محفظة الحوت</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Arial, sans-serif; 
+            background: linear-gradient(135deg, #0f0f23 0%, #1a1a2e 50%, #16213e 100%); 
+            color: #e0e0e0; 
+            padding: 20px; 
+            min-height: 100vh;
+        }
+        .container { max-width: 1000px; margin: 0 auto; }
+        h1 { text-align: center; color: #00d4ff; margin-bottom: 30px; font-size: 2.2em; }
+        .input-section { 
+            background: rgba(42,42,60,0.9); 
+            padding: 30px; 
+            border-radius: 20px; 
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        input { 
+            width: 70%; 
+            padding: 18px; 
+            font-size: 18px; 
+            border: 2px solid #333; 
+            border-radius: 12px; 
+            background: #1e1e2e; 
+            color: #fff;
+            margin: 10px;
+        }
+        button { 
+            background: linear-gradient(45deg, #00ff88, #00cc66); 
+            color: #000; 
+            border: none; 
+            padding: 18px 40px; 
+            font-size: 20px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        .results { display: none; }
+        .metric { 
+            background: rgba(0,255,136,0.1); 
+            padding: 20px; 
+            margin: 15px 0; 
+            border-radius: 15px; 
+            border-left: 5px solid #00ff88;
+        }
+        .bad { background: rgba(255,100,100,0.1); border-left-color: #ff6464; }
+        .score { font-size: 48px; font-weight: bold; }
+        .good { color: #00ff88; }
+        .bad-score { color: #ff6464; }
+        #chartContainer { height: 400px; margin: 30px 0; }
+        .recommendation { 
+            font-size: 24px; 
+            padding: 25px; 
+            border-radius: 15px; 
+            text-align: center; 
+            margin: 20px 0;
+            font-weight: bold;
+        }
+        .follow { background: rgba(0,255,136,0.2); color: #00ff88; border: 3px solid #00ff88; }
+        .avoid { background: rgba(255,100,100,0.2); color: #ff6464; border: 3px solid #ff6464; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🐋 محلل أداء محفظة الحوت</h1>
+        
+        <div class="input-section">
+            <input type="text" id="walletAddress" placeholder="حط رابط محفظة الحوت هنا (Solscan/BirdEye/DEXScreener)">
+            <br>
+            <button onclick="analyzeWallet()">🔍 حلل الأداء الآن</button>
+            <p style="color:#aaa;margin-top:15px;">مثال: https://solscan.io/account/xxx أو https://dexscreener.com/solana/xxx</p>
+        </div>
+
+        <div id="results" class="results">
+            <div class="metric">
+                <h3>📊 ملخص الأداء الأخير (30 يوم)</h3>
+                <div class="score good" id="totalPnL">+245%</div>
+                <p>عدد الصفقات الناجحة: <span id="winRate">78%</span> | متوسط الربح لكل صفقة: <span id="avgProfit">+32%</span></p>
+            </div>
+
+            <div class="metric">
+                <h3>🎯 معدل الفوز</h3>
+                <div class="score" id="winRateScore">78%</div>
+                <p>الصفقات الرابحة من الإجمالي</p>
+            </div>
+
+            <div class="metric">
+                <h3>💰 أكبر ربح</h3>
+                <div class="score good" id="maxProfit">+1,245%</div>
+                <p>أعلى نسبة ربح في صفقة واحدة</p>
+            </div>
+
+            <canvas id="pnlChart"></canvas>
+
+            <div class="recommendation follow" id="recommendation">
+                ✅ <strong>تابع هالحوت فوراً!</strong><br>
+                أداء ممتاز + معدل فوز عالي + ربحية ثابتة
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let chart;
+        
+        function analyzeWallet() {
+            const address = document.getElementById('walletAddress').value.trim();
+            if (!address) {
+                alert('حط رابط المحفظة أول!');
+                return;
+            }
+
+            // محاكاة تحليل حقيقي
+            const performance = generatePerformanceData();
+            
+            // عرض النتائج
+            document.getElementById('totalPnL').textContent = performance.totalPnL;
+            document.getElementById('winRate').textContent = performance.winRate;
+            document.getElementById('avgProfit').textContent = performance.avgProfit;
+            document.getElementById('winRateScore').textContent = performance.winRate;
+            document.getElementById('maxProfit').textContent = performance.maxProfit;
+            
+            const recDiv = document.getElementById('recommendation');
+            if (performance.score > 70) {
+                recDiv.textContent = `✅ تابع هالحوت فوراً! درجة الأداء: ${performance.score}/100`;
+                recDiv.className = 'recommendation follow';
+            } else if (performance.score > 40) {
+                recDiv.textContent = `⚠️ حذر - أداء متوسط (${performance.score}/100)`;
+                recDiv.className = 'recommendation';
+            } else {
+                recDiv.textContent = `❌ تجنب هالحوت (${performance.score}/100)`;
+                recDiv.className = 'recommendation avoid';
+            }
+            
+            drawPnLChart(performance.pnlData);
+            document.getElementById('results').style.display = 'block';
+            window.scrollTo(0, document.body.scrollHeight);
+        }
+
+        function generatePerformanceData() {
+            // بيانات عشوائية واقعية للاختبار
+            const winRate = Math.floor(Math.random() * 50) + 30; // 30-80%
+            const totalPnL = Math.floor(Math.random() * 400) + 50; // +50% to +450%
+            const avgProfit = Math.floor(Math.random() * 40) + 15; // +15% to +55%
+            const maxProfit = Math.floor(Math.random() * 2000) + 200; // +200% to +2200%
+            
+            const score = Math.min(95, winRate * 0.8 + (totalPnL/5) * 0.15 + avgProfit * 0.05);
+            
+            // بيانات الشارت
+            const pnlData = [];
+            let currentPnL = 0;
+            for (let i = 0; i < 15; i++) {
+                currentPnL += (Math.random() - 0.4) * 30;
+                pnlData.push(Math.max(0, currentPnL));
+            }
+            
+            return {
+                winRate: winRate + '%',
+                totalPnL: '+' + totalPnL + '%',
+                avgProfit: '+' + avgProfit + '%',
+                maxProfit: '+' + maxProfit + '%',
+                score: Math.floor(score),
+                pnlData: pnlData
+            };
+        }
+
+        function drawPnLChart(data) {
+            const ctx = document.getElementById('pnlChart').getContext('2d');
+            if (chart) chart.destroy();
+            
+            chart = new Chart(ctx, {
+                type: 'line',
+                 {
+                    labels: Array.from({length: data.length}, (_, i) => `يوم ${i+1}`),
+                    datasets: [{
+                        label: 'الأرباح المحققة %',
+                         data,
+                        borderColor: '#00ff88',
+                        backgroundColor: 'rgba(0,255,136,0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        }
+
+        // مثال جاهز
+        document.getElementById('walletAddress').value = 'https://solscan.io/account/7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU';
+    </script>
+</body>
+</html>
