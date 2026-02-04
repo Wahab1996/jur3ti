@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>حاسبة PSI للنيمونيا</title>
+<style>
+body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+input { margin: 5px; padding: 5px; }
+button { padding: 10px 20px; background: #007bff; color: white; border: none; cursor: pointer; }
+.result { margin-top: 20px; padding: 15px; border: 2px solid #007bff; border-radius: 5px; }
+</style>
+</head>
+<body>
+<h1>حاسبة مؤشر شدة النيمونيا (PSI)</h1>
+<p>أدخل البيانات للحساب (النقاط الإجمالية تحدد الفئة والعلاج)</p>
+
+<label>العمر: <input type="number" id="age" min="18"></label><br>
+<label>جنس (1=ذكر, 0=أنثى): <input type="number" id="gender" min="0" max="1" value="1"></label><br>
+
+<h3>أمراض مصاحبة (1=نعم)</h3>
+<label>سكن دار رعاية: <input type="number" id="nursing" min="0" max="1" value="0"></label><br>
+<label>سرطان: <input type="number" id="neoplastic" min="0" max="1" value="0"></label><br>
+<label>أمراض كبدية: <input type="number" id="liver" min="0" max="1" value="0"></label><br>
+<label>فشل قلبي: <input type="number" id="chf" min="0" max="1" value="0"></label><br>
+<label>سكتة دماغية: <input type="number" id="cerebro" min="0" max="1" value="0"></label><br>
+<label>فشل كلوي: <input type="number" id="renal" min="0" max="1" value="0"></label><br>
+
+<h3>علامات حيوية</h3>
+<label>تنفس >30: <input type="checkbox" id="resp"></label><br>
+<label>ضغط انقباضي <90: <input type="checkbox" id="bp"></label><br>
+<label>درجة حرارة <35 أو >40: <input type="checkbox" id="temp"></label><br>
+<label>نبض >125: <input type="checkbox" id="pulse"></label><br>
+<label>ارتباك: <input type="checkbox" id="mental"></label><br>
+
+<h3>مخبري</h3>
+<label>pH <7.35: <input type="checkbox" id="ph"></label><br>
+<label>BUN >10.7 mg/dL: <input type="checkbox" id="bun"></label><br>
+<label>صوديوم <130: <input type="checkbox" id="sodium"></label><br>
+<label>جلوكوز >250: <input type="checkbox" id="glucose"></label><br>
+<label>خلايا دموية <10k: <input type="checkbox" id="hematocrit"></label><br>
+<label>PaO2 <60 أو SpO2 <90: <input type="checkbox" id="pao2"></label><br>
+<label>بلسات >1: <input type="checkbox" id="pleural"></label><br>
+<label>ALT مرتفع: <input type="checkbox" id="alt"></label><br>
+
+<button onclick="calculatePSI()">احسب</button>
+<div id="result" class="result" style="display:none;"></div>
+
+<script>
+function calculatePSI() {
+  let score = parseInt(document.getElementById('age').value) || 0;
+  if (parseInt(document.getElementById('gender').value) === 0) score += 10;
+  score += (document.getElementById('nursing').value * 10);
+  score += (document.getElementById('neoplastic').value * 30);
+  score += (document.getElementById('liver').value * 20);
+  score += (document.getElementById('chf').value * 10);
+  score += (document.getElementById('cerebro').value * 10);
+  score += (document.getElementById('renal').value * 10);
+  score += (document.getElementById('resp').checked ? 20 : 0);
+  score += (document.getElementById('bp').checked ? 20 : 0);
+  score += (document.getElementById('temp').checked ? 15 : 0);
+  score += (document.getElementById('pulse').checked ? 10 : 0);
+  score += (document.getElementById('mental').checked ? 20 : 0);
+  score += (document.getElementById('ph').checked ? 30 : 0);
+  score += (document.getElementById('bun').checked ? 20 : 0);
+  score += (document.getElementById('sodium').checked ? 20 : 0);
+  score += (document.getElementById('glucose').checked ? 10 : 0);
+  score += (document.getElementById('hematocrit').checked ? 10 : 0);
+  score += (document.getElementById('pao2').checked ? 10 : 0);
+  score += (document.getElementById('pleural').checked ? 10 : 0);
+  score += (document.getElementById('alt').checked ? 20 : 0);
+
+  let category, risk, recommendation;
+  if (score < 51) {
+    category = 'I';
+    risk = '0.1-0.4%';
+    recommendation = 'علاج خارجي';
+  } else if (score < 71) {
+    category = 'II';
+    risk = '0.6-0.7%';
+    recommendation = 'علاج خارجي
