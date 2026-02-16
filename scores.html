@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>حاسبة السكورات السريرية للطبيب الأسري R1</title>
+  <style>
+    body {
+      font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #f5f7fb;
+      margin: 0;
+      padding: 0;
+      color: #222;
+    }
+    header {
+      background: #1f6feb;
+      color: #fff;
+      padding: 1rem 1.5rem;
+      text-align: center;
+    }
+    main {
+      max-width: 1100px;
+      margin: 1.5rem auto;
+      padding: 0 1rem;
+    }
+    h1, h2, h3 {
+      margin-top: 0;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 1rem;
+    }
+    @media (max-width: 800px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+    .card {
+      background: #fff;
+      border-radius: 8px;
+      padding: 1rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+      margin-bottom: 1rem;
+    }
+    .category-title {
+      font-size: 0.9rem;
+      font-weight: bold;
+      margin-top: 1rem;
+      margin-bottom: 0.3rem;
+      color: #555;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 0.2rem;
+    }
+    .score-list button {
+      width: 100%;
+      text-align: right;
+      padding: 0.4rem 0.6rem;
+      margin-bottom: 0.25rem;
+      border-radius: 6px;
+      border: 1px solid #e0e4f0;
+      background: #fff;
+      cursor: pointer;
+      font-size: 0.9rem;
+    }
+    .score-list button:hover {
+      background: #eef3ff;
+    }
+    .score-list button.active {
+      background: #1f6feb;
+      color: #fff;
+      border-color: #1f6feb;
+    }
+    .score-details h2 {
+      margin-bottom: 0.25rem;
+    }
+    .tag {
+      display: inline-block;
+      padding: 0.1rem 0.4rem;
+      margin-left: 0.25rem;
+      border-radius: 4px;
+      font-size: 0.7rem;
+      background: #e8f0ff;
+      color: #1f3b7a;
+    }
+    .field {
+      margin-bottom: 0.6rem;
+    }
+    .field label {
+      display: block;
+      font-size: 0.85rem;
+      margin-bottom: 0.2rem;
+      color: #444;
+    }
+    .field input[type="number"],
+    .field select {
+      width: 100%;
+      padding: 0.3rem 0.4rem;
+      border-radius: 4px;
+      border: 1px solid #ccd2e4;
+      font-size: 0.9rem;
+    }
+    .result-box {
+      background: #f1f5ff;
+      border-radius: 6px;
+      padding: 0.75rem;
+      border: 1px solid #d0dafc;
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+    }
+    .badge {
+      display: inline-block;
+      border-radius: 999px;
+      padding: 0.15rem 0.5rem;
+      font-size: 0.75rem;
+      margin-left: 0.25rem;
+      color: #fff;
+    }
+    .badge-low { background: #16a34a; }
+    .badge-mod { background: #eab308; }
+    .badge-high { background: #dc2626; }
+    small {
+      font-size: 0.75rem;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>لوحة السكورات السريرية للطبيب الأسري R1</h1>
+  <p>Pediatrics · Psychiatry · Internal Medicine · General Surgery · OB/GYN · Common</p>
+</header>
+
+<main class="grid">
+
+  <!-- LEFT: LIST OF SCORES -->
+  <aside class="card score-list" id="scoreList">
+    <h3>اختر السكور</h3>
+
+    <div class="category-title">Pediatrics (أطفال)</div>
+    <button data-score="westley">Westley Croup Score</button>
+    <button data-score="pews">PEWS / Pediatric Early Warning</button>
+    <button data-score="peds-gcs">GCS Pediatric</button>
+
+    <div class="category-title">Psychiatry (نفسي)</div>
+    <button data-score="phq9">PHQ‑9 (اكتئاب)</button>
+    <button data-score="gad7">GAD‑7 (قلق)</button>
+    <button data-score="mmse">MMSE / MoCA</button>
+
+    <div class="category-title">Internal Medicine (باطنة)</div>
+    <button data-score="curb65">CURB‑65 (Pneumonia)</button>
+    <button data-score="wells">Wells (DVT/PE)</button>
+    <button data-score="qsofa">qSOFA (Sepsis)</button>
+    <button data-score="hasbled">HAS‑BLED</button>
+
+    <div class="category-title">General Surgery (جراحة)</div>
+    <button data-score="alvarado">Alvarado (Appendicitis)</button>
+    <button data-score="news2">NEWS2</button>
+
+    <div class="category-title">OB/GYN (نساء وولادة)</div>
+    <button data-score="bishop">Bishop Score</button>
+    <button data-score="apgar">APGAR</button>
+
+    <div class="category-title">Common (مشتركة)</div>
+    <button data-score="gcs">GCS (بالغ)</button>
+    <button data-score="centor">Centor (Strep)</button>
+  </aside>
+
+  <!-- RIGHT: DETAILS / CALCULATOR -->
+  <section class="card score-details" id="scoreDetails">
+    <h2>اختر سكور من القائمة</h2>
+    <p>هذه الصفحة مخصصة للتطبيق العملي اليومي للطبيب الأسري R1 في مختلف التخصصات مع حاسبة بسيطة لكل سكور أساسي.</p>
+    <small>ملاحظة: الأرقام تقريبية تعليمية، راجع دائمًا البروتوكولات المحلية (MOH / SCFHS / UpToDate / AMBOSS).[web:41][web:42][web:49]</small>
+  </section>
+
+</main>
+
+<script>
+  // تعريف بيانات السكورات الأساسية (وصف + عتبات + عناصر إدخال مبسطة)
+  const scores = {
+    westley: {
+      name: "Westley Croup Score",
+      tags: ["Pediatrics", "Respiratory"],
+      description: "تقييم شدة الكروب (وعي، سيانوس، دخول الهواء، الصريغ، الشد الصدري).",
+      threshold: "0–2 خفيف، 3–5 متوسط، 6–11 شديد، ≥12 مهدد للحياة.",
+      usage: "قرار استخدام الإبينفرين النبولايزر، الكورتيزون، والإدخال للمستشفى.",
+      inputs: [
+        { id: "westley-stridor", label: "الصريغ في الراحة", type: "select", options: [
+          {label: "لا يوجد", value: 0},
+          {label: "مع بكاء/إثارة فقط", value: 1},
+          {label: "في الراحة", value: 2}
+        ]},
+        { id: "westley-retractions", label: "الشد الصدري", type: "select", options: [
+          {label: "لا يوجد", value: 0},
+          {label: "خفيف", value: 1},
+          {label: "متوسط", value: 2},
+          {label: "شديد", value: 3}
+        ]},
+        { id: "westley-air", label: "دخول الهواء", type: "select", options: [
+          {label: "طبيعي", value: 0},
+          {label: "منقوص", value: 1},
+          {label: "ضعيف جدًا", value: 2}
+        ]}
+      ],
+      calc: (vals) => {
+        const score = (vals["westley-stridor"]||0) + (vals["westley-retractions"]||0) + (vals["westley-air"]||0);
+        let risk = "خفيف";
+        let badge = "low";
+        if (score >= 3 && score <= 5) { risk = "متوسط"; badge = "mod"; }
+        if (score >= 6) { risk = "شديد"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "≥3 عادة يحتاج تقييم في الطوارئ، ≥6 فكر في إبينفرين نبولايزر ومراقبة لصيقة."};
+      }
+    },
+
+    pews: {
+      name: "PEWS / Pediatric Early Warning",
+      tags: ["Pediatrics", "Ward"],
+      description: "تقييم مبكر لخطر تدهور حالة الطفل اعتمادًا على العلامات الحيوية والسلوك.",
+      threshold: "3–4: زيادة المراقبة، ≥5: استدعاء طبيب/rapid response.",
+      usage: "متابعة أطفال منومين أو في ER لتحديد من يحتاج تصعيد رعاية.",
+      inputs: [
+        { id: "pews-resp", label: "نقطة التنفس", type: "number" },
+        { id: "pews-cv", label: "نقطة القلب/النبض", type: "number" },
+        { id: "pews-beh", label: "نقطة السلوك/الوعي", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = (+vals["pews-resp"]||0) + (+vals["pews-cv"]||0) + (+vals["pews-beh"]||0);
+        let risk = "منخفض";
+        let badge = "low";
+        if (score >= 3 && score <= 4) { risk = "متوسط"; badge = "mod"; }
+        if (score >= 5) { risk = "مرتفع"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "≥3 راقب عن قرب؛ ≥5 استدعِ طبيب كبير/فكر في PICU."};
+      }
+    },
+
+    "peds-gcs": {
+      name: "Pediatric GCS",
+      tags: ["Pediatrics", "Neuro"],
+      description: "مقياس غلاسكو للأطفال لتقييم مستوى الوعي (فتح عين، استجابة كلامية، حركية).",
+      threshold: "<8: خطر على مجرى الهواء، يحتاج غالبًا إلى تنبيب.",
+      usage: "أي طفل مع إصابة رأس أو انخفاض وعي.",
+      inputs: [
+        { id: "gcs-eye", label: "E (فتح العين)", type: "number" },
+        { id: "gcs-verbal", label: "V (الكلام)", type: "number" },
+        { id: "gcs-motor", label: "M (الحركة)", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = (+vals["gcs-eye"]||0) + (+vals["gcs-verbal"]||0) + (+vals["gcs-motor"]||0);
+        let risk = "خفيف";
+        let badge = "low";
+        if (score <= 12 && score >= 9) { risk = "Moderate (متوسط)"; badge = "mod"; }
+        if (score <= 8) { risk = "Severe (شديد)"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "GCS ≤8 غالبًا يحتاج تأمين مجرى الهواء + CT / ICU حسب الحالة."};
+      }
+    },
+
+    phq9: {
+      name: "PHQ‑9 (اكتئاب)",
+      tags: ["Psychiatry"],
+      description: "استبيان الاكتئاب الشائع في العيادات الأولية لتقييم الشدة ومتابعة الاستجابة للعلاج.",
+      threshold: "5 خفيف، 10 متوسط، 15 متوسط‑شديد، 20 شديد.",
+      usage: "screening ومتابعة المرضى النفسيين في عيادة الأسرة.",
+      inputs: [
+        { id: "phq9-score", label: "مجموع درجة PHQ‑9", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["phq9-score"]||0;
+        let risk = "Minimal / لا يذكر";
+        let badge = "low";
+        if (score >= 5 && score <= 9) { risk = "Mild (خفيف)"; badge = "low"; }
+        if (score >= 10 && score <= 14) { risk = "Moderate (متوسط)"; badge = "mod"; }
+        if (score >= 15 && score <= 19) { risk = "Moderately Severe (متوسط‑شديد)"; badge = "mod"; }
+        if (score >= 20) { risk = "Severe (شديد)"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "≥10 عادة يحتاج علاج (دوائي/نفسي)، ≥20 تقييم انتحار وحالة طارئة."};
+      }
+    },
+
+    gad7: {
+      name: "GAD‑7 (قلق)",
+      tags: ["Psychiatry"],
+      description: "استبيان لقياس شدة اضطراب القلق المعمم.",
+      threshold: "5 خفيف، 10 متوسط، 15 شديد.",
+      usage: "screening للقلق في عيادة الأسرة والطب النفسي.",
+      inputs: [
+        { id: "gad7-score", label: "مجموع درجة GAD‑7", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["gad7-score"]||0;
+        let risk = "Minimal / لا يذكر";
+        let badge = "low";
+        if (score >= 5 && score <= 9) { risk = "Mild (خفيف)"; badge = "low"; }
+        if (score >= 10 && score <= 14) { risk = "Moderate (متوسط)"; badge = "mod"; }
+        if (score >= 15) { risk = "Severe (شديد)"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "≥10 غالبًا يحتاج تدخل علاجي؛ ≥15 فكر في إحالة/تقييم متخصص."};
+      }
+    },
+
+    mmse: {
+      name: "MMSE / MoCA",
+      tags: ["Psychiatry", "Geriatrics"],
+      description: "تقييم الإدراك والوظائف المعرفية (للخرف، mild cognitive impairment).",
+      threshold: "MMSE <24 أو MoCA <26 يشيران لاحتمال اضطراب إدراكي.",
+      usage: "كبار السن مع شكاوى الذاكرة/السلوك.",
+      inputs: [
+        { id: "mmse-score", label: "درجة MMSE", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["mmse-score"]||0;
+        let risk = "طبيعي تقريبا";
+        let badge = "low";
+        if (score < 24) { risk = "ضعف إدراكي محتمل"; badge = "mod"; }
+        if (score < 20) { risk = "احتمال خرف واضح"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "نتيجة منخفضة تحتاج تقييم شامل + فحوص مخبرية وتصوير/إحالة."};
+      }
+    },
+
+    curb65: {
+      name: "CURB‑65 (Pneumonia)",
+      tags: ["Internal Medicine", "Pulmonary"],
+      description: "تقييم شدة الكورونا/الالتهاب الرئوي (Confusion، Urea، Respiratory rate، Blood pressure، Age ≥65).",
+      threshold: "0–1: علاج منزلي؛ 2: إدخال؛ ≥3: ICU محتمل.",
+      usage: "قرار الإدخال/المضاد الحيوي في الباطنة والطوارئ.",
+      inputs: [
+        { id: "curb-conf", label: "ارتباك (Confusion) 0/1", type: "number" },
+        { id: "curb-urea", label: "يوريا >7 mmol/L (0/1)", type: "number" },
+        { id: "curb-rr", label: "RR ≥30 (0/1)", type: "number" },
+        { id: "curb-bp", label: "BP systolic <90 أو diastolic ≤60 (0/1)", type: "number" },
+        { id: "curb-age", label: "العمر ≥65 (0/1)", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = (+vals["curb-conf"]||0)+(+vals["curb-urea"]||0)+(+vals["curb-rr"]||0)+(+vals["curb-bp"]||0)+(+vals["curb-age"]||0);
+        let risk = "منخفض (outpatient)";
+        let badge = "low";
+        if (score === 2) { risk = "متوسط (admit)"; badge = "mod"; }
+        if (score >= 3) { risk = "مرتفع (consider ICU)"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "0–1 غالبًا علاج منزلي؛ 2 إدخال؛ ≥3 تقييم ICU و broad-spectrum."};
+      }
+    },
+
+    wells: {
+      name: "Wells (DVT/PE مختصر)",
+      tags: ["Internal Medicine", "Emergency"],
+      description: "يحدد احتمال الإصابة بجلطة وريدية عميقة أو صمة رئوية قبل طلب D‑dimer/CT.",
+      threshold: "عادة: 0–1 منخفض، 2–6 متوسط، ≥7 عالي (حسب النموذج).",
+      usage: "تحديد من يحتاج تصوير ومن يكفيه D‑dimer.",
+      inputs: [
+        { id: "wells-score", label: "مجموع نقاط Wells", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["wells-score"]||0;
+        let risk = "منخفض";
+        let badge = "low";
+        if (score >= 2 && score <= 6) { risk = "متوسط"; badge = "mod"; }
+        if (score >= 7) { risk = "عالٍ"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "احتمال متوسط/عالٍ غالبًا يحتاج تصوير (US أو CT‑PA) بدلاً من الاكتفاء بـ D‑dimer."};
+      }
+    },
+
+    qsofa: {
+      name: "qSOFA (Sepsis)",
+      tags: ["Internal Medicine", "ICU"],
+      description: "screen سريع للـ sepsis خارج ICU (ضغط، تنفس، وعي).",
+      threshold: "≥2 يشير لخطر أعلى للوفاة/الإقامة الطويلة.",
+      usage: "أي مريض مشتبه sepsis في ER/ward.",
+      inputs: [
+        { id: "qsofa-sbp", label: "SBP ≤100 (0/1)", type: "number" },
+        { id: "qsofa-rr", label: "RR ≥22 (0/1)", type: "number" },
+        { id: "qsofa-gcs", label: "GCS <15 (0/1)", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = (+vals["qsofa-sbp"]||0)+(+vals["qsofa-rr"]||0)+(+vals["qsofa-gcs"]||0);
+        let risk = "منخفض";
+        let badge = "low";
+        if (score >= 2) { risk = "مرتفع"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "qSOFA ≥2 → فعّل sepsis protocol، لا تؤجل المضاد الحيوي/السوائل."};
+      }
+    },
+
+    hasbled: {
+      name: "HAS‑BLED",
+      tags: ["Internal Medicine", "Cardiology"],
+      description: "تقييم خطر النزيف عند المرضى على مميعات (خاصة AF).",
+      threshold: "≥3 يعتبر خطر نزيف مرتفع.",
+      usage: "موازنة فائدة المميع مقابل خطر النزيف.",
+      inputs: [
+        { id: "hasbled-score", label: "مجموع درجة HAS‑BLED", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["hasbled-score"]||0;
+        let risk = "منخفض إلى متوسط";
+        let badge = "low";
+        if (score >= 3) { risk = "خطر نزيف مرتفع"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "لا يعني إيقاف المميع مباشرة؛ ركّز على تعديل عوامل الخطر والمتابعة اللصيقة."};
+      }
+    },
+
+    alvarado: {
+      name: "Alvarado Score (Appendicitis)",
+      tags: ["Surgery", "Abdomen"],
+      description: "تقييم احتمال التهاب الزائدة (ألم RIF، هجرة الألم، WBC، إلخ).",
+      threshold: "1–4 منخفض، 5–6 متوسط، 7–10 عالي.",
+      usage: "قرار تصوير/جراحة في ألم البطن الحاد.",
+      inputs: [
+        { id: "alvarado-score", label: "مجموع درجة Alvarado", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["alvarado-score"]||0;
+        let risk = "منخفض";
+        let badge = "low";
+        if (score >= 5 && score <= 6) { risk = "متوسط"; badge = "mod"; }
+        if (score >= 7) { risk = "عالٍ"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "≥7 غالبًا يحتاج جراحة/استشارة جراحة، 5–6 تصوير إضافي (US/CT)." };
+      }
+    },
+
+    news2: {
+      name: "NEWS2",
+      tags: ["Surgery", "Medicine", "Ward"],
+      description: "National Early Warning Score 2 لتقييم تدهور أي مريض منوم.",
+      threshold: "5–6: خطر متوسط؛ ≥7: خطر مرتفع.",
+      usage: "متابعة vital signs واتخاذ قرار rapid response/ICU.",
+      inputs: [
+        { id: "news2-score", label: "مجموع NEWS2", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["news2-score"]||0;
+        let risk = "منخفض";
+        let badge = "low";
+        if (score >= 5 && score <= 6) { risk = "متوسط"; badge = "mod"; }
+        if (score >= 7) { risk = "مرتفع"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "NEWS2 ≥5 استدعِ طبيب؛ ≥7 فعّل فريق الطوارئ / ICU."};
+      }
+    },
+
+    bishop: {
+      name: "Bishop Score",
+      tags: ["OB/GYN"],
+      description: "تقييم نضج عنق الرحم قبل تحفيز الولادة (dilatation، effacement، station، consistency، position).",
+      threshold: "≥6–8 يشير إلى عنق رحم ناضج للتحفيز.",
+      usage: "قرار نجاح induction في النساء والولادة.",
+      inputs: [
+        { id: "bishop-score", label: "مجموع Bishop", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["bishop-score"]||0;
+        let risk = "عنق رحم غير ناضج غالبًا";
+        let badge = "low";
+        if (score >= 6 && score <= 7) { risk = "حدّي/مقبول للتحفيز"; badge = "mod"; }
+        if (score >= 8) { risk = "ناضج (احتمال نجاح عالي)"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "الدرجات العالية تعني أن التحفيز (مثلاً بـ oxytocin) أكثر احتمالًا للنجاح."};
+      }
+    },
+
+    apgar: {
+      name: "APGAR",
+      tags: ["OB/GYN", "Neonatal"],
+      description: "تقييم سريع لحالة المولود عند 1 و 5 دقائق (Appearance، Pulse، Grimace، Activity، Respiration).",
+      threshold: "7–10 طبيعي؛ 4–6 متوسط؛ 0–3 شديد.",
+      usage: "تحديد الحاجة للإنعاش أو دعم إضافي بعد الولادة.",
+      inputs: [
+        { id: "apgar-score", label: "مجموع APGAR", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["apgar-score"]||0;
+        let risk = "طبيعي";
+        let badge = "low";
+        if (score >= 4 && score <= 6) { risk = "متوسط، يحتاج دعم"; badge = "mod"; }
+        if (score <= 3) { risk = "حرج، إنعاش فوري"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "APGAR منخفض يستدعي تطبيق خطوات NRP والتحقق من الأسباب القابلة للعلاج."};
+      }
+    },
+
+    gcs: {
+      name: "GCS (بالغ)",
+      tags: ["Neuro", "Emergency"],
+      description: "Glasgow Coma Scale لتقييم الوعي في البالغين (E + V + M).",
+      threshold: "13–15 خفيف؛ 9–12 متوسط؛ ≤8 شديد.",
+      usage: "أي مريض trauma / تغير وعي.",
+      inputs: [
+        { id: "gcs-eye", label: "E (فتح العين)", type: "number" },
+        { id: "gcs-verbal", label: "V (الكلام)", type: "number" },
+        { id: "gcs-motor", label: "M (الحركة)", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = (+vals["gcs-eye"]||0) + (+vals["gcs-verbal"]||0) + (+vals["gcs-motor"]||0);
+        let risk = "Mild (خفيف)";
+        let badge = "low";
+        if (score <= 12 && score >= 9) { risk = "Moderate (متوسط)"; badge = "mod"; }
+        if (score <= 8) { risk = "Severe (شديد)"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "GCS ≤8 → تأمين مجرى الهواء + تقييم CT و ICU حسب البروتوكول."};
+      }
+    },
+
+    centor: {
+      name: "Centor / Modified Centor",
+      tags: ["Family Medicine", "ENT"],
+      description: "تقييم احتمال التهاب لوزتين بكتيري (حمى، غياب كحة، تضخم غدد، exudate).",
+      threshold: "0–1 منخفض؛ 2–3 متوسط؛ 4–5 عالي.",
+      usage: "قرار طلب strep test أو إعطاء مضاد حيوي.",
+      inputs: [
+        { id: "centor-score", label: "مجموع درجة Centor", type: "number" }
+      ],
+      calc: (vals) => {
+        const score = +vals["centor-score"]||0;
+        let risk = "منخفض";
+        let badge = "low";
+        if (score === 2 || score === 3) { risk = "متوسط، فكر في strep test"; badge = "mod"; }
+        if (score >= 4) { risk = "عالٍ، احتمال كبير لـ strep"; badge = "high"; }
+        return {score, risk, badge,
+          advice: "في درجات عالية، بعض البروتوكولات تسمح بالعلاج التجريبي بدون مسحة."};
+      }
+    }
+  };
+
+  const scoreListEl = document.getElementById("scoreList");
+  const detailsEl   = document.getElementById("scoreDetails");
+
+  scoreListEl.addEventListener("click", (e) => {
+    if (e.target.tagName.toLowerCase() === "button") {
+      const key = e.target.dataset.score;
+      if (!scores[key]) return;
+      // toggle active
+      [...scoreListEl.querySelectorAll("button")].forEach(b => b.classList.remove("active"));
+      e.target.classList.add("active");
+      renderScore(key);
+    }
+  });
+
+  function renderScore(key) {
+    const s = scores[key];
+    detailsEl.innerHTML = "";
+
+    const title = document.createElement("h2");
+    title.textContent = s.name;
+    detailsEl.appendChild(title);
+
+    if (s.tags && s.tags.length) {
+      const tagWrap = document.createElement("div");
+      s.tags.forEach(t => {
+        const span = document.createElement("span");
+        span.className = "tag";
+        span.textContent = t;
+        tagWrap.appendChild(span);
+      });
+      detailsEl.appendChild(tagWrap);
+    }
+
+    const pDesc = document.createElement("p");
+    pDesc.textContent = s.description;
+    detailsEl.appendChild(pDesc);
+
+    const pTh = document.createElement("p");
+    pTh.innerHTML = "<strong>العتبات المهمة:</strong> " + s.threshold;
+    detailsEl.appendChild(pTh);
+
+    const pUse = document.createElement("p");
+    pUse.innerHTML = "<strong>الاستخدام:</strong> " + s.usage;
+    detailsEl.appendChild(pUse);
+
+    if (s.inputs && s.inputs.length) {
+      const form = document.createElement("div");
+      form.id = "score-form";
+      s.inputs.forEach(inp => {
+        const field = document.createElement("div");
+        field.className = "field";
+
+        const label = document.createElement("label");
+        label.setAttribute("for", inp.id);
+        label.textContent = inp.label;
+        field.appendChild(label);
+
+        if (inp.type === "select") {
+          const sel = document.createElement("select");
+          sel.id = inp.id;
+          inp.options.forEach(opt => {
+            const o = document.createElement("option");
+            o.value = opt.value;
+            o.textContent = opt.label + " (" + opt.value + ")";
+            sel.appendChild(o);
+          });
+          field.appendChild(sel);
+        } else {
+          const input = document.createElement("input");
+          input.type = inp.type;
+          input.id = inp.id;
+          input.step = "1";
+          field.appendChild(input);
+        }
+
+        form.appendChild(field);
+      });
+
+      const resultBox = document.createElement("div");
+      resultBox.className = "result-box";
+      resultBox.id = "result-box";
+      resultBox.innerHTML = "أدخل أو اختر القيم ثم راقب النتيجة هنا.";
+
+      form.addEventListener("input", () => {
+        const vals = {};
+        s.inputs.forEach(inp => {
+          const el = document.getElementById(inp.id);
+          if (!el) return;
+          if (inp.type === "select") {
+            vals[inp.id] = parseFloat(el.value);
+          } else {
+            vals[inp.id] = el.value;
+          }
+        });
+        const res = s.calc(vals);
+        resultBox.innerHTML = `
+          <div><strong>الدرجة الكلية:</strong> ${res.score}</div>
+          <div><strong>التصنيف:</strong>
+            <span class="badge badge-${res.badge}">${res.risk}</span>
+          </div>
+          <div style="margin-top:0.3rem;">${res.advice}</div>
+        `;
+      });
+
+      detailsEl.appendChild(form);
+      detailsEl.appendChild(resultBox);
+    }
+
+    const note = document.createElement("small");
+    note.textContent = "تعليمي فقط، استخدم مع الحكم السريري والبروتوكولات المحلية.";
+    detailsEl.appendChild(note);
+  }
+</script>
+
+</body>
+</html>
